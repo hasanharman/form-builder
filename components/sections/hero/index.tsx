@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 
-import { Icons } from "@/components/ui/icons";
 import HeroVideoDialog from "@/components/sections/hero/hero-video";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
