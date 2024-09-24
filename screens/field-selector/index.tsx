@@ -13,7 +13,7 @@ const fieldTypes = [
   "Input",
   "InputOTP",
   "Select",
-  "Slider",
+  // "Slider",
   "Switch",
   "Textarea",
   "Password",
@@ -28,10 +28,16 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
   return (
     <div className="flex items-center flex-wrap gap-3">
       {fieldTypes.map((type) => (
-        <Button key={type} variant="outline" onClick={() => addFormField(type)}>
+        <Button
+          key={type}
+          variant="outline"
+          onClick={() => addFormField(type)}
+          className="rounded-full"
+        >
           {type}
         </Button>
       ))}
+      <Button className="rounded-full" disabled>Request Component</Button>
     </div>
   );
 };

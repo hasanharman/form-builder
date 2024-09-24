@@ -4,22 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { LuGrip, LuPencil, LuTrash2 } from "react-icons/lu";
-
-type FormField = {
-  type: string;
-  label: string;
-  value?: string;
-  name: string;
-  placeholder?: string;
-  required: boolean;
-  disabled: boolean;
-};
+import { FormFieldType } from "@/types";
 
 type FormFieldListProps = {
-  formFields: FormField[];
-  setFormFields: React.Dispatch<React.SetStateAction<FormField[]>>;
-  updateFormField: (index: number, updates: Partial<FormField>) => void;
-  openEditDialog: (field: FormField) => void;
+  formFields: FormFieldType[];
+  setFormFields: React.Dispatch<React.SetStateAction<FormFieldType[]>>;
+  updateFormField: (index: number, updates: Partial<FormFieldType>) => void;
+  openEditDialog: (field: FormFieldType) => void;
 };
 
 export const FormFieldList: React.FC<FormFieldListProps> = ({
@@ -36,7 +27,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
         <div className="w-12" />
         <div className="grid grid-cols-6 w-full">
           <div className="col-span-2">Label</div>
-          <div className="col-span-2">Placeholder</div>
+          <div className="col-span-2">Description</div>
           <div className="col-span-1">Required</div>
           <div className="col-span-1">Disabled</div>
         </div>
@@ -68,13 +59,13 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
                 </div>
                 <div className="col-span-2">
                   <Input
-                    value={field.placeholder}
+                    value={field.description}
                     onChange={(e) =>
                       updateFormField(index, {
-                        placeholder: e.target.value,
+                        description: e.target.value,
                       })
                     }
-                    placeholder="Enter Placeholder"
+                    placeholder="Enter description"
                   />
                 </div>
                 <div className="col-span-1 pl-6">

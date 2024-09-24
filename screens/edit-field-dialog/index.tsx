@@ -10,22 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-
-type FormField = {
-  type: string;
-  label: string;
-  value?: string;
-  name: string;
-  placeholder?: string;
-  required: boolean;
-  disabled: boolean;
-};
+import { FormFieldType } from "@/types";
 
 type EditFieldDialogProps = {
   isOpen: boolean;
   onClose: () => void;
-  field: FormField | null;
-  onSave: (updatedField: FormField) => void;
+  field: FormFieldType | null;
+  onSave: (updatedField: FormFieldType) => void;
 };
 
 export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
@@ -34,7 +25,7 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   field,
   onSave,
 }) => {
-  const [editedField, setEditedField] = useState<FormField | null>(null);
+  const [editedField, setEditedField] = useState<FormFieldType | null>(null);
 
   useEffect(() => {
     setEditedField(field);
@@ -51,64 +42,74 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle>Edit {editedField.type} Field</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="label" className="text-right">
-              Label
-            </Label>
+        <div className="py-4 space-y-4">
+          <div>
+            <Label htmlFor="label">Label</Label>
             <Input
               id="label"
               value={editedField.label}
               onChange={(e) =>
                 setEditedField({ ...editedField, label: e.target.value })
               }
-              className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="placeholder" className="text-right">
-              Placeholder
-            </Label>
+          <div>
+            <Label htmlFor="label">Description</Label>
+            <Input
+              id="description"
+              value={editedField.description}
+              onChange={(e) =>
+                setEditedField({ ...editedField, description: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label htmlFor="placeholder">Placeholder</Label>
             <Input
               id="placeholder"
               value={editedField.placeholder}
               onChange={(e) =>
                 setEditedField({ ...editedField, placeholder: e.target.value })
               }
-              className="col-span-3"
             />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Required</Label>
-            <div className="col-span-3">
-              <Checkbox
-                checked={editedField.required}
-                onCheckedChange={(checked) =>
-                  setEditedField({
-                    ...editedField,
-                    required: checked as boolean,
-                  })
-                }
-              />
-            </div>
+          <div>
+            <Label htmlFor="label">Name</Label>
+            <Input
+              id="name"
+              value={editedField.name}
+              onChange={(e) =>
+                setEditedField({ ...editedField, name: e.target.value })
+              }
+            />
           </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Disabled</Label>
-            <div className="col-span-3">
-              <Checkbox
-                checked={editedField.disabled}
-                onCheckedChange={(checked) =>
-                  setEditedField({
-                    ...editedField,
-                    disabled: checked as boolean,
-                  })
-                }
-              />
-            </div>
+          <div className="flex flex-col gap-1">
+            <Label>Required</Label>
+            <Checkbox
+              checked={editedField.required}
+              onCheckedChange={(checked) =>
+                setEditedField({
+                  ...editedField,
+                  required: checked as boolean,
+                })
+              }
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label>Disabled</Label>
+            <Checkbox
+              checked={editedField.disabled}
+              onCheckedChange={(checked) =>
+                setEditedField({
+                  ...editedField,
+                  disabled: checked as boolean,
+                })
+              }
+            />
           </div>
         </div>
         <DialogFooter>

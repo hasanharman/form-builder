@@ -14,7 +14,10 @@ export default function Header() {
         <Logo />
       </Link>
       <nav className="hidden md:flex items-center gap-3">
-        <Link href="/playground">
+        <Link href="/readme">
+          <Button variant="link">Readme</Button>
+        </Link>
+        <Link href="/roadmap">
           <Button variant="link">Roadmap</Button>
         </Link>
         <Link href="/playground">
