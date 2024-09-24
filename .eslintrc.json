@@ -1,3 +1,12 @@
 {
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parser": "@typescript-eslint/parser"
+    }
+  ],
+  "rules": {
+    "@typescript-eslint/no-empty-interface": "off"
+  },
   "extends": ["next/core-web-vitals", "next/typescript"]
 }
