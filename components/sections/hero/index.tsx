@@ -1,11 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 
-import HeroVideoDialog from "@/components/sections/hero/hero-video";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+
+import HeroVideoDialog from "@/components/sections/hero/hero-video";
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -154,8 +155,8 @@ function HeroImage() {
       <HeroVideoDialog
         animationStyle="from-center"
         videoSrc="https://www.youtube.com/embed/qh3NGpYRG3I?si=4rb-zSdDkVK9qxxb"
-        thumbnailSrc="/dashboard.png"
-        thumbnailAlt="Hero Video"
+        thumbnailSrc="/demo.png"
+        thumbnailAlt="Thumbnail"
         className="border rounded-lg shadow-lg max-w-screen-lg mt-16"
       />
     </motion.div>

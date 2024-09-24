@@ -19,8 +19,44 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Form Builder",
+  title: "Shadcn Form Builder",
   description: "Shadcn Form Builder",
+  openGraph: {
+    images: [
+      {
+        url: "https://form-builder-three-flame.vercel.app/meta.png",
+        width: 600,
+        height: 315,
+      },
+    ],
+    type: "website",
+    siteName: "Shadcn Form Builder",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Shadcn Form Builder",
+    description: "Shadcn Form Builder",
+    images: ["https://form-builder-three-flame.vercel.app/meta.png"],
+    creator: "@strad3r",
+  },
+  keywords: ["form", "builder", "shadcn", "react"],
+  themeColor: "#ffffff",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+    other: [
+      {
+        url: "/android-chrome-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        url: "/android-chrome-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
