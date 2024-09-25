@@ -275,7 +275,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
       return `
             <FormField
               control={form.control}
-              name="fileInputField"
+              name="${field.name}"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>${field.label}</FormLabel>
@@ -291,7 +291,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         className="outline-dashed outline-1 outline-slate-500"
                       >
                         <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
-                          <FileSvgDraw />
+                          <CloudUpload />
                         </div>
                       </FileInput>
                       <FileUploaderContent>

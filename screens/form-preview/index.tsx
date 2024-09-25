@@ -69,43 +69,103 @@ const generateZodSchema = (formFields: FormFieldType[]) => {
 const generateFormCode = (formFields: FormFieldType[]) => {
   // Create a Set to store unique import statements
   const importSet = new Set([
+    '"use client"',
+    'import { useState } from "react"',
     'import { useForm } from "react-hook-form"',
     'import { zodResolver } from "@hookform/resolvers/zod"',
     'import * as z from "zod"',
+    'import { cn } from "@/lib/utils"',
     'import { Button } from "@/components/ui/button"',
     'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
   ]);
 
+  const constantSet: Set<string> = new Set(); // Define type for constantSet
+
   formFields.forEach((field) => {
-    importSet.add(
-      `import { ${
-        field.type
-      } } from "@/components/ui/${field.type.toLowerCase()}"`
-    );
+    switch (field.type) {
+      case "Combobox":
+        importSet.add(
+          'import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"'
+        );
+        importSet.add(
+          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"'
+        );
+        importSet.add('import { Check, ChevronsUpDown } from "lucide-react"');
+        constantSet.add(`const languages = [
+          { label: "English", value: "en" },
+          { label: "French", value: "fr" },
+          { label: "German", value: "de" },
+          { label: "Spanish", value: "es" },
+          { label: "Portuguese", value: "pt" },
+          { label: "Russian", value: "ru" },
+          { label: "Japanese", value: "ja" },
+          { label: "Korean", value: "ko" },
+          { label: "Chinese", value: "zh" },
+          ] as const;`);
+        break;
+      case "DatePicker":
+        importSet.add('import { format } from "date-fns"');
+        importSet.add(
+          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"'
+        );
+        importSet.add(
+          'import { Calendar as CalendarIcon } from "lucide-react"'
+        );
+        break;
+      case "InputOTP":
+        importSet.add(
+          'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"'
+        );
+        break;
+      case "Select":
+        importSet.add(
+          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"'
+        );
+        break;
+      case "FileInput":
+        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"');
+        importSet.add(
+          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"'
+        );
+        constantSet.add(`
+            const [files, setFiles] = useState<File[] | null>(null); 
+
+            const dropZoneConfig = {
+              maxFiles: 5,
+              maxSize: 1024 * 1024 * 4,
+              multiple: true,
+            };`);
+        break;
+      case "Phone":
+        importSet.add("");
+        importSet.add("");
+        importSet.add("");
+        importSet.add("");
+        break;
+      case "Password":
+        importSet.add("");
+        importSet.add("");
+        importSet.add("");
+        importSet.add("");
+        break;
+      default:
+        importSet.add(
+          `import { ${
+            field.type
+          } } from "@/components/ui/${field.type.toLowerCase()}"`
+        );
+        break;
+    }
   });
 
   const imports = Array.from(importSet).join("\n");
-
-  const constants = `
-const languages = [
-  { label: "English", value: "en" },
-  { label: "French", value: "fr" },
-  { label: "German", value: "de" },
-  { label: "Spanish", value: "es" },
-  { label: "Portuguese", value: "pt" },
-  { label: "Russian", value: "ru" },
-  { label: "Japanese", value: "ja" },
-  { label: "Korean", value: "ko" },
-  { label: "Chinese", value: "zh" },
-] as const;
-  `;
 
   const schema = `
 const formSchema = z.object({
   ${formFields
     .map(
       (field, index) =>
-        `form_element_${index}: ${
+        `${field.name}: ${
           field.type === "Checkbox" || field.type === "Switch"
             ? "z.boolean().optional()"
             : field.type === "Number"
@@ -123,8 +183,11 @@ const formSchema = z.object({
 })
   `;
 
+  const constants = Array.from(constantSet).join("\n"); // Convert Set to string
+
   const component = `
 export function MyForm() {
+  ${constants} // Insert constants here
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -146,7 +209,7 @@ export function MyForm() {
 }
   `;
 
-  return imports + "\n" + constants + "\n" + schema + "\n" + component;
+  return imports + "\n"  + "\n" + schema + "\n" + component;
 };
 
 export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
@@ -253,7 +316,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                       size="icon"
                       onClick={() => {
                         navigator.clipboard.writeText(generatedCode);
-                        toast.success('Code copied to clipboard!');
+                        toast.success("Code copied to clipboard!");
                       }}
                     >
                       <Files />
