@@ -75,7 +75,7 @@ export default function FormBuilder() {
           guidance.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 items-center justify-items-center gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start justify-items-center gap-8">
         <div className="w-full h-full col-span-1 space-y-3 md:max-h-[75vh] overflow-auto">
           <FieldSelector addFormField={addFormField} />
           <Separator />
@@ -86,7 +86,7 @@ export default function FormBuilder() {
             openEditDialog={openEditDialog}
           />
         </div>
-        <div className="w-full h-full col-span-1 md:max-h-[75vh] overflow-auto">
+        <div className="w-full h-full col-span-1">
           <FormPreview formFields={formFields} />
         </div>
       </div>

@@ -217,16 +217,14 @@ const generateFormCode = (formFields: FormFieldType[]) => {
             };`);
         break;
       case "Phone":
-        importSet.add("");
-        importSet.add("");
-        importSet.add("");
-        importSet.add("");
+        importSet.add(
+          'import { PhoneInput } from "@/components/ui/phone-input";'
+        );
         break;
       case "Password":
-        importSet.add("");
-        importSet.add("");
-        importSet.add("");
-        importSet.add("");
+        importSet.add(
+          'import { PasswordInput } from "@/components/ui/password-input"'
+        );
         break;
       default:
         importSet.add(
@@ -334,7 +332,10 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
           <TabsTrigger value="json">JSON</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
-        <TabsContent value="preview" className="space-y-4 ">
+        <TabsContent
+          value="preview"
+          className="space-y-4 h-full md:max-h-[75vh] overflow-auto"
+        >
           <If
             condition={formFields.length > 0}
             render={() => (
@@ -367,63 +368,78 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                 </form>
               </Form>
             )}
-            otherwise={() => <p>No form element selected yet.</p>}
+            otherwise={() => (
+              <div className="h-[50vh] flex justify-center items-center">
+                <p>No form element selected yet.</p>
+              </div>
+            )}
           />
         </TabsContent>
         <TabsContent value="json">
           <If
             condition={formFields.length > 0}
             render={() => (
-              <pre className="p-4 text-sm bg-gray-100 rounded-lg ">
+              <pre className="p-4 text-sm bg-gray-100 rounded-lg h-full md:max-h-[75vh] overflow-auto">
                 {JSON.stringify(formFields, null, 2)}
               </pre>
             )}
-            otherwise={() => <p>No form element selected yet.</p>}
+            otherwise={() => (
+              <div className="h-[50vh] flex justify-center items-center">
+                <p>No form element selected yet.</p>
+              </div>
+            )}
           />
         </TabsContent>
         <TabsContent value="code">
           <If
             condition={formFields.length > 0}
             render={() => (
-              <Highlight
-                code={formattedCode}
-                language="tsx"
-                theme={themes.shadesOfPurple}
-              >
-                {({
-                  className,
-                  style,
-                  tokens,
-                  getLineProps,
-                  getTokenProps,
-                }: any) => (
-                  <pre
-                    className={`${className} p-4 text-sm bg-gray-100 rounded-lg relative`}
-                    style={style}
-                  >
-                    <Button
-                      className="absolute right-1 top-1"
-                      variant="secondary"
-                      size="icon"
-                      onClick={() => {
-                        navigator.clipboard.writeText(generatedCode);
-                        toast.success("Code copied to clipboard!");
-                      }}
+              <div className="relative">
+                <Button
+                  className="absolute right-2 top-2"
+                  variant="secondary"
+                  size="icon"
+                  onClick={() => {
+                    navigator.clipboard.writeText(generatedCode);
+                    toast.success("Code copied to clipboard!");
+                  }}
+                >
+                  <Files />
+                </Button>
+                <Highlight
+                  code={formattedCode}
+                  language="tsx"
+                  theme={themes.oneDark}
+                >
+                  {({
+                    className,
+                    style,
+                    tokens,
+                    getLineProps,
+                    getTokenProps,
+                  }: any) => (
+                    <pre
+                      className={`${className} p-4 text-sm bg-gray-100 rounded-lg 
+                      h-full md:max-h-[75vh] overflow-auto`}
+                      style={style}
                     >
-                      <Files />
-                    </Button>
-                    {tokens.map((line: any, i: number) => (
-                      <div {...getLineProps({ line, key: i })}>
-                        {line.map((token: any, key: any) => (
-                          <span {...getTokenProps({ token, key })} />
-                        ))}
-                      </div>
-                    ))}
-                  </pre>
-                )}
-              </Highlight>
+                      {tokens.map((line: any, i: number) => (
+                        <div {...getLineProps({ line, key: i })}>
+                          {line.map((token: any, key: any) => (
+                            <span {...getTokenProps({ token, key })} />
+                          ))}
+                        </div>
+                      ))}
+                    </pre>
+                  )}
+                </Highlight>
+              </div>
             )}
-            otherwise={() => <p>No form element selected yet.</p>}
+            otherwise={() => (
+              <div className="h-[50vh] flex justify-center items-center">
+                <p>No form element selected yet.</p>
+              </div>
+            )}
           />
         </TabsContent>
       </Tabs>

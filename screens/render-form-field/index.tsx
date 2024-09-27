@@ -354,7 +354,7 @@ export const renderFormField = (field: FormFieldType) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <PasswordInput />
+            <PasswordInput value="password" />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
@@ -365,7 +365,7 @@ export const renderFormField = (field: FormFieldType) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <PhoneInput />
+            <PhoneInput defaultCountry="TR" />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />

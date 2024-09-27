@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { LuGrip, LuPencil, LuTrash2 } from "react-icons/lu";
 import { FormFieldType } from "@/types";
+import If from "@/components/ui/if";
 
 type FormFieldListProps = {
   formFields: FormFieldType[];
@@ -23,16 +24,21 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex w-full font-medium text-sm">
-        <div className="w-12" />
-        <div className="grid grid-cols-6 w-full">
-          <div className="col-span-2">Label</div>
-          <div className="col-span-2">Description</div>
-          <div className="col-span-1">Required</div>
-          <div className="col-span-1">Disabled</div>
-        </div>
-        <div className="w-28" />
-      </div>
+      <If
+        condition={formFields.length > 0}
+        render={() => (
+          <div className="flex w-full font-medium text-sm">
+            <div className="w-12" />
+            <div className="grid grid-cols-6 w-full">
+              <div className="col-span-2">Label</div>
+              <div className="col-span-2">Description</div>
+              <div className="col-span-1">Required</div>
+              <div className="col-span-1">Disabled</div>
+            </div>
+            <div className="w-28" />
+          </div>
+        )}
+      />
       <Reorder.Group values={formFields} onReorder={setFormFields}>
         {formFields.map((field, index) => (
           <Reorder.Item

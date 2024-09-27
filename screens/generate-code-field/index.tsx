@@ -311,7 +311,50 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 </FormItem>
               )}
             />`;
-
+    case "Password":
+      return `
+        <FormField
+          control={form.control}
+          name="${field.name}"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>${field.label}</FormLabel>
+              <FormControl>
+                <PasswordInput placeholder="${field.placeholder}" {...field} />
+              </FormControl>
+              ${
+                field.description &&
+                `<FormDescription>${field.description}</FormDescription>`
+              }
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        `;
+    case "Phone":
+      return `
+          <FormField
+            control={form.control}
+            name="${field.name}"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+              <FormLabel>${field.label}</FormLabel>
+                <FormControl className="w-full">
+                  <PhoneInput
+                    placeholder="${field.placeholder}"
+                    {...field}
+                    defaultCountry="TR"
+                  />
+                </FormControl>
+              ${
+                field.description &&
+                `<FormDescription>${field.description}</FormDescription>`
+              }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            `;
     default:
       return null;
   }
