@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { js_beautify } from "js-beautify";
 
 import { renderFormField } from "@/screens/render-form-field";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,49 +22,124 @@ export type FormPreviewProps = {
 
 const generateZodSchema = (formFields: FormFieldType[]) => {
   const schemaObject: Record<string, any> = {};
-  formFields.forEach((field, index) => {
+
+  formFields.forEach((field) => {
     if (field.type !== "Label") {
       let fieldSchema;
       switch (field.type) {
         case "Checkbox":
         case "Switch":
           fieldSchema = z.boolean();
+          if (field.required) {
+            fieldSchema = fieldSchema.refine((value) => value === true, {
+              message: `${field.label} is required`,
+            });
+          }
           break;
         case "Number":
-          fieldSchema = z.number();
+          fieldSchema = z.coerce.number();
+          if (field.required) {
+            fieldSchema = fieldSchema.min(1, {
+              message: `${field.label} is required`,
+            });
+          }
           break;
         case "Date":
           fieldSchema = z.date();
+          if (field.required) {
+            fieldSchema = fieldSchema.refine((date) => !isNaN(date.getTime()), {
+              message: `${field.label} is required`,
+            });
+          }
           break;
         default:
           fieldSchema = z.string();
+          if (field.required) {
+            fieldSchema = fieldSchema.min(1, {
+              message: `${field.label} is required`,
+            });
+          }
           break;
       }
 
-      // if (field.required) {
-      //   switch (field.type) {
-      //     case "Checkbox":
-      //     case "Switch":
-      //       fieldSchema = z.refine(
-      //         (value): value is boolean =>
-      //           value !== undefined && value !== null && value !== false,
-      //         {
-      //           message: `${field.label} is required`,
-      //         }
-      //       );
-      //       break;
-      //     default:
-      //       fieldSchema = z.min(1, {
-      //         message: `${field.label} is required`,
-      //       });
-      //       break;
-      //   }
-      // }
-
-      schemaObject[`form_element_${index}`] = fieldSchema;
+      schemaObject[field.name] = fieldSchema;
     }
   });
-  return z.object(schemaObject);
+
+  const schema = z.object(schemaObject);
+
+  // Debugging: Log the generated schema
+  console.log("schema", schemaObject);
+
+  return schema;
+};
+
+const getZodSchema = (formFields: FormFieldType[]) => {
+  const schemaObject: Record<string, z.ZodTypeAny> = {};
+
+  formFields.forEach((field) => {
+    if (field.type !== "Label") {
+      let fieldSchema: z.ZodTypeAny;
+      switch (field.type) {
+        case "Checkbox":
+        case "Switch":
+          fieldSchema = field.required
+            ? z.boolean().refine((value) => value === true, {
+                message: `${field.label} is required`,
+              })
+            : z.boolean();
+          break;
+        case "Number":
+          fieldSchema = field.required
+            ? z.number().min(1, { message: `${field.label} is required` })
+            : z.number();
+          break;
+        case "Date":
+          fieldSchema = field.required
+            ? z.date().refine((date) => !isNaN(date.getTime()), {
+                message: `${field.label} is required`,
+              })
+            : z.date();
+          break;
+        default:
+          fieldSchema = field.required
+            ? z.string().min(1, { message: `${field.label} is required` })
+            : z.string();
+          break;
+      }
+      schemaObject[field.name] = fieldSchema;
+    }
+  });
+
+  return schemaObject;
+};
+
+const zodSchemaToString = (schema: z.ZodTypeAny): string => {
+  if (schema instanceof z.ZodBoolean) {
+    return "z.boolean()";
+  } else if (schema instanceof z.ZodNumber) {
+    return "z.number()";
+  } else if (schema instanceof z.ZodString) {
+    return "z.string()";
+  } else if (schema instanceof z.ZodDate) {
+    return "z.date()";
+  } else if (schema instanceof z.ZodEffects) {
+    const baseSchema = zodSchemaToString(schema._def.schema);
+    return `${baseSchema}`;
+  }
+  // Add more cases as needed for other Zod types
+  return "z.unknown()"; // fallback
+};
+
+const getZodSchemaString = (formFields: FormFieldType[]) => {
+  const schemaObject = getZodSchema(formFields);
+  const schemaEntries = Object.entries(schemaObject)
+    .map(([key, value]) => {
+      return `  ${key}: ${zodSchemaToString(value)}`;
+    })
+    .join(",\n");
+
+  return `const formSchema = z.object({\n${schemaEntries}\n});`;
 };
 
 const generateFormCode = (formFields: FormFieldType[]) => {
@@ -71,6 +147,7 @@ const generateFormCode = (formFields: FormFieldType[]) => {
   const importSet = new Set([
     '"use client"',
     'import { useState } from "react"',
+    'import {toast} from "sonner"',
     'import { useForm } from "react-hook-form"',
     'import { zodResolver } from "@hookform/resolvers/zod"',
     'import * as z from "zod"',
@@ -78,6 +155,8 @@ const generateFormCode = (formFields: FormFieldType[]) => {
     'import { Button } from "@/components/ui/button"',
     'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
   ]);
+
+  const schema = getZodSchemaString(formFields);
 
   const constantSet: Set<string> = new Set(); // Define type for constantSet
 
@@ -108,6 +187,7 @@ const generateFormCode = (formFields: FormFieldType[]) => {
         importSet.add(
           'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"'
         );
+        importSet.add('import { Calendar } from "@/components/ui/calendar"');
         importSet.add(
           'import { Calendar as CalendarIcon } from "lucide-react"'
         );
@@ -160,45 +240,32 @@ const generateFormCode = (formFields: FormFieldType[]) => {
 
   const imports = Array.from(importSet).join("\n");
 
-  const schema = `
-const formSchema = z.object({
-  ${formFields
-    .map(
-      (field, index) =>
-        `${field.name}: ${
-          field.type === "Checkbox" || field.type === "Switch"
-            ? "z.boolean().optional()"
-            : field.type === "Number"
-            ? "z.coerce.number()"
-            : field.type === "Date"
-            ? "z.date()"
-            : "z.string()"
-        }${
-          field.required
-            ? `.min(1, { message: "${field.label} is required" })`
-            : ""
-        }`
-    )
-    .join(",\n  ")}
-})
-  `;
-
   const constants = Array.from(constantSet).join("\n"); // Convert Set to string
 
   const component = `
-export function MyForm() {
+export default function MyForm() {
   ${constants} // Insert constants here
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+    try {
+      console.log(values);
+      toast(
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      );
+    } catch (error) {
+      console.error("Form submission error", error);
+      toast.error("Failed to submit the form. Please try again.");
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
         ${formFields
           .map((field) => `${generateCodeSnippet(field)}`)
           .join("\n        ")}
@@ -209,7 +276,7 @@ export function MyForm() {
 }
   `;
 
-  return imports + "\n"  + "\n" + schema + "\n" + component;
+  return imports + "\n" + "\n" + schema + "\n" + component;
 };
 
 export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
@@ -233,7 +300,31 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
     }
   }
 
+  function formatJSXCode(code: string): string {
+    return js_beautify(code, {
+      indent_size: 2,
+      indent_char: " ",
+      max_preserve_newlines: 2,
+      preserve_newlines: true,
+      keep_array_indentation: false,
+      break_chained_methods: false,
+      // indent_scripts: "normal",
+      // brace_style: "collapse,preserve-inline",
+      space_before_conditional: true,
+      unescape_strings: false,
+      jslint_happy: false,
+      end_with_newline: false,
+      wrap_line_length: 0,
+      // indent_inner_html: false,
+      comma_first: false,
+      e4x: true,
+      indent_empty_lines: false,
+    });
+  }
+
   const generatedCode = generateFormCode(formFields);
+
+  const formattedCode = formatJSXCode(generatedCode);
 
   return (
     <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
@@ -295,7 +386,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
             condition={formFields.length > 0}
             render={() => (
               <Highlight
-                code={generatedCode}
+                code={formattedCode}
                 language="tsx"
                 theme={themes.shadesOfPurple}
               >

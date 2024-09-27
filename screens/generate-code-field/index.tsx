@@ -67,7 +67,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                             value={language.label}
                             key={language.value}
                             onSelect={() => {
-                              form.setValue("language", language.value)
+                              form.setValue("${field.name}", language.value);
                             }}
                           >
                             <Check
@@ -306,10 +306,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                       </FileUploaderContent>
                     </FileUploader>
                   </FormControl>
-                  ${
-                    field.description &&
-                    `<FormDescription>${field.description}</FormDescription>`
-                  }
+                  ${field.description ? `<FormDescription>${field.description}</FormDescription>` : ""}
                   <FormMessage />
                 </FormItem>
               )}

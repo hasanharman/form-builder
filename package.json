@@ -26,6 +26,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@types/prettier": "^3.0.0",
     "@typescript-eslint/parser": "^8.7.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -33,6 +34,7 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.5.6",
     "input-otp": "^1.2.4",
+    "js-beautify": "^1.15.1",
     "lucide-react": "^0.445.0",
     "next": "14.2.13",
     "next-themes": "^0.3.0",
@@ -52,12 +54,14 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
+    "@types/js-beautify": "^1.14.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "postcss": "^8",
+    "prettier": "^3.3.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

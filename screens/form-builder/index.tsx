@@ -22,9 +22,10 @@ export default function FormBuilder() {
       label: `New ${type}`,
       value: "",
       checked: true,
-      name: "",
+      name: `name_${formFields.length + 1}`, // Set default name
       placeholder: "Enter Placeholder",
-      required: false,
+      description: "",
+      required: true,
       disabled: false,
       onChange: handleChange,
       setValue: () => {},
@@ -67,8 +68,11 @@ export default function FormBuilder() {
           If you've successfully installed Shadcn, you can easily copy and paste
           the generated forms. Some components may require additional packages,
           so be sure to check their documentation in the{" "}
-          <Link href="/readme" className="underline text-slate-800">readme</Link> section. If you encounter any
-          errors, refer to the readme for further guidance.
+          <Link href="/readme" className="underline text-slate-800">
+            readme
+          </Link>{" "}
+          section. If you encounter any errors, refer to the readme for further
+          guidance.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 items-center justify-items-center gap-8">
