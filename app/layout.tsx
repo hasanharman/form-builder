@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "sonner";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/react";
 
 import "./globals.css";
 
@@ -75,6 +76,7 @@ export default function RootLayout({
           <main>{children}</main>
         </body>
       </html>
+      <Analytics />
     </ViewTransitions>
   );
 }
