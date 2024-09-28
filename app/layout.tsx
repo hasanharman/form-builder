@@ -3,6 +3,7 @@ import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "sonner";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
+import { OpenPanelComponent } from "@openpanel/nextjs";
 
 import "./globals.css";
 
@@ -77,6 +78,12 @@ export default function RootLayout({
         </body>
       </html>
       <Analytics />
+      <OpenPanelComponent
+        clientId={process.env.NEXT_OPEN_PANEL_CLIENT_ID || ""}
+        trackScreenViews={true}
+        trackAttributes={true}
+        trackOutgoingLinks={true}
+      />
     </ViewTransitions>
   );
 }
