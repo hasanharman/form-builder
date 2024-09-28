@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import { Link } from "next-view-transitions";
 
 import { Button } from "@/components/ui/button";
@@ -17,15 +14,12 @@ import {
 
 import { LuGithub, LuMenu } from "react-icons/lu";
 import { FaXTwitter } from "react-icons/fa6";
-import { IoClose } from "react-icons/io5";
 
 import Logo from "@/assets/logo.svg";
 
 export default function Header() {
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-
   return (
-    <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
+    <header className="max-w-5xl mx-auto flex justify-between items-center my-5">
       <Link href="/" className="cursor-pointer">
         <Logo />
       </Link>

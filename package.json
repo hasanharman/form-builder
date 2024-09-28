@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@next/third-parties": "^14.2.13",
     "@openpanel/nextjs": "^1.0.3",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-checkbox": "^1.1.1",
@@ -41,6 +42,8 @@
     "next": "14.2.13",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",
+    "nextjs-toploader": "^3.6.15",
+    "posthog-js": "^1.165.0",
     "prism-react-renderer": "^2.4.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",

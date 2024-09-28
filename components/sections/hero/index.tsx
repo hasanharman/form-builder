@@ -1,16 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
+import { LuStar } from "react-icons/lu";
 import HeroVideoDialog from "@/components/sections/hero/hero-video";
 
 const ease = [0.16, 1, 0.3, 1];
 
 function HeroPill() {
+  const [stars, setStars] = useState<number>(0);
+  const [forks, setForks] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchGitHubData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.github.com/repos/hasanharman/form-builder"
+        );
+        const data = await response.json();
+        setStars(data.stargazers_count);
+        setForks(data.forks_count);
+      } catch (error) {
+        console.error("Error fetching GitHub data:", error);
+      }
+    };
+    fetchGitHubData();
+  }, []);
+
   return (
     <motion.a
       href="https://github.com/hasanharman/form-builder"
@@ -20,12 +41,11 @@ function HeroPill() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease }}
     >
-      <div className="w-fit rounded-full px-2 py-0.5 text-center text-xs font-medium text-primary sm:text-sm">
-        ⭐️
+      <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-muted-foreground hover:text-primary text-sm border">
+        <LuStar />
+        <span className="ml-1">{stars}</span>
       </div>
-      <p className="text-xs font-medium text-primary sm:text-sm">
-        Support The Project
-      </p>
+      <p className="font-medium text-primary text-sm">Support the project on GitHub</p>
       <svg
         width="12"
         height="12"
@@ -56,7 +76,7 @@ function HeroTitles() {
           staggerChildren: 0.2,
         }}
       >
-        {["Build", "your", "forms", "faster"].map((text, index) => (
+        {["Build", "your", "Forms", "Faster"].map((text, index) => (
           <motion.span
             key={index}
             className="inline-block px-1 md:px-2"

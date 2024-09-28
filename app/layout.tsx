@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "sonner";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/react";
-import { OpenPanelComponent } from "@openpanel/nextjs";
+import NextTopLoader from "nextjs-toploader";
 
 import "./globals.css";
 
 import Header from "@/components/header";
+import AllProviders from "@/providers";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -72,18 +72,16 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <Toaster />
-          <Header />
-          <main>{children}</main>
+          <div className="px-5 lg:px-0">
+            <NextTopLoader color="#FF9432" showSpinner={false} />
+            <Toaster />
+            <Header />
+            <AllProviders>
+              <main>{children}</main>
+            </AllProviders>
+          </div>
         </body>
       </html>
-      <Analytics />
-      <OpenPanelComponent
-        clientId={process.env.NEXT_OPEN_PANEL_CLIENT_ID || ""}
-        trackScreenViews={true}
-        trackAttributes={true}
-        trackOutgoingLinks={true}
-      />
     </ViewTransitions>
   );
 }
