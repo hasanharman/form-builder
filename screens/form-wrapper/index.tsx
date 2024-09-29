@@ -17,6 +17,7 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
+import { isNotEmpty } from "@/lib/utils";
 
 interface FormWrapperProps<TFieldValues extends FieldValues> {
   schema: z.ZodType<TFieldValues>;
@@ -68,7 +69,9 @@ export function FormFieldWrapper<TFieldValues extends FieldValues>({
           <FormControl>
             {React.cloneElement(children as React.ReactElement, { ...field })}
           </FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
+          {isNotEmpty(description) && (
+            <FormDescription>{description}</FormDescription>
+          )}
           <FormMessage />
         </FormItem>
       )}
