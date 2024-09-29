@@ -1,21 +1,21 @@
-import * as React from "react";
-import { useMotionValue, Reorder } from "framer-motion";
+import * as React from 'react'
+import { useMotionValue, Reorder } from 'framer-motion'
 
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { useRaisedShadow } from "@/components/use-raised-shadow";
-import { FormFieldType } from "@/types";
+import { Input } from '@/components/ui/input'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Button } from '@/components/ui/button'
+import { useRaisedShadow } from '@/components/use-raised-shadow'
+import { FormFieldType } from '@/types'
 
-import { LuGrip, LuPencil, LuTrash2 } from "react-icons/lu";
+import { LuGrip, LuPencil, LuTrash2 } from 'react-icons/lu'
 
 interface Props {
-  index: number;
-  field: FormFieldType;
-  formFields: FormFieldType[];
-  setFormFields: React.Dispatch<React.SetStateAction<FormFieldType[]>>;
-  updateFormField: (index: number, updates: Partial<FormFieldType>) => void;
-  openEditDialog: (field: FormFieldType) => void;
+  index: number
+  field: FormFieldType
+  formFields: FormFieldType[]
+  setFormFields: React.Dispatch<React.SetStateAction<FormFieldType[]>>
+  updateFormField: (index: number, updates: Partial<FormFieldType>) => void
+  openEditDialog: (field: FormFieldType) => void
 }
 
 export const FieldItem = ({
@@ -26,8 +26,8 @@ export const FieldItem = ({
   updateFormField,
   openEditDialog,
 }: Props) => {
-  const y = useMotionValue(0);
-  const boxShadow = useRaisedShadow(y);
+  const y = useMotionValue(0)
+  const boxShadow = useRaisedShadow(y)
 
   return (
     <Reorder.Item
@@ -92,13 +92,13 @@ export const FieldItem = ({
           variant="ghost"
           size="icon"
           onClick={() => {
-            const updatedFields = formFields.filter((_, i) => i !== index);
-            setFormFields(updatedFields);
+            const updatedFields = formFields.filter((_, i) => i !== index)
+            setFormFields(updatedFields)
           }}
         >
           <LuTrash2 />
         </Button>
       </div>
     </Reorder.Item>
-  );
-};
+  )
+}

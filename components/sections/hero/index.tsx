@@ -1,36 +1,36 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+import { cn } from '@/lib/utils'
+import { buttonVariants } from '@/components/ui/button'
 
-import { LuStar } from "react-icons/lu";
-import HeroVideoDialog from "@/components/sections/hero/hero-video";
+import { LuStar } from 'react-icons/lu'
+import HeroVideoDialog from '@/components/sections/hero/hero-video'
 
-const ease = [0.16, 1, 0.3, 1];
+const ease = [0.16, 1, 0.3, 1]
 
 function HeroPill() {
-  const [stars, setStars] = useState<number>(0);
-  const [forks, setForks] = useState<number>(0);
+  const [stars, setStars] = useState<number>(0)
+  const [forks, setForks] = useState<number>(0)
 
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
         const response = await fetch(
-          "https://api.github.com/repos/hasanharman/form-builder"
-        );
-        const data = await response.json();
-        setStars(data.stargazers_count);
-        setForks(data.forks_count);
+          'https://api.github.com/repos/hasanharman/form-builder',
+        )
+        const data = await response.json()
+        setStars(data.stargazers_count)
+        setForks(data.forks_count)
       } catch (error) {
-        console.error("Error fetching GitHub data:", error);
+        console.error('Error fetching GitHub data:', error)
       }
-    };
-    fetchGitHubData();
-  }, []);
+    }
+    fetchGitHubData()
+  }, [])
 
   return (
     <motion.a
@@ -45,7 +45,9 @@ function HeroPill() {
         <LuStar />
         <span className="ml-1">{stars}</span>
       </div>
-      <p className="font-medium text-primary text-sm">Support the project on GitHub</p>
+      <p className="font-medium text-primary text-sm">
+        Support the project on GitHub
+      </p>
       <svg
         width="12"
         height="12"
@@ -60,7 +62,7 @@ function HeroPill() {
         />
       </svg>
     </motion.a>
-  );
+  )
 }
 
 function HeroTitles() {
@@ -68,15 +70,15 @@ function HeroTitles() {
     <div className="flex w-full max-w-2xl flex-col space-y-4 overflow-hidden pt-8">
       <motion.h1
         className="text-center text-4xl font-medium leading-tight text-foreground sm:text-5xl md:text-6xl"
-        initial={{ filter: "blur(10px)", opacity: 0, y: 50 }}
-        animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
+        initial={{ filter: 'blur(10px)', opacity: 0, y: 50 }}
+        animate={{ filter: 'blur(0px)', opacity: 1, y: 0 }}
         transition={{
           duration: 1,
           ease,
           staggerChildren: 0.2,
         }}
       >
-        {["Build", "your", "Forms", "Faster"].map((text, index) => (
+        {['Build', 'your', 'Forms', 'Faster'].map((text, index) => (
           <motion.span
             key={index}
             className="inline-block px-1 md:px-2"
@@ -102,7 +104,7 @@ function HeroTitles() {
           ease,
         }}
       >
-        Create forms with{" "}
+        Create forms with{' '}
         <Link
           href="https://ui.shadcn.com/"
           target="_blank"
@@ -110,26 +112,26 @@ function HeroTitles() {
         >
           Shadcn
         </Link>
-        ,{" "}
+        ,{' '}
         <Link
           href="https://react-hook-form.com/"
           target="_blank"
           className="hover:underline"
         >
           react-hooks-form
-        </Link>{" "}
-        and{" "}
+        </Link>{' '}
+        and{' '}
         <Link
           href="https://zod.dev/"
           target="_blank"
           className="hover:underline"
         >
           zod
-        </Link>{" "}
+        </Link>{' '}
         within minutes.
       </motion.p>
     </div>
-  );
+  )
 }
 
 function HeroCTA() {
@@ -144,8 +146,8 @@ function HeroCTA() {
         <Link
           href="/playground"
           className={cn(
-            buttonVariants({ variant: "default" }),
-            "w-full sm:w-auto text-background flex gap-2 rounded-full"
+            buttonVariants({ variant: 'default' }),
+            'w-full sm:w-auto text-background flex gap-2 rounded-full',
           )}
         >
           {/* <Icons.logo className="h-6 w-6" /> */}
@@ -161,7 +163,7 @@ function HeroCTA() {
         7 day free trial. No credit card required.
       </motion.p> */}
     </>
-  );
+  )
 }
 
 function HeroImage() {
@@ -180,7 +182,7 @@ function HeroImage() {
         className="border rounded-lg shadow-lg max-w-screen-lg mt-16"
       />
     </motion.div>
-  );
+  )
 }
 
 export default function HeroSection() {
@@ -194,5 +196,5 @@ export default function HeroSection() {
         <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4"></div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react'
 import {
   useForm,
   UseFormReturn,
   FieldValues,
   DefaultValues,
   Path,
-} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+} from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import {
   Form,
   FormField,
@@ -16,14 +16,14 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "@/components/ui/form";
-import { isNotEmpty } from "@/lib/utils";
+} from '@/components/ui/form'
+import { isNotEmpty } from '@/lib/utils'
 
 interface FormWrapperProps<TFieldValues extends FieldValues> {
-  schema: z.ZodType<TFieldValues>;
-  defaultValues: DefaultValues<TFieldValues>;
-  onSubmit: (values: TFieldValues) => void;
-  children: (form: UseFormReturn<TFieldValues>) => React.ReactNode;
+  schema: z.ZodType<TFieldValues>
+  defaultValues: DefaultValues<TFieldValues>
+  onSubmit: (values: TFieldValues) => void
+  children: (form: UseFormReturn<TFieldValues>) => React.ReactNode
 }
 
 export function FormWrapper<TFieldValues extends FieldValues>({
@@ -35,21 +35,21 @@ export function FormWrapper<TFieldValues extends FieldValues>({
   const form = useForm<TFieldValues>({
     resolver: zodResolver(schema),
     defaultValues,
-  });
+  })
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>{children(form)}</form>
     </Form>
-  );
+  )
 }
 
 interface FormFieldWrapperProps<TFieldValues extends FieldValues> {
-  form: UseFormReturn<TFieldValues>;
-  name: keyof TFieldValues;
-  label: string;
-  description?: string;
-  children: React.ReactNode;
+  form: UseFormReturn<TFieldValues>
+  name: keyof TFieldValues
+  label: string
+  description?: string
+  children: React.ReactNode
 }
 
 export function FormFieldWrapper<TFieldValues extends FieldValues>({
@@ -76,5 +76,5 @@ export function FormFieldWrapper<TFieldValues extends FieldValues>({
         </FormItem>
       )}
     />
-  );
+  )
 }

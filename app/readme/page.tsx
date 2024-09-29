@@ -1,13 +1,13 @@
-import { Link } from "next-view-transitions";
+import { Link } from 'next-view-transitions'
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@radix-ui/react-separator";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Separator } from '@radix-ui/react-separator'
 
 interface UserLinkProps {
-  href: string;
-  avatarSrc: string;
-  name: string;
-  xLink: string;
+  href: string
+  avatarSrc: string
+  name: string
+  xLink: string
 }
 
 const UserLink = ({ href, avatarSrc, name, xLink }: UserLinkProps) => {
@@ -24,30 +24,30 @@ const UserLink = ({ href, avatarSrc, name, xLink }: UserLinkProps) => {
         </Avatar>
       </Link>
     </div>
-  );
-};
+  )
+}
 
 const resourcesList = [
   {
-    href: "https://ui.shadcn.com/",
-    avatarSrc: "https://github.com/shadcn.png",
-    name: "shadcn",
-    xLink: "https://x.com/shadcn",
+    href: 'https://ui.shadcn.com/',
+    avatarSrc: 'https://github.com/shadcn.png',
+    name: 'shadcn',
+    xLink: 'https://x.com/shadcn',
   },
   {
-    href: "https://shadcn-extension.vercel.app/",
+    href: 'https://shadcn-extension.vercel.app/',
     avatarSrc:
-      "https://pbs.twimg.com/profile_images/1574177524254384129/nMQ3eP2n_400x400.jpg",
-    name: "Bylka",
-    xLink: "https://x.com/BylkaYf",
+      'https://pbs.twimg.com/profile_images/1574177524254384129/nMQ3eP2n_400x400.jpg',
+    name: 'Bylka',
+    xLink: 'https://x.com/BylkaYf',
   },
   {
-    href: "https://shadcn-phone-input.vercel.app/",
-    avatarSrc: "https://github.com/omeralpi.png",
-    name: "omeralpi",
-    xLink: "https://github.com/omeralpi/shadcn-phone-input",
+    href: 'https://shadcn-phone-input.vercel.app/',
+    avatarSrc: 'https://github.com/omeralpi.png',
+    name: 'omeralpi',
+    xLink: 'https://github.com/omeralpi/shadcn-phone-input',
   },
-];
+]
 
 export default function ReadmePage() {
   return (
@@ -72,10 +72,10 @@ export default function ReadmePage() {
         </p>
         <p className="text-muted-foreground">
           I plan to open source this project as soon as I complete my roadmap,
-          so stay tuned! In the meantime, feel free to DM me on{" "}
+          so stay tuned! In the meantime, feel free to DM me on{' '}
           <Link href="https://x.com/strad3r" target="_blank">
             Twitter
-          </Link>{" "}
+          </Link>{' '}
           (yes, it’s still Twitter for me).
         </p>
       </div>
@@ -101,5 +101,5 @@ export default function ReadmePage() {
         </div>
       </div>
     </section>
-  );
+  )
 }

@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { FormFieldType } from "@/types";
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { FormFieldType } from '@/types'
 
 type EditFieldDialogProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  field: FormFieldType | null;
-  onSave: (updatedField: FormFieldType) => void;
-};
+  isOpen: boolean
+  onClose: () => void
+  field: FormFieldType | null
+  onSave: (updatedField: FormFieldType) => void
+}
 
 export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   isOpen,
@@ -25,20 +25,20 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   field,
   onSave,
 }) => {
-  const [editedField, setEditedField] = useState<FormFieldType | null>(null);
+  const [editedField, setEditedField] = useState<FormFieldType | null>(null)
 
   useEffect(() => {
-    setEditedField(field);
-  }, [field]);
+    setEditedField(field)
+  }, [field])
 
   const handleSave = () => {
     if (editedField) {
-      onSave(editedField);
-      onClose();
+      onSave(editedField)
+      onClose()
     }
-  };
+  }
 
-  if (!editedField) return null;
+  if (!editedField) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -117,5 +117,5 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

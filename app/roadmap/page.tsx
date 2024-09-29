@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react'
 
 const Steps = [
-  "Implement custom naming conventions for form fields",
-  "Enhance validation mechanisms for improved accuracy",
-  "Allow detailed selection of validation rules within the edit dialog",
-  "Open source the project for community contributions",
-  "Add sections for request handling and messaging",
-  "Create or integrate a Kanban board to visualize the project roadmap",
-  "Prepare forms that are ready for easy copying and pasting",
-];
+  'Implement custom naming conventions for form fields',
+  'Enhance validation mechanisms for improved accuracy',
+  'Allow detailed selection of validation rules within the edit dialog',
+  'Open source the project for community contributions',
+  'Add sections for request handling and messaging',
+  'Create or integrate a Kanban board to visualize the project roadmap',
+  'Prepare forms that are ready for easy copying and pasting',
+]
 
 export default function RoadMapPage() {
   return (
@@ -28,5 +28,5 @@ export default function RoadMapPage() {
         </div>
       </div>
     </section>
-  );
+  )
 }

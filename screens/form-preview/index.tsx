@@ -1,146 +1,146 @@
-import React from "react";
-import { Highlight, themes } from "prism-react-renderer";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { js_beautify } from "js-beautify";
+import React from 'react'
+import { Highlight, themes } from 'prism-react-renderer'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
+import { js_beautify } from 'js-beautify'
 
-import { renderFormField } from "@/screens/render-form-field";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Form, FormField, FormItem, FormControl } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import If from "@/components/ui/if";
-import { FormFieldType } from "@/types";
-import { generateCodeSnippet } from "../generate-code-field";
+import { renderFormField } from '@/screens/render-form-field'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
+import If from '@/components/ui/if'
+import { FormFieldType } from '@/types'
+import { generateCodeSnippet } from '../generate-code-field'
 
-import { Files } from "lucide-react";
+import { Files } from 'lucide-react'
 
 export type FormPreviewProps = {
-  formFields: FormFieldType[];
-};
+  formFields: FormFieldType[]
+}
 
 const generateZodSchema = (formFields: FormFieldType[]) => {
-  const schemaObject: Record<string, any> = {};
+  const schemaObject: Record<string, any> = {}
 
   formFields.forEach((field) => {
-    if (field.type !== "Label") {
-      let fieldSchema;
+    if (field.type !== 'Label') {
+      let fieldSchema
       switch (field.type) {
-        case "Checkbox":
-        case "Switch":
-          fieldSchema = z.boolean();
+        case 'Checkbox':
+        case 'Switch':
+          fieldSchema = z.boolean()
           if (field.required) {
             fieldSchema = fieldSchema.refine((value) => value === true, {
               message: `${field.label} is required`,
-            });
+            })
           }
-          break;
-        case "Number":
-          fieldSchema = z.coerce.number();
+          break
+        case 'Number':
+          fieldSchema = z.coerce.number()
           if (field.required) {
             fieldSchema = fieldSchema.min(1, {
               message: `${field.label} is required`,
-            });
+            })
           }
-          break;
-        case "Date":
-          fieldSchema = z.date();
+          break
+        case 'Date':
+          fieldSchema = z.date()
           if (field.required) {
             fieldSchema = fieldSchema.refine((date) => !isNaN(date.getTime()), {
               message: `${field.label} is required`,
-            });
+            })
           }
-          break;
+          break
         default:
-          fieldSchema = z.string();
+          fieldSchema = z.string()
           if (field.required) {
             fieldSchema = fieldSchema.min(1, {
               message: `${field.label} is required`,
-            });
+            })
           }
-          break;
+          break
       }
 
-      schemaObject[field.name] = fieldSchema;
+      schemaObject[field.name] = fieldSchema
     }
-  });
+  })
 
-  const schema = z.object(schemaObject);
+  const schema = z.object(schemaObject)
 
   // Debugging: Log the generated schema
-  console.log("schema", schemaObject);
+  console.log('schema', schemaObject)
 
-  return schema;
-};
+  return schema
+}
 
 const getZodSchema = (formFields: FormFieldType[]) => {
-  const schemaObject: Record<string, z.ZodTypeAny> = {};
+  const schemaObject: Record<string, z.ZodTypeAny> = {}
 
   formFields.forEach((field) => {
-    if (field.type !== "Label") {
-      let fieldSchema: z.ZodTypeAny;
+    if (field.type !== 'Label') {
+      let fieldSchema: z.ZodTypeAny
       switch (field.type) {
-        case "Checkbox":
-        case "Switch":
+        case 'Checkbox':
+        case 'Switch':
           fieldSchema = field.required
             ? z.boolean().refine((value) => value === true, {
                 message: `${field.label} is required`,
               })
-            : z.boolean();
-          break;
-        case "Number":
+            : z.boolean()
+          break
+        case 'Number':
           fieldSchema = field.required
             ? z.number().min(1, { message: `${field.label} is required` })
-            : z.number();
-          break;
-        case "Date":
+            : z.number()
+          break
+        case 'Date':
           fieldSchema = field.required
             ? z.date().refine((date) => !isNaN(date.getTime()), {
                 message: `${field.label} is required`,
               })
-            : z.date();
-          break;
+            : z.date()
+          break
         default:
           fieldSchema = field.required
             ? z.string().min(1, { message: `${field.label} is required` })
-            : z.string();
-          break;
+            : z.string()
+          break
       }
-      schemaObject[field.name] = fieldSchema;
+      schemaObject[field.name] = fieldSchema
     }
-  });
+  })
 
-  return schemaObject;
-};
+  return schemaObject
+}
 
 const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   if (schema instanceof z.ZodBoolean) {
-    return "z.boolean()";
+    return 'z.boolean()'
   } else if (schema instanceof z.ZodNumber) {
-    return "z.number()";
+    return 'z.number()'
   } else if (schema instanceof z.ZodString) {
-    return "z.string()";
+    return 'z.string()'
   } else if (schema instanceof z.ZodDate) {
-    return "z.date()";
+    return 'z.date()'
   } else if (schema instanceof z.ZodEffects) {
-    const baseSchema = zodSchemaToString(schema._def.schema);
-    return `${baseSchema}`;
+    const baseSchema = zodSchemaToString(schema._def.schema)
+    return `${baseSchema}`
   }
   // Add more cases as needed for other Zod types
-  return "z.unknown()"; // fallback
-};
+  return 'z.unknown()' // fallback
+}
 
 const getZodSchemaString = (formFields: FormFieldType[]) => {
-  const schemaObject = getZodSchema(formFields);
+  const schemaObject = getZodSchema(formFields)
   const schemaEntries = Object.entries(schemaObject)
     .map(([key, value]) => {
-      return `  ${key}: ${zodSchemaToString(value)}`;
+      return `  ${key}: ${zodSchemaToString(value)}`
     })
-    .join(",\n");
+    .join(',\n')
 
-  return `const formSchema = z.object({\n${schemaEntries}\n});`;
-};
+  return `const formSchema = z.object({\n${schemaEntries}\n});`
+}
 
 const generateFormCode = (formFields: FormFieldType[]) => {
   // Create a Set to store unique import statements
@@ -154,22 +154,22 @@ const generateFormCode = (formFields: FormFieldType[]) => {
     'import { cn } from "@/lib/utils"',
     'import { Button } from "@/components/ui/button"',
     'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
-  ]);
+  ])
 
-  const schema = getZodSchemaString(formFields);
+  const schema = getZodSchemaString(formFields)
 
-  const constantSet: Set<string> = new Set(); // Define type for constantSet
+  const constantSet: Set<string> = new Set() // Define type for constantSet
 
   formFields.forEach((field) => {
     switch (field.type) {
-      case "Combobox":
+      case 'Combobox':
         importSet.add(
-          'import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"'
-        );
+          'import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"',
+        )
         importSet.add(
-          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"'
-        );
-        importSet.add('import { Check, ChevronsUpDown } from "lucide-react"');
+          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
+        )
+        importSet.add('import { Check, ChevronsUpDown } from "lucide-react"')
         constantSet.add(`const languages = [
           { label: "English", value: "en" },
           { label: "French", value: "fr" },
@@ -180,33 +180,31 @@ const generateFormCode = (formFields: FormFieldType[]) => {
           { label: "Japanese", value: "ja" },
           { label: "Korean", value: "ko" },
           { label: "Chinese", value: "zh" },
-          ] as const;`);
-        break;
-      case "DatePicker":
-        importSet.add('import { format } from "date-fns"');
+          ] as const;`)
+        break
+      case 'DatePicker':
+        importSet.add('import { format } from "date-fns"')
         importSet.add(
-          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"'
-        );
-        importSet.add('import { Calendar } from "@/components/ui/calendar"');
+          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
+        )
+        importSet.add('import { Calendar } from "@/components/ui/calendar"')
+        importSet.add('import { Calendar as CalendarIcon } from "lucide-react"')
+        break
+      case 'InputOTP':
         importSet.add(
-          'import { Calendar as CalendarIcon } from "lucide-react"'
-        );
-        break;
-      case "InputOTP":
+          'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"',
+        )
+        break
+      case 'Select':
         importSet.add(
-          'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"'
-        );
-        break;
-      case "Select":
+          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
+        )
+        break
+      case 'FileInput':
+        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
         importSet.add(
-          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"'
-        );
-        break;
-      case "FileInput":
-        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"');
-        importSet.add(
-          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"'
-        );
+          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"',
+        )
         constantSet.add(`
             const [files, setFiles] = useState<File[] | null>(null); 
 
@@ -214,31 +212,31 @@ const generateFormCode = (formFields: FormFieldType[]) => {
               maxFiles: 5,
               maxSize: 1024 * 1024 * 4,
               multiple: true,
-            };`);
-        break;
-      case "Phone":
+            };`)
+        break
+      case 'Phone':
         importSet.add(
-          'import { PhoneInput } from "@/components/ui/phone-input";'
-        );
-        break;
-      case "Password":
+          'import { PhoneInput } from "@/components/ui/phone-input";',
+        )
+        break
+      case 'Password':
         importSet.add(
-          'import { PasswordInput } from "@/components/ui/password-input"'
-        );
-        break;
+          'import { PasswordInput } from "@/components/ui/password-input"',
+        )
+        break
       default:
         importSet.add(
           `import { ${
             field.type
-          } } from "@/components/ui/${field.type.toLowerCase()}"`
-        );
-        break;
+          } } from "@/components/ui/${field.type.toLowerCase()}"`,
+        )
+        break
     }
-  });
+  })
 
-  const imports = Array.from(importSet).join("\n");
+  const imports = Array.from(importSet).join('\n')
 
-  const constants = Array.from(constantSet).join("\n"); // Convert Set to string
+  const constants = Array.from(constantSet).join('\n') // Convert Set to string
 
   const component = `
 export default function MyForm() {
@@ -266,42 +264,42 @@ export default function MyForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
         ${formFields
           .map((field) => `${generateCodeSnippet(field)}`)
-          .join("\n        ")}
+          .join('\n        ')}
         <Button type="submit">Submit</Button>
       </form>
     </Form>
   )
 }
-  `;
+  `
 
-  return imports + "\n" + "\n" + schema + "\n" + component;
-};
+  return imports + '\n' + '\n' + schema + '\n' + component
+}
 
 export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
-  const formSchema = generateZodSchema(formFields);
+  const formSchema = generateZodSchema(formFields)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-  });
+  })
 
   function onSubmit(data: any) {
     try {
-      console.log("DATA", data);
+      console.log('DATA', data)
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      );
+        </pre>,
+      )
     } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+      console.error('Form submission error', error)
+      toast.error('Failed to submit the form. Please try again.')
     }
   }
 
   function formatJSXCode(code: string): string {
     return js_beautify(code, {
       indent_size: 2,
-      indent_char: " ",
+      indent_char: ' ',
       max_preserve_newlines: 2,
       preserve_newlines: true,
       keep_array_indentation: false,
@@ -317,12 +315,12 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
       comma_first: false,
       e4x: true,
       indent_empty_lines: false,
-    });
+    })
   }
 
-  const generatedCode = generateFormCode(formFields);
+  const generatedCode = generateFormCode(formFields)
 
-  const formattedCode = formatJSXCode(generatedCode);
+  const formattedCode = formatJSXCode(generatedCode)
 
   return (
     <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
@@ -356,7 +354,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                                 renderFormField(field) as React.ReactElement,
                                 {
                                   ...formField,
-                                }
+                                },
                               )}
                             </FormControl>
                           </FormItem>
@@ -400,8 +398,8 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                   variant="secondary"
                   size="icon"
                   onClick={() => {
-                    navigator.clipboard.writeText(generatedCode);
-                    toast.success("Code copied to clipboard!");
+                    navigator.clipboard.writeText(generatedCode)
+                    toast.success('Code copied to clipboard!')
                   }}
                 >
                   <Files />
@@ -444,5 +442,5 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
         </TabsContent>
       </Tabs>
     </div>
-  );
-};
+  )
+}

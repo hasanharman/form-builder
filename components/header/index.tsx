@@ -1,6 +1,6 @@
-import { Link } from "next-view-transitions";
+import { Link } from 'next-view-transitions'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Drawer,
   DrawerClose,
@@ -10,12 +10,12 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from '@/components/ui/drawer'
 
-import { LuGithub, LuMenu } from "react-icons/lu";
-import { FaXTwitter } from "react-icons/fa6";
+import { LuGithub, LuMenu } from 'react-icons/lu'
+import { FaXTwitter } from 'react-icons/fa6'
 
-import Logo from "@/assets/logo.svg";
+import Logo from '@/assets/logo.svg'
 
 export default function Header() {
   return (
@@ -99,5 +99,5 @@ export default function Header() {
         </Drawer>
       </nav>
     </header>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import { FormFieldType } from "@/types";
+import { FormFieldType } from '@/types'
 
 export const generateCodeSnippet = (field: FormFieldType) => {
   switch (field.type) {
-    case "Checkbox":
+    case 'Checkbox':
       return `<FormField
           control={form.control}
           name="${field.name}"
@@ -12,8 +12,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  ${field.required ? "required" : ""}
-                  ${field.disabled ? "disabled" : ""}
+                  ${field.required ? 'required' : ''}
+                  ${field.disabled ? 'disabled' : ''}
                 />
               </FormControl>
               <div className="space-y-1 leading-none">
@@ -26,8 +26,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               </div>
             </FormItem>
           )}
-        />`;
-    case "Combobox":
+        />`
+    case 'Combobox':
       return `<FormField
           control={form.control}
           name="${field.name}"
@@ -44,8 +44,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         "w-[200px] justify-between",
                         !field.value && "text-muted-foreground"
                       )}
-                      ${field.required ? "required" : ""}
-                      ${field.disabled ? "disabled" : ""}
+                      ${field.required ? 'required' : ''}
+                      ${field.disabled ? 'disabled' : ''}
                     >
                       {field.value
                         ? languages.find(
@@ -93,8 +93,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormMessage />
             </FormItem>
           )}
-        />`;
-    case "DatePicker":
+        />`
+    case 'DatePicker':
       return `
       <FormField
       control={form.control}
@@ -140,8 +140,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
           <FormMessage />
         </FormItem>
       )}
-    />`;
-    case "Input":
+    />`
+    case 'Input':
       return `
         <FormField
           control={form.control}
@@ -152,8 +152,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormControl>
                 <Input 
                 placeholder="${field.placeholder}"
-                ${field.required ? "required" : ""}
-                ${field.disabled ? "disabled" : ""}
+                ${field.required ? 'required' : ''}
+                ${field.disabled ? 'disabled' : ''}
                 {...field} />
               </FormControl>
               ${
@@ -163,8 +163,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormMessage />
             </FormItem>
           )}
-        />`;
-    case "InputOTP":
+        />`
+    case 'InputOTP':
       return `
        <FormField
           control={form.control}
@@ -194,8 +194,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormMessage />
             </FormItem>
           )}
-        />`;
-    case "Select":
+        />`
+    case 'Select':
       return `
         <FormField
           control={form.control}
@@ -222,8 +222,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormMessage />
             </FormItem>
           )}
-        />`;
-    case "Switch":
+        />`
+    case 'Switch':
       return `
           <FormField
               control={form.control}
@@ -247,8 +247,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                   </FormControl>
                 </FormItem>
               )}
-            />`;
-    case "Textarea":
+            />`
+    case 'Textarea':
       return `
         <FormField
           control={form.control}
@@ -270,8 +270,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormMessage />
             </FormItem>
           )}
-        />`;
-    case "FileInput":
+        />`
+    case 'FileInput':
       return `
             <FormField
               control={form.control}
@@ -306,12 +306,12 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                       </FileUploaderContent>
                     </FileUploader>
                   </FormControl>
-                  ${field.description ? `<FormDescription>${field.description}</FormDescription>` : ""}
+                  ${field.description ? `<FormDescription>${field.description}</FormDescription>` : ''}
                   <FormMessage />
                 </FormItem>
               )}
-            />`;
-    case "Password":
+            />`
+    case 'Password':
       return `
         <FormField
           control={form.control}
@@ -330,8 +330,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />
-        `;
-    case "Phone":
+        `
+    case 'Phone':
       return `
           <FormField
             control={form.control}
@@ -354,12 +354,12 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               </FormItem>
             )}
           />
-            `;
+            `
     default:
-      return null;
+      return null
   }
-};
+}
 
 export default function GenerateCodeFields() {
-  return <div>index</div>;
+  return <div>index</div>
 }
