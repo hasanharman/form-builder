@@ -16,6 +16,19 @@ import { LuGithub, LuMenu } from 'react-icons/lu'
 import { FaXTwitter } from 'react-icons/fa6'
 
 import Logo from '@/assets/logo.svg'
+import { cn } from '@/lib/utils'
+
+type Tabs = {
+  name: string
+  href: string
+  className?: string
+}
+
+const tabs: Tabs[] = [
+  { name: 'Readme', href: '/readme' },
+  { name: 'Roadmap', href: '/roadmap' },
+  { name: 'Open Playground', href: '/playground', className: 'bg-primary text-white rounded-full shadow' },
+]
 
 export default function Header() {
   return (
@@ -23,16 +36,14 @@ export default function Header() {
       <Link href="/" className="cursor-pointer">
         <Logo />
       </Link>
+
       <nav className="hidden md:flex items-center gap-3">
-        <Link href="/readme">
-          <Button variant="link">Readme</Button>
-        </Link>
-        <Link href="/roadmap">
-          <Button variant="link">Roadmap</Button>
-        </Link>
-        <Link href="/playground">
-          <Button className="rounded-full">Open Playground</Button>
-        </Link>
+        {tabs.map((tab, i) => (
+          <Link href={tab.href} key={i}>
+            <Button variant="link" className={(cn('w-full', tab?.className))}>{tab.name}</Button>
+          </Link>
+        ))}
+
         <Link
           href="https://github.com/hasanharman/form-builder"
           target="_blank"
@@ -47,6 +58,7 @@ export default function Header() {
           </Button>
         </Link>
       </nav>
+
       <nav className="md:hidden">
         <Drawer>
           <DrawerTrigger asChild>
@@ -54,6 +66,7 @@ export default function Header() {
               <LuMenu />
             </Button>
           </DrawerTrigger>
+
           <DrawerContent>
             <div className="mx-auto w-full max-w-sm flex flex-col gap-3">
               <DrawerFooter>
@@ -62,32 +75,28 @@ export default function Header() {
                     href="https://github.com/hasanharman/form-builder"
                     target="_blank"
                   >
-                    <Button variant="outline" className="rounded-full p-2 ">
+                    <Button variant="outline" className="rounded-full p-2">
                       <LuGithub className="text-lg" />
                     </Button>
                   </Link>
+
                   <Link href="https://x.com/strad3r" target="_blank">
                     <Button variant="outline" className="rounded-full p-2">
                       <FaXTwitter className="text-lg" />
                     </Button>
                   </Link>
                 </div>
-                <Link href="/readme">
-                  <Button variant="secondary" className="w-full">
-                    Readme
-                  </Button>
-                </Link>
-                <Link href="/roadmap">
-                  <Button variant="secondary" className="w-full">
-                    Roadmap
-                  </Button>
-                </Link>
 
-                <Link href="/playground">
-                  <Button className="rounded-full w-full">
-                    Open Playground
-                  </Button>
-                </Link>
+                {tabs.map((tab) => (
+                  <DrawerClose asChild key={tab.href}>
+                    <Link href={tab.href}>
+                      <Button variant="secondary" className={(cn('w-full', tab?.className))}>
+                        {tab.name}
+                      </Button>
+                    </Link>
+                  </DrawerClose>
+                ))}
+
                 <DrawerClose asChild>
                   <Button variant="outline" className="rounded-full">
                     Cancel
