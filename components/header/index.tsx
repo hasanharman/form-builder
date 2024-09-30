@@ -22,6 +22,7 @@ import If from '../ui/if'
 type Tabs = {
   name: string
   href: string
+  isNewTab?: boolean
   variant:
     | 'default'
     | 'destructive'
@@ -37,7 +38,12 @@ type Tabs = {
 
 const tabs: Tabs[] = [
   { name: 'Readme', href: '/readme', variant: 'link' },
-  { name: 'Roadmap', href: '/roadmap', variant: 'link' },
+  {
+    name: 'Roadmap',
+    href: 'https://shadcnform.featurebase.app/',
+    variant: 'link',
+    isNewTab: true,
+  },
   {
     name: 'Open Playground',
     href: '/playground',
@@ -56,7 +62,12 @@ export default function Header() {
 
       <nav className="hidden md:flex items-center gap-3">
         {tabs.map((tab, i) => (
-          <Link href={tab.href} key={i} className="relative">
+          <Link
+            href={tab.href}
+            key={i}
+            target={tab.isNewTab ? '_blank' : '_self'}
+            className="relative"
+          >
             <Button
               variant={tab.variant}
               className={cn('w-full', tab?.className)}
