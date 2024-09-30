@@ -1,9 +1,12 @@
 import { Reorder } from 'framer-motion'
 
+import { FormFieldType } from '@/types'
+import { useMediaQuery } from '@/hooks/use-media-query'
+
+import { FieldItem } from '@/components/field-item'
 import If from '@/components/ui/if'
 
-import { FormFieldType } from '@/types'
-import { FieldItem } from '@/components/field-item'
+import { LucideShieldAlert, LucideShieldBan } from 'lucide-react'
 
 type FormFieldListProps = {
   formFields: FormFieldType[]
@@ -18,6 +21,8 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
   updateFormField,
   openEditDialog,
 }) => {
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
   return (
     <div className="flex flex-col gap-1">
       <If
@@ -28,8 +33,20 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
             <div className="grid grid-cols-6 w-full">
               <div className="col-span-2">Label</div>
               <div className="col-span-2">Description</div>
-              <div className="col-span-1">Required</div>
-              <div className="col-span-1">Disabled</div>
+              <div className="col-span-1">
+                <If
+                  condition={isDesktop}
+                  render={() => 'Required'}
+                  otherwise={() => <LucideShieldAlert className="ml-5 w-5" />}
+                />
+              </div>
+              <div className="col-span-1">
+                <If
+                  condition={isDesktop}
+                  render={() => 'Disabled'}
+                  otherwise={() => <LucideShieldBan className="ml-5 w-5" />}
+                />
+              </div>
             </div>
             <div className="w-28" />
           </div>

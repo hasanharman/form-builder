@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest"
@@ -41,6 +42,7 @@
     "js-beautify": "^1.15.1",
     "lucide-react": "^0.445.0",
     "next": "14.2.13",
+    "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",
     "nextjs-toploader": "^3.6.15",

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.shadcn-form.com
+
+# Sitemaps
+Sitemap: https://www.shadcn-form.com/sitemap.xml

@@ -28,7 +28,7 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
   addFormField,
 }) => {
   return (
-    <div className="flex flex-col items-start flex-wrap gap-3">
+    <div className="flex md:flex-col items-start flex-wrap gap-3">
       {fieldTypes.map((type) => (
         <div className="flex items-center gap-1">
           <Button
@@ -39,11 +39,19 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
             size="sm"
           >
             {type.name}
+            <If
+              condition={type.isNew}
+              render={() => (
+                <div className="md:hidden ml-1 text-[10px] p-1 bg-yellow-200 rounded">
+                  New
+                </div>
+              )}
+            />
           </Button>
           <If
             condition={type.isNew}
             render={() => (
-              <div className="ml-1 text-[10px] p-1 bg-yellow-200 rounded">
+              <div className="hidden md:block ml-1 text-[10px] p-1 bg-yellow-200 rounded">
                 New
               </div>
             )}

@@ -1,15 +1,20 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Separator } from '@/components/ui/separator'
-import { FieldSelector } from '../field-selector'
-import { FormFieldList } from '../form-field-list'
-import { FormPreview } from '../form-preview'
-import { EditFieldDialog } from '../edit-field-dialog'
-import { FormFieldType } from '@/types'
 import { Link } from 'next-view-transitions'
 
+import { FormFieldType } from '@/types'
+import { Separator } from '@/components/ui/separator'
+import { FieldSelector } from '@/screens/field-selector'
+import { FormFieldList } from '@/screens/form-field-list'
+import { FormPreview } from '@/screens/form-preview'
+import { EditFieldDialog } from '@/screens/edit-field-dialog'
+
+import { useMediaQuery } from '@/hooks/use-media-query'
+
 export default function FormBuilder() {
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
   const [formFields, setFormFields] = useState<FormFieldType[]>([])
   const [selectedField, setSelectedField] = useState<FormFieldType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
@@ -59,7 +64,7 @@ export default function FormBuilder() {
   }
 
   return (
-    <section className="max-h-screen px-8 space-y-8">
+    <section className="max-h-screen space-y-8">
       <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-2xl font-semibold">Playground</h1>
         <p className="text-muted-foreground">
@@ -71,13 +76,13 @@ export default function FormBuilder() {
           </Link>
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8">
-        <div className="w-full h-full col-span-1 space-x-3 md:max-h-[75vh] flex">
-          <div className="flex space-x-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5">
+        <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
+          <div className="flex flex-col md:flex-row gap-3">
             <FieldSelector addFormField={addFormField} />
-            <Separator orientation="vertical" />
+            <Separator orientation={isDesktop ? 'vertical' : 'horizontal'} />
           </div>
-          <div className="overflow-y-auto flex-1">
+          <div className="overflow-y-auto flex-1 my-2">
             <FormFieldList
               formFields={formFields}
               setFormFields={setFormFields}
