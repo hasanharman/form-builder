@@ -1,16 +1,16 @@
-import { Reorder } from "framer-motion";
+import { Reorder } from 'framer-motion'
 
-import If from "@/components/ui/if";
+import If from '@/components/ui/if'
 
-import { FormFieldType } from "@/types";
-import { FieldItem } from "@/components/field-item";
+import { FormFieldType } from '@/types'
+import { FieldItem } from '@/components/field-item'
 
 type FormFieldListProps = {
-  formFields: FormFieldType[];
-  setFormFields: React.Dispatch<React.SetStateAction<FormFieldType[]>>;
-  updateFormField: (index: number, updates: Partial<FormFieldType>) => void;
-  openEditDialog: (field: FormFieldType) => void;
-};
+  formFields: FormFieldType[]
+  setFormFields: React.Dispatch<React.SetStateAction<FormFieldType[]>>
+  updateFormField: (index: number, updates: Partial<FormFieldType>) => void
+  openEditDialog: (field: FormFieldType) => void
+}
 
 export const FormFieldList: React.FC<FormFieldListProps> = ({
   formFields,
@@ -55,5 +55,5 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
         ))}
       </Reorder.Group>
     </div>
-  );
-};
+  )
+}

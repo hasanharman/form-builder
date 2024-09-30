@@ -1,26 +1,26 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react'
+import { Button } from '@/components/ui/button'
 
 type FieldSelectorProps = {
-  addFormField: (type: string) => void;
-};
+  addFormField: (type: string) => void
+}
 
 const fieldTypes = [
-  "Checkbox",
-  "Combobox",
-  "DatePicker",
-  "FileInput",
-  "Input",
-  "InputOTP",
-  "Select",
+  'Checkbox',
+  'Combobox',
+  'DatePicker',
+  'FileInput',
+  'Input',
+  'InputOTP',
+  'Select',
   // "Slider",
-  "Switch",
-  "Textarea",
-  "Password",
-  "Phone",
+  'Switch',
+  'Textarea',
+  'Password',
+  'Phone',
   // "Tags",
   // "Multi Select",
-];
+]
 
 export const FieldSelector: React.FC<FieldSelectorProps> = ({
   addFormField,
@@ -37,7 +37,9 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
           {type}
         </Button>
       ))}
-      <Button className="rounded-full" disabled>Request Component</Button>
+      <Button className="rounded-full" disabled>
+        Request Component
+      </Button>
     </div>
-  );
-};
+  )
+}

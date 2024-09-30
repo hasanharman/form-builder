@@ -17,7 +17,6 @@ Check out the live demo [here](https://shadcn-form-build.vercel.app/).
 - **Zod**: Provides schema-based validation for form inputs.
 - **Next.js**: Developed using Next.js for server-side rendering and API routes.
 
-
 ## Installation
 
 Follow these steps to get the project up and running on your local machine.
@@ -53,6 +52,7 @@ npm run dev
 This command starts the Next.js development server. You can view your project at http://localhost:3000 in your browser.
 
 ### Build for Production
+
 If you want to build the project for production, you can run the following command:
 
 ```bash
