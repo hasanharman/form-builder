@@ -118,7 +118,7 @@ function HeroTitles() {
           target="_blank"
           className="hover:underline"
         >
-          react-hooks-form
+          react-hook-form
         </Link>{' '}
         and{' '}
         <Link
