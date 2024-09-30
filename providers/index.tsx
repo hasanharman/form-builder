@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
-import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import { OpenPanelComponent } from '@openpanel/nextjs'
 import { Analytics } from '@vercel/analytics/react'
 
@@ -18,10 +18,9 @@ const AllProviders = ({ children }: { children: ReactNode }) => {
     <PostHogProvider client={posthog}>
       {children}
       <Analytics />
-      <GoogleAnalytics gaId="G-V5MSV08LD2" />
-      {/* <GoogleTagManager gtmId="GTM-KCCRCDBX" /> */}
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
       <OpenPanelComponent
-        clientId={process.env.NEXT_OPEN_PANEL_CLIENT_ID || ''}
+        clientId={process.env.NEXT_PUBLIC_OPEN_PANEL_CLIENT_ID || ''}
         trackScreenViews={true}
         trackAttributes={true}
         trackOutgoingLinks={true}

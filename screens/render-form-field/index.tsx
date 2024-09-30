@@ -57,6 +57,7 @@ import {
 } from '@/components/ui/file-upload'
 
 import { CalendarIcon, Check, ChevronsUpDown, Paperclip } from 'lucide-react'
+import { Slider } from '@/components/ui/slider'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -317,6 +318,22 @@ export const renderFormField = (field: FormFieldType) => {
           <FormMessage />
         </FormItem>
       )
+    case 'Slider':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <Slider
+              min={0}
+              max={100}
+              step={1}
+              defaultValue={[5]}
+            />
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
     case 'Switch':
       return (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -371,18 +388,6 @@ export const renderFormField = (field: FormFieldType) => {
           <FormMessage />
         </FormItem>
       )
-    // case "Tags":
-    //   // Simplified tags input for preview
-    //   return <Input placeholder="Enter tags..." />;
-    // case "Multi Select":
-    //   // Simplified multi-select for preview
-    //   return (
-    //     <Select>
-    //       <SelectTrigger>
-    //         <SelectValue placeholder="Select multiple..." />
-    //       </SelectTrigger>
-    //     </Select>
-    //   );
     default:
       return null
   }

@@ -223,6 +223,31 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
+    case 'Slider':
+      return `
+            <FormField
+              control={form.control}
+              name="${field.name}"
+              render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <FormLabel>Price - {value}</FormLabel>
+                <FormControl>
+                  <Slider
+                    min={0}
+                    max={100}
+                    step={1}
+                    defaultValue={[value]}
+                    onValueChange={onChange}
+                  />
+                </FormControl>
+                ${
+                  field.description &&
+                  `<FormDescription>${field.description}</FormDescription>`
+                }
+                <FormMessage />
+              </FormItem>
+              )}
+            />`
     case 'Switch':
       return `
           <FormField

@@ -34,7 +34,7 @@ export const FieldItem = ({
       value={field}
       id={field.name}
       style={{ boxShadow, y }}
-      className="flex items-center"
+      className="flex items-center gap-1"
     >
       <div className="flex justify-start items-center gap-1 border rounded-xl px-3 py-1.5 mt-1.5 w-full">
         <LuGrip
@@ -80,7 +80,7 @@ export const FieldItem = ({
           </div>
         </div>
       </div>
-      <div className="flex flex-nowrap space-x-2">
+      <div className="flex flex-nowrap space-x-1">
         <Button
           variant="ghost"
           size="icon"

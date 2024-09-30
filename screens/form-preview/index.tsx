@@ -36,6 +36,14 @@ const generateZodSchema = (formFields: FormFieldType[]) => {
             })
           }
           break
+        case 'Slider':
+          fieldSchema = z.coerce.number()
+          if (field.required) {
+            fieldSchema = fieldSchema.min(1, {
+              message: `${field.label} is required`,
+            })
+          }
+          break
         case 'Number':
           fieldSchema = z.coerce.number()
           if (field.required) {
@@ -88,6 +96,11 @@ const getZodSchema = (formFields: FormFieldType[]) => {
                 message: `${field.label} is required`,
               })
             : z.boolean()
+          break
+        case 'Slider':
+          fieldSchema = field.required
+            ? z.number().min(1, { message: `${field.label} is required` })
+            : z.number()
           break
         case 'Number':
           fieldSchema = field.required
@@ -284,7 +297,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
 
   function onSubmit(data: any) {
     try {
-      console.log('DATA', data)
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -332,7 +344,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
         </TabsList>
         <TabsContent
           value="preview"
-          className="space-y-4 h-full md:max-h-[75vh] overflow-auto"
+          className="space-y-4 h-full md:max-h-[70vh] overflow-auto"
         >
           <If
             condition={formFields.length > 0}
@@ -377,7 +389,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
           <If
             condition={formFields.length > 0}
             render={() => (
-              <pre className="p-4 text-sm bg-gray-100 rounded-lg h-full md:max-h-[75vh] overflow-auto">
+              <pre className="p-4 text-sm bg-gray-100 rounded-lg h-full md:max-h-[70vh] overflow-auto">
                 {JSON.stringify(formFields, null, 2)}
               </pre>
             )}
@@ -418,7 +430,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                   }: any) => (
                     <pre
                       className={`${className} p-4 text-sm bg-gray-100 rounded-lg 
-                      h-full md:max-h-[75vh] overflow-auto`}
+                      h-full md:max-h-[70vh] overflow-auto`}
                       style={style}
                     >
                       {tokens.map((line: any, i: number) => (

@@ -3,7 +3,7 @@ export type FormFieldType = {
   type: string
   name: string
   label: string
-  value: string | boolean | Date
+  value: string | boolean | Date | number
   checked: boolean
   setValue: (value: string | boolean) => void
   placeholder?: string

@@ -7,8 +7,9 @@ import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
-import { LuStar } from 'react-icons/lu'
+import { LuStar, LuGithub } from 'react-icons/lu'
 import HeroVideoDialog from '@/components/sections/hero/hero-video'
+import { NumberTicker } from '@/components/number-ticker'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -36,31 +37,16 @@ function HeroPill() {
     <motion.a
       href="https://github.com/hasanharman/form-builder"
       target="_blank"
-      className="flex w-auto items-center space-x-2 rounded-full bg-muted px-2 py-1 ring-1 ring-accent whitespace-pre"
+      className="cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 py-1 ring-1 ring-accent whitespace-pre shadow hover:shadow-lg"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease }}
     >
-      <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-muted-foreground hover:text-primary text-sm border">
+      <p className="font-medium text-primary text-sm">Star Project on GitHub</p>
+      <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm border ">
         <LuStar />
-        <span className="ml-1">{stars}</span>
+        <NumberTicker className="ml-1" value={stars} />
       </div>
-      <p className="font-medium text-primary text-sm">
-        Support the project on GitHub
-      </p>
-      <svg
-        width="12"
-        height="12"
-        className="ml-1"
-        viewBox="0 0 12 12"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M8.78141 5.33312L5.20541 1.75712L6.14808 0.814453L11.3334 5.99979L6.14808 11.1851L5.20541 10.2425L8.78141 6.66645H0.666748V5.33312H8.78141Z"
-          fill="hsl(var(--primary))"
-        />
-      </svg>
     </motion.a>
   )
 }
@@ -118,7 +104,7 @@ function HeroTitles() {
           target="_blank"
           className="hover:underline"
         >
-          react-hooks-form
+          react-hook-form
         </Link>{' '}
         and{' '}
         <Link

@@ -60,29 +60,31 @@ export default function FormBuilder() {
 
   return (
     <section className="max-h-screen px-8 space-y-8">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-2xl font-semibold">Playground</h1>
         <p className="text-muted-foreground">
-          If you've successfully installed Shadcn, you can easily copy and paste
-          the generated forms. Some components may require additional packages,
-          so be sure to check their documentation in the{' '}
+          If you've successfully installed Shadcn, you can directly copy and
+          paste the generated forms. Some components may require additional
+          packages, so be sure to check their documentation in the{' '}
           <Link href="/readme" className="underline text-slate-800">
             readme
-          </Link>{' '}
-          section. If you encounter any errors, refer to the readme for further
-          guidance.
+          </Link>
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start justify-items-center gap-8">
-        <div className="w-full h-full col-span-1 space-y-3 md:max-h-[75vh] overflow-auto">
-          <FieldSelector addFormField={addFormField} />
-          <Separator />
-          <FormFieldList
-            formFields={formFields}
-            setFormFields={setFormFields}
-            updateFormField={updateFormField}
-            openEditDialog={openEditDialog}
-          />
+      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8">
+        <div className="w-full h-full col-span-1 space-x-3 md:max-h-[75vh] flex">
+          <div className="flex space-x-3">
+            <FieldSelector addFormField={addFormField} />
+            <Separator orientation="vertical" />
+          </div>
+          <div className="overflow-y-auto flex-1">
+            <FormFieldList
+              formFields={formFields}
+              setFormFields={setFormFields}
+              updateFormField={updateFormField}
+              openEditDialog={openEditDialog}
+            />
+          </div>
         </div>
         <div className="w-full h-full col-span-1">
           <FormPreview formFields={formFields} />

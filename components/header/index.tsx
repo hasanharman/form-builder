@@ -17,17 +17,34 @@ import { FaXTwitter } from 'react-icons/fa6'
 
 import Logo from '@/assets/logo.svg'
 import { cn } from '@/lib/utils'
+import If from '../ui/if'
 
 type Tabs = {
   name: string
   href: string
+  variant:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | null
+    | undefined
   className?: string
+  isUpdated?: boolean
 }
 
 const tabs: Tabs[] = [
-  { name: 'Readme', href: '/readme' },
-  { name: 'Roadmap', href: '/roadmap' },
-  { name: 'Open Playground', href: '/playground', className: 'bg-primary text-white rounded-full shadow' },
+  { name: 'Readme', href: '/readme', variant: 'link' },
+  { name: 'Roadmap', href: '/roadmap', variant: 'link' },
+  {
+    name: 'Open Playground',
+    href: '/playground',
+    variant: 'default',
+    className: 'bg-primary text-white rounded-full',
+    isUpdated: true,
+  },
 ]
 
 export default function Header() {
@@ -39,8 +56,19 @@ export default function Header() {
 
       <nav className="hidden md:flex items-center gap-3">
         {tabs.map((tab, i) => (
-          <Link href={tab.href} key={i}>
-            <Button variant="link" className={(cn('w-full', tab?.className))}>{tab.name}</Button>
+          <Link href={tab.href} key={i} className="relative">
+            <Button
+              variant={tab.variant}
+              className={cn('w-full', tab?.className)}
+            >
+              {tab.name}
+              <If
+                condition={tab.isUpdated}
+                render={() => (
+                  <span className="w-2 h-2 bg-green-400 rounded-full absolute right-1.5 top-1.5 animate-pulse" />
+                )}
+              />
+            </Button>
           </Link>
         ))}
 
@@ -90,7 +118,10 @@ export default function Header() {
                 {tabs.map((tab) => (
                   <DrawerClose asChild key={tab.href}>
                     <Link href={tab.href}>
-                      <Button variant="secondary" className={(cn('w-full', tab?.className))}>
+                      <Button
+                        variant="secondary"
+                        className={cn('w-full', tab?.className)}
+                      >
                         {tab.name}
                       </Button>
                     </Link>
