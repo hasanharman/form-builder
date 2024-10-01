@@ -25,7 +25,7 @@ export default function FormBuilder() {
       label: `New ${type}`,
       value: '',
       checked: true,
-      name: `name_${formFields.length + 1}`, // Set default name
+      name: `name_${Math.random().toString().slice(-10)}`, // Set default name
       placeholder: 'Enter Placeholder',
       description: '',
       required: true,
