@@ -8,7 +8,7 @@ export const fieldTypes: FieldType[] = [
   { name: 'Input', isNew: false },
   { name: 'InputOTP', isNew: false },
   { name: 'Select', isNew: false },
-  { name: 'Slider', isNew: true },
+  { name: 'Slider', isNew: false },
   { name: 'Switch', isNew: false },
   { name: 'Textarea', isNew: false },
   { name: 'Password', isNew: false },

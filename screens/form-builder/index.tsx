@@ -12,6 +12,10 @@ import { EditFieldDialog } from '@/screens/edit-field-dialog'
 
 import { useMediaQuery } from '@/hooks/use-media-query'
 
+import EmptyListImage from '@/assets/oc-thinking.png'
+import If from '@/components/ui/if'
+import Image from 'next/image'
+
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
 export default function FormBuilder() {
@@ -92,11 +96,22 @@ export default function FormBuilder() {
     setIsDialogOpen(false)
   }
 
+  const FieldSelectorWithSeparator = ({
+    addFormField,
+  }: {
+    addFormField: (type: string, index?: number) => void
+  }) => (
+    <div className="flex flex-col md:flex-row gap-3">
+      <FieldSelector addFormField={addFormField} />
+      <Separator orientation={isDesktop ? 'vertical' : 'horizontal'} />
+    </div>
+  )
+
   return (
     <section className="max-h-screen space-y-8">
       <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-2xl font-semibold">Playground</h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           After successfully installing Shadcn, you can simply copy and paste
           the generated form components to get started. Some components may have
           additional dependencies, so make sure to review their documentation in
@@ -107,29 +122,48 @@ export default function FormBuilder() {
           for further instructions.
         </p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5">
-        <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
-          <div className="flex flex-col md:flex-row gap-3">
-            <FieldSelector
+      <If
+        condition={formFields.length > 0}
+        render={() => (
+          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5">
+            <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
+              <FieldSelectorWithSeparator
+                addFormField={(type: string, index: number = 0) =>
+                  addFormField(type, index)
+                }
+              />
+              <div className="overflow-y-auto flex-1">
+                <FormFieldList
+                  formFields={formFields}
+                  setFormFields={setFormFields}
+                  updateFormField={updateFormField}
+                  openEditDialog={openEditDialog}
+                />
+              </div>
+            </div>
+            <div className="col-span-1 w-full h-full">
+              <FormPreview formFields={formFields} />
+            </div>
+          </div>
+        )}
+        otherwise={() => (
+          <div className="flex flex-col md:flex-row items-center gap-3 md:px-5">
+            <FieldSelectorWithSeparator
               addFormField={(type: string, index: number = 0) =>
                 addFormField(type, index)
               }
             />
-            <Separator orientation={isDesktop ? 'vertical' : 'horizontal'} />
-          </div>
-          <div className="overflow-y-auto flex-1">
-            <FormFieldList
-              formFields={formFields}
-              setFormFields={setFormFields}
-              updateFormField={updateFormField}
-              openEditDialog={openEditDialog}
+            <Image
+              src={EmptyListImage}
+              width={585}
+              height={502}
+              alt="Empty Image"
+              className="object-contain mx-auto p-5 md:p-20"
             />
           </div>
-        </div>
-        <div className="w-full h-full col-span-1">
-          <FormPreview formFields={formFields} />
-        </div>
-      </div>
+        )}
+      />
+
       <EditFieldDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

@@ -309,8 +309,15 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         id="fileInput"
                         className="outline-dashed outline-1 outline-slate-500"
                       >
-                        <div className="flex items-center justify-center flex-col pt-3 pb-4 w-full ">
-                          <CloudUpload />
+                        <div className="flex items-center justify-center flex-col p-8 w-full ">
+                          <CloudUpload className='text-gray-500 w-10 h-10' />
+                          <p className="mb-1 text-sm text-gray-500 dark:text-gray-400">
+                            <span className="font-semibold">Click to upload</span>
+                            &nbsp; or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            SVG, PNG, JPG or GIF
+                          </p>
                         </div>
                       </FileInput>
                       <FileUploaderContent>
