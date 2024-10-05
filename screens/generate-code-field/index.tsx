@@ -12,7 +12,6 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 <Checkbox
                   checked={field.value}
                   onCheckedChange={field.onChange}
-                  ${field.required ? 'required' : ''}
                   ${field.disabled ? 'disabled' : ''}
                 />
               </FormControl>
@@ -44,7 +43,6 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         "w-[200px] justify-between",
                         !field.value && "text-muted-foreground"
                       )}
-                      ${field.required ? 'required' : ''}
                       ${field.disabled ? 'disabled' : ''}
                     >
                       {field.value
@@ -126,9 +124,6 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 mode="single"
                 selected={field.value}
                 onSelect={field.onChange}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
                 initialFocus
               />
             </PopoverContent>
@@ -152,7 +147,6 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               <FormControl>
                 <Input 
                 placeholder="${field.placeholder}"
-                ${field.required ? 'required' : ''}
                 ${field.disabled ? 'disabled' : ''}
                 {...field} />
               </FormControl>

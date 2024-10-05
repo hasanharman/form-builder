@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     images: [
       {
-        url: 'https://form-builder-three-flame.vercel.app/meta.png',
+        url: 'https://www.shadcn-form.com/meta.png',
         width: 600,
         height: 315,
       },
@@ -38,11 +38,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Shadcn Form Builder',
     description: 'Shadcn Form Builder',
-    images: ['https://form-builder-three-flame.vercel.app/meta.png'],
+    images: ['https://www.shadcn-form.com/meta.png'],
     creator: '@strad3r',
   },
   keywords: ['form', 'builder', 'shadcn', 'react'],
-  themeColor: '#ffffff',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',

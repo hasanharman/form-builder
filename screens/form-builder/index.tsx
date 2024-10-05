@@ -12,34 +12,68 @@ import { EditFieldDialog } from '@/screens/edit-field-dialog'
 
 import { useMediaQuery } from '@/hooks/use-media-query'
 
+export type FormFieldOrGroup = FormFieldType | FormFieldType[]
+
 export default function FormBuilder() {
   const isDesktop = useMediaQuery('(min-width: 768px)')
 
-  const [formFields, setFormFields] = useState<FormFieldType[]>([])
+  const [formFields, setFormFields] = useState<FormFieldOrGroup[]>([])
   const [selectedField, setSelectedField] = useState<FormFieldType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const addFormField = (type: string) => {
+  const addFormField = (type: string, index: number) => {
+    const uniqueId = Math.random().toString().slice(-10)
+
     const newField: FormFieldType = {
       type,
-      label: `New ${type}`,
+      label: `name_${uniqueId}`,
       value: '',
       checked: true,
-      name: `name_${Math.random().toString().slice(-10)}`, // Set default name
+      name: `name_${uniqueId}`, // Set default name
       placeholder: 'Enter Placeholder',
       description: '',
       required: true,
       disabled: false,
-      onChange: handleChange,
+      onChange: () => {},
       setValue: () => {},
       onSelect: () => {},
+      rowIndex: index,
     }
     setFormFields([...formFields, newField])
   }
 
-  const updateFormField = (index: number, updates: Partial<FormFieldType>) => {
-    const updatedFields = [...formFields]
-    updatedFields[index] = { ...updatedFields[index], ...updates }
+  const findFieldPath = (
+    fields: FormFieldOrGroup[],
+    name: string,
+  ): number[] | null => {
+    const search = (
+      currentFields: FormFieldOrGroup[],
+      currentPath: number[],
+    ): number[] | null => {
+      for (let i = 0; i < currentFields.length; i++) {
+        const field = currentFields[i]
+        if (Array.isArray(field)) {
+          const result = search(field, [...currentPath, i])
+          if (result) return result
+        } else if (field.name === name) {
+          return [...currentPath, i]
+        }
+      }
+      return null
+    }
+    return search(fields, [])
+  }
+
+  const updateFormField = (path: number[], updates: Partial<FormFieldType>) => {
+    const updatedFields = JSON.parse(JSON.stringify(formFields)) // Deep clone
+    let current: any = updatedFields
+    for (let i = 0; i < path.length - 1; i++) {
+      current = current[path[i]]
+    }
+    current[path[path.length - 1]] = {
+      ...current[path[path.length - 1]],
+      ...updates,
+    }
     setFormFields(updatedFields)
   }
 
@@ -49,18 +83,13 @@ export default function FormBuilder() {
   }
 
   const handleSaveField = (updatedField: FormFieldType) => {
-    const index = formFields.findIndex(
-      (field) => field.label === selectedField?.label,
-    )
-    if (index !== -1) {
-      updateFormField(index, updatedField)
+    if (selectedField) {
+      const path = findFieldPath(formFields, selectedField.name)
+      if (path) {
+        updateFormField(path, updatedField)
+      }
     }
     setIsDialogOpen(false)
-  }
-
-  // Define the handleChange function
-  const handleChange = (event: any) => {
-    // Your onChange logic here
   }
 
   return (
@@ -68,21 +97,27 @@ export default function FormBuilder() {
       <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-2xl font-semibold">Playground</h1>
         <p className="text-muted-foreground">
-          If you've successfully installed Shadcn, you can directly copy and
-          paste the generated forms. Some components may require additional
-          packages, so be sure to check their documentation in the{' '}
+          After successfully installing Shadcn, you can simply copy and paste
+          the generated form components to get started. Some components may have
+          additional dependencies, so make sure to review their documentation in
+          the{' '}
           <Link href="/readme" className="underline text-slate-800">
-            readme
-          </Link>
+            README
+          </Link>{' '}
+          for further instructions.
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5">
         <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
           <div className="flex flex-col md:flex-row gap-3">
-            <FieldSelector addFormField={addFormField} />
+            <FieldSelector
+              addFormField={(type: string, index: number = 0) =>
+                addFormField(type, index)
+              }
+            />
             <Separator orientation={isDesktop ? 'vertical' : 'horizontal'} />
           </div>
-          <div className="overflow-y-auto flex-1 my-2">
+          <div className="overflow-y-auto flex-1">
             <FormFieldList
               formFields={formFields}
               setFormFields={setFormFields}

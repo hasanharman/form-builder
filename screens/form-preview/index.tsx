@@ -15,277 +15,66 @@ import { FormFieldType } from '@/types'
 import { generateCodeSnippet } from '../generate-code-field'
 
 import { Files } from 'lucide-react'
+import {
+  generateZodSchema,
+  generateFormCode,
+} from '@/screens/generate-code-parts'
+
+export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
 export type FormPreviewProps = {
-  formFields: FormFieldType[]
+  formFields: FormFieldOrGroup[]
 }
 
-const generateZodSchema = (formFields: FormFieldType[]) => {
-  const schemaObject: Record<string, any> = {}
-
-  formFields.forEach((field) => {
-    if (field.type !== 'Label') {
-      let fieldSchema
-      switch (field.type) {
-        case 'Checkbox':
-        case 'Switch':
-          fieldSchema = z.boolean()
-          if (field.required) {
-            fieldSchema = fieldSchema.refine((value) => value === true, {
-              message: `${field.label} is required`,
-            })
-          }
-          break
-        case 'Slider':
-          fieldSchema = z.coerce.number()
-          if (field.required) {
-            fieldSchema = fieldSchema.min(1, {
-              message: `${field.label} is required`,
-            })
-          }
-          break
-        case 'Number':
-          fieldSchema = z.coerce.number()
-          if (field.required) {
-            fieldSchema = fieldSchema.min(1, {
-              message: `${field.label} is required`,
-            })
-          }
-          break
-        case 'Date':
-          fieldSchema = z.date()
-          if (field.required) {
-            fieldSchema = fieldSchema.refine((date) => !isNaN(date.getTime()), {
-              message: `${field.label} is required`,
-            })
-          }
-          break
-        default:
-          fieldSchema = z.string()
-          if (field.required) {
-            fieldSchema = fieldSchema.min(1, {
-              message: `${field.label} is required`,
-            })
-          }
-          break
-      }
-
-      schemaObject[field.name] = fieldSchema
+const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
+  return fields.map((fieldOrGroup, index) => {
+    if (Array.isArray(fieldOrGroup)) {
+      const colSpan = fieldOrGroup.length === 2 ? 6 : 4
+      return (
+        <div key={index} className="grid grid-cols-12 gap-4">
+          {fieldOrGroup.map((field, subIndex) => (
+            <FormField
+              key={field.name}
+              control={form.control}
+              name={field.name}
+              render={({ field: formField }) => (
+                <FormItem className={`col-span-${colSpan}`}>
+                  <FormControl>
+                    {React.cloneElement(
+                      renderFormField(field) as React.ReactElement,
+                      {
+                        ...formField,
+                      },
+                    )}
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
+      )
+    } else {
+      return (
+        <FormField
+          key={index}
+          control={form.control}
+          name={fieldOrGroup.name}
+          render={({ field: formField }) => (
+            <FormItem>
+              <FormControl>
+                {React.cloneElement(
+                  renderFormField(fieldOrGroup) as React.ReactElement,
+                  {
+                    ...formField,
+                  },
+                )}
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      )
     }
   })
-
-  const schema = z.object(schemaObject)
-
-  // Debugging: Log the generated schema
-  console.log('schema', schemaObject)
-
-  return schema
-}
-
-const getZodSchema = (formFields: FormFieldType[]) => {
-  const schemaObject: Record<string, z.ZodTypeAny> = {}
-
-  formFields.forEach((field) => {
-    if (field.type !== 'Label') {
-      let fieldSchema: z.ZodTypeAny
-      switch (field.type) {
-        case 'Checkbox':
-        case 'Switch':
-          fieldSchema = field.required
-            ? z.boolean().refine((value) => value === true, {
-                message: `${field.label} is required`,
-              })
-            : z.boolean()
-          break
-        case 'Slider':
-          fieldSchema = field.required
-            ? z.number().min(1, { message: `${field.label} is required` })
-            : z.number()
-          break
-        case 'Number':
-          fieldSchema = field.required
-            ? z.number().min(1, { message: `${field.label} is required` })
-            : z.number()
-          break
-        case 'Date':
-          fieldSchema = field.required
-            ? z.date().refine((date) => !isNaN(date.getTime()), {
-                message: `${field.label} is required`,
-              })
-            : z.date()
-          break
-        default:
-          fieldSchema = field.required
-            ? z.string().min(1, { message: `${field.label} is required` })
-            : z.string()
-          break
-      }
-      schemaObject[field.name] = fieldSchema
-    }
-  })
-
-  return schemaObject
-}
-
-const zodSchemaToString = (schema: z.ZodTypeAny): string => {
-  if (schema instanceof z.ZodBoolean) {
-    return 'z.boolean()'
-  } else if (schema instanceof z.ZodNumber) {
-    return 'z.number()'
-  } else if (schema instanceof z.ZodString) {
-    return 'z.string()'
-  } else if (schema instanceof z.ZodDate) {
-    return 'z.date()'
-  } else if (schema instanceof z.ZodEffects) {
-    const baseSchema = zodSchemaToString(schema._def.schema)
-    return `${baseSchema}`
-  }
-  // Add more cases as needed for other Zod types
-  return 'z.unknown()' // fallback
-}
-
-const getZodSchemaString = (formFields: FormFieldType[]) => {
-  const schemaObject = getZodSchema(formFields)
-  const schemaEntries = Object.entries(schemaObject)
-    .map(([key, value]) => {
-      return `  ${key}: ${zodSchemaToString(value)}`
-    })
-    .join(',\n')
-
-  return `const formSchema = z.object({\n${schemaEntries}\n});`
-}
-
-const generateFormCode = (formFields: FormFieldType[]) => {
-  // Create a Set to store unique import statements
-  const importSet = new Set([
-    '"use client"',
-    'import { useState } from "react"',
-    'import {toast} from "sonner"',
-    'import { useForm } from "react-hook-form"',
-    'import { zodResolver } from "@hookform/resolvers/zod"',
-    'import * as z from "zod"',
-    'import { cn } from "@/lib/utils"',
-    'import { Button } from "@/components/ui/button"',
-    'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
-  ])
-
-  const schema = getZodSchemaString(formFields)
-
-  const constantSet: Set<string> = new Set() // Define type for constantSet
-
-  formFields.forEach((field) => {
-    switch (field.type) {
-      case 'Combobox':
-        importSet.add(
-          'import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"',
-        )
-        importSet.add(
-          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
-        )
-        importSet.add('import { Check, ChevronsUpDown } from "lucide-react"')
-        constantSet.add(`const languages = [
-          { label: "English", value: "en" },
-          { label: "French", value: "fr" },
-          { label: "German", value: "de" },
-          { label: "Spanish", value: "es" },
-          { label: "Portuguese", value: "pt" },
-          { label: "Russian", value: "ru" },
-          { label: "Japanese", value: "ja" },
-          { label: "Korean", value: "ko" },
-          { label: "Chinese", value: "zh" },
-          ] as const;`)
-        break
-      case 'DatePicker':
-        importSet.add('import { format } from "date-fns"')
-        importSet.add(
-          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
-        )
-        importSet.add('import { Calendar } from "@/components/ui/calendar"')
-        importSet.add('import { Calendar as CalendarIcon } from "lucide-react"')
-        break
-      case 'InputOTP':
-        importSet.add(
-          'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"',
-        )
-        break
-      case 'Select':
-        importSet.add(
-          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
-        )
-        break
-      case 'FileInput':
-        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
-        importSet.add(
-          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"',
-        )
-        constantSet.add(`
-            const [files, setFiles] = useState<File[] | null>(null); 
-
-            const dropZoneConfig = {
-              maxFiles: 5,
-              maxSize: 1024 * 1024 * 4,
-              multiple: true,
-            };`)
-        break
-      case 'Phone':
-        importSet.add(
-          'import { PhoneInput } from "@/components/ui/phone-input";',
-        )
-        break
-      case 'Password':
-        importSet.add(
-          'import { PasswordInput } from "@/components/ui/password-input"',
-        )
-        break
-      default:
-        importSet.add(
-          `import { ${
-            field.type
-          } } from "@/components/ui/${field.type.toLowerCase()}"`,
-        )
-        break
-    }
-  })
-
-  const imports = Array.from(importSet).join('\n')
-
-  const constants = Array.from(constantSet).join('\n') // Convert Set to string
-
-  const component = `
-export default function MyForm() {
-  ${constants} // Insert constants here
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-  })
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      console.log(values);
-      toast(
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      );
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
-    }
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-3xl mx-auto py-10">
-        ${formFields
-          .map((field) => `${generateCodeSnippet(field)}`)
-          .join('\n        ')}
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-  )
-}
-  `
-
-  return imports + '\n' + '\n' + schema + '\n' + component
 }
 
 export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
@@ -354,26 +143,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                   onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-4 py-5 max-w-lg mx-auto"
                 >
-                  {formFields.map((field, index) => (
-                    <React.Fragment key={index}>
-                      <FormField
-                        control={form.control}
-                        name={`form_element_${index}`}
-                        render={({ field: formField }) => (
-                          <FormItem>
-                            <FormControl>
-                              {React.cloneElement(
-                                renderFormField(field) as React.ReactElement,
-                                {
-                                  ...formField,
-                                },
-                              )}
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                    </React.Fragment>
-                  ))}
+                  {renderFormFields(formFields, form)}
                   <Button type="submit">Submit</Button>
                 </form>
               </Form>

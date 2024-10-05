@@ -12,4 +12,7 @@ export type FormFieldType = {
   description?: string
   onChange: (value: string | boolean | Date) => void
   onSelect: (value: string | boolean | Date) => void
+  rowIndex: number
 }
+
+export type FieldType = { name: string; isNew: boolean; index?: number }

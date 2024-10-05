@@ -104,6 +104,7 @@ export const renderFormField = (field: FormFieldType) => {
   const [checked, setChecked] = useState<boolean>(field.checked)
   const [value, setValue] = useState(field.value)
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
+  const [date, setDate] = useState<Date>()
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -121,7 +122,6 @@ export const renderFormField = (field: FormFieldType) => {
               onCheckedChange={() => {
                 setChecked(!checked)
               }}
-              required={field.required}
               disabled={field.disabled}
             />
           </FormControl>
@@ -145,7 +145,7 @@ export const renderFormField = (field: FormFieldType) => {
                   variant="outline"
                   role="combobox"
                   className={cn(
-                    'w-[200px] justify-between',
+                    'w-full justify-between',
                     !value && 'text-muted-foreground',
                   )}
                 >
@@ -203,27 +203,20 @@ export const renderFormField = (field: FormFieldType) => {
                 <Button
                   variant={'outline'}
                   className={cn(
-                    'w-[240px] pl-3 text-left font-normal',
-                    !field.value && 'text-muted-foreground',
+                    'w-full justify-start text-left font-normal',
+                    !date && 'text-muted-foreground',
                   )}
                 >
-                  {field.value && typeof field.value !== 'boolean' ? (
-                    format(field.value as Date, 'PPP')
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, 'PPP') : <span>Pick a date</span>}
                 </Button>
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
-                selected={field.value instanceof Date ? field.value : undefined}
-                onSelect={(date: any) => field.onChange(date)}
-                disabled={(date) =>
-                  date > new Date() || date < new Date('1900-01-01')
-                }
+                selected={date}
+                onSelect={setDate}
                 initialFocus
               />
             </PopoverContent>
@@ -323,12 +316,7 @@ export const renderFormField = (field: FormFieldType) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <Slider
-              min={0}
-              max={100}
-              step={1}
-              defaultValue={[5]}
-            />
+            <Slider min={0} max={100} step={1} defaultValue={[5]} />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
