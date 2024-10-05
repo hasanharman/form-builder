@@ -27,6 +27,9 @@ const nextConfig = {
 
     return config
   },
+  images: {
+    domains: ['img.youtube.com'],
+  },
 }
 
 export default nextConfig

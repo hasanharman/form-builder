@@ -87,7 +87,7 @@ export default function HeroVideoDialog({
         onClick={() => setIsVideoOpen(true)}
       >
         <Image
-          src={ThumbnailImage}
+          src="https://img.youtube.com/vi/7r0n7A3OL7s/maxresdefault.jpg"
           alt={thumbnailAlt}
           width={1920}
           height={1080}
