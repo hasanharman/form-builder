@@ -8,7 +8,7 @@ Check out the live demo [here](https://shadcn-form-build.vercel.app/).
 
 ## YouTube Demo
 
-[![Watch the demo](https://img.youtube.com/vi/Es3-0afAvj0/0.jpg))](https://www.youtube.com/watch?v=Es3-0afAvj0)
+[![Watch the demo](https://img.youtube.com/vi/7r0n7A3OL7s/0.jpg))](https://www.youtube.com/watch?v=7r0n7A3OL7s)
 
 ## Features
 
