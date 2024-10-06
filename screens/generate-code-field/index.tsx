@@ -92,7 +92,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
-    case 'DatePicker':
+    case 'Date Picker':
       return `
       <FormField
       control={form.control}
@@ -158,7 +158,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
-    case 'InputOTP':
+    case 'Input OTP':
       return `
        <FormField
           control={form.control}
@@ -189,6 +189,41 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
+    case 'Multi Select':
+      return `
+           <FormField
+              control={form.control}
+              name="${field.name}"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>${field.label}</FormLabel>
+                  <FormControl>
+                    <MultiSelector
+                      values={field.value}
+                      onValuesChange={field.onChange}
+                      loop
+                      className="max-w-xs"
+                    >
+                      <MultiSelectorTrigger>
+                        <MultiSelectorInput placeholder="Select languages" />
+                      </MultiSelectorTrigger>
+                      <MultiSelectorContent>
+                      <MultiSelectorList>
+                        <MultiSelectorItem value={"React"}>React</MultiSelectorItem>
+                        <MultiSelectorItem value={"Vue"}>Vue</MultiSelectorItem>
+                        <MultiSelectorItem value={"Svelte"}>Svelte</MultiSelectorItem>
+                      </MultiSelectorList>
+                      </MultiSelectorContent>
+                    </MultiSelector>
+                  </FormControl>
+                  ${
+                    field.description &&
+                    `<FormDescription>${field.description}</FormDescription>`
+                  }
+                  <FormMessage />
+                </FormItem>
+              )}
+            />`
     case 'Select':
       return `
         <FormField
@@ -267,6 +302,29 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 </FormItem>
               )}
             />`
+    case 'Tags Input':
+      return `
+        <FormField
+          control={form.control}
+          name="${field.name}"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>${field.label}</FormLabel>
+              <FormControl>
+                <TagsInput
+                  value={field.value}
+                  onValueChange={field.onChange}
+                  placeholder="Enter your tags"
+                />
+              </FormControl>
+              ${
+                field.description &&
+                `<FormDescription>${field.description}</FormDescription>`
+              }
+              <FormMessage />
+            </FormItem>
+          )}
+        />`
     case 'Textarea':
       return `
         <FormField
@@ -290,7 +348,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
-    case 'FileInput':
+    case 'File Input':
       return `
             <FormField
               control={form.control}

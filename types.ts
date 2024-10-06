@@ -3,15 +3,15 @@ export type FormFieldType = {
   type: string
   name: string
   label: string
-  value: string | boolean | Date | number
+  value: string | boolean | Date | number | string[]
   checked: boolean
   setValue: (value: string | boolean) => void
   placeholder?: string
   required: boolean
   disabled: boolean
   description?: string
-  onChange: (value: string | boolean | Date) => void
-  onSelect: (value: string | boolean | Date) => void
+  onChange: (value: string | string[] | boolean | Date) => void
+  onSelect: (value: string | string[] | boolean | Date) => void
   rowIndex: number
 }
 

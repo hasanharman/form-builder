@@ -16,15 +16,22 @@ export const generateZodSchema = (
 
     switch (field.type) {
       case 'Checkbox':
+      case 'Date Picker':
+        fieldSchema = z.date()
+        break
+      case 'Slider':
+        fieldSchema = z.coerce.number()
       case 'Switch':
         fieldSchema = z.boolean()
         break
-      case 'Slider':
-      case 'Number':
-        fieldSchema = z.number()
+      case 'Tags Input':
+        fieldSchema = z.array(z.string()).nonempty('Please at least one item')
         break
-      case 'DatePicker':
-        fieldSchema = z.date()
+      case 'Multi Select':
+        fieldSchema = z.array(z.string())
+        break
+      case 'Number':
+        fieldSchema = z.array(z.string()).nonempty('Please at least one item')
         break
       default:
         fieldSchema = z.string()
@@ -63,6 +70,8 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
     return 'z.string()'
   } else if (schema instanceof z.ZodDate) {
     return 'z.date()'
+  } else if (schema instanceof z.ZodArray) {
+    return 'z.array(z.string())'
   } else if (schema instanceof z.ZodEffects) {
     const baseSchema = zodSchemaToString(schema._def.schema)
     return `${baseSchema}`
@@ -107,7 +116,7 @@ export const generateImports = (
         )
         importSet.add('import { Check, ChevronsUpDown } from "lucide-react"')
         break
-      case 'DatePicker':
+      case 'Date Picker':
         importSet.add('import { format } from "date-fns"')
         importSet.add(
           'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
@@ -115,7 +124,13 @@ export const generateImports = (
         importSet.add('import { Calendar } from "@/components/ui/calendar"')
         importSet.add('import { Calendar as CalendarIcon } from "lucide-react"')
         break
-      case 'InputOTP':
+      case 'File Input':
+        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
+        importSet.add(
+          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"',
+        )
+        break
+      case 'Input OTP':
         importSet.add(
           'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"',
         )
@@ -125,20 +140,22 @@ export const generateImports = (
           'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
         )
         break
-      case 'FileInput':
-        importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
-        importSet.add(
-          'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"',
-        )
+      case 'Tags Input':
+        importSet.add('import { TagsInput } from "@/components/ui/tags-input"')
         break
-      case 'Phone':
+      case 'Multi Select':
         importSet.add(
-          'import { PhoneInput } from "@/components/ui/phone-input";',
+          'import { MultiSelector, MultiSelectorContent, MultiSelectorInput, MultiSelectorItem, MultiSelectorList, MultiSelectorTrigger} from "@/components/ui/multi-select"',
         )
         break
       case 'Password':
         importSet.add(
           'import { PasswordInput } from "@/components/ui/password-input"',
+        )
+        break
+      case 'Phone':
+        importSet.add(
+          'import { PhoneInput } from "@/components/ui/phone-input";',
         )
         break
       default:
@@ -172,7 +189,7 @@ export const generateConstants = (
         { label: "Korean", value: "ko" },
         { label: "Chinese", value: "zh" },
       ] as const;`)
-    } else if (field.type === 'FileInput') {
+    } else if (field.type === 'File Input') {
       constantSet.add(`
         const [files, setFiles] = useState<File[] | null>(null); 
 
@@ -216,11 +233,32 @@ export const generateFormCode = (formFields: FormFieldOrGroup[]): string => {
       .join('\n        ')
   }
 
+  // New function to generate defaultValues
+  const generateDefaultValues = (fields: FormFieldOrGroup[]): string => {
+    const defaultValues: Record<string, any> = {}
+
+    fields.flat().forEach((field) => {
+      if (field.type === 'Multi Select') {
+        defaultValues[field.name] = ['React']
+      } else if (field.type === 'Tags Input') {
+        defaultValues[field.name] = ['']
+      }
+    })
+
+    if (Object.keys(defaultValues).length > 0) {
+      return `defaultValues: ${JSON.stringify(defaultValues)},`
+    }
+    return ''
+  }
+
+  const defaultValuesString = generateDefaultValues(formFields)
+
   const component = `
 export default function MyForm() {
   ${constants}
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+     ${defaultValuesString}
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {

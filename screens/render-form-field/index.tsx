@@ -6,10 +6,8 @@ import { FormFieldType } from '@/types'
 import { cn } from '@/lib/utils'
 
 import {
-  Form,
   FormControl,
   FormDescription,
-  FormField,
   FormItem,
   FormLabel,
   FormMessage,
@@ -55,9 +53,17 @@ import {
   FileUploaderItem,
   FileInput,
 } from '@/components/ui/file-upload'
-
-import { CalendarIcon, Check, ChevronsUpDown, Paperclip } from 'lucide-react'
 import { Slider } from '@/components/ui/slider'
+import { CalendarIcon, Check, ChevronsUpDown, Paperclip } from 'lucide-react'
+import { TagsInput } from '@/components/ui/tags-input'
+import {
+  MultiSelector,
+  MultiSelectorContent,
+  MultiSelectorInput,
+  MultiSelectorItem,
+  MultiSelectorList,
+  MultiSelectorTrigger,
+} from '@/components/ui/multi-select'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -191,7 +197,7 @@ export const renderFormField = (field: FormFieldType) => {
           <FormDescription>{field.description}</FormDescription>
         </FormItem>
       )
-    case 'DatePicker':
+    case 'Date Picker':
       return (
         <FormItem className="flex flex-col">
           <div>
@@ -224,7 +230,7 @@ export const renderFormField = (field: FormFieldType) => {
           <FormDescription>{field.description}</FormDescription>
         </FormItem>
       )
-    case 'FileInput':
+    case 'File Input':
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel> {field.required && '*'}
@@ -268,7 +274,7 @@ export const renderFormField = (field: FormFieldType) => {
           <FormDescription>{field.description}</FormDescription>
         </FormItem>
       )
-    case 'InputOTP':
+    case 'Input OTP':
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel> {field.required && '*'}
@@ -286,6 +292,33 @@ export const renderFormField = (field: FormFieldType) => {
                 <InputOTPSlot index={5} />
               </InputOTPGroup>
             </InputOTP>
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Multi Select':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <MultiSelector
+              values={Array.isArray(value) ? value : [String(value)]} // Ensure values is always a string array
+              onValuesChange={setValue}
+              loop
+              className="max-w-xs"
+            >
+              <MultiSelectorTrigger>
+                <MultiSelectorInput placeholder="Select languages" />
+              </MultiSelectorTrigger>
+              <MultiSelectorContent>
+                <MultiSelectorList>
+                  <MultiSelectorItem value={'React'}>React</MultiSelectorItem>
+                  <MultiSelectorItem value={'Vue'}>Vue</MultiSelectorItem>
+                  <MultiSelectorItem value={'Svelte'}>Svelte</MultiSelectorItem>
+                </MultiSelectorList>
+              </MultiSelectorContent>
+            </MultiSelector>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
@@ -337,6 +370,21 @@ export const renderFormField = (field: FormFieldType) => {
               }}
             />
           </FormControl>
+        </FormItem>
+      )
+    case 'Tags Input':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <TagsInput
+              value={Array.isArray(value) ? value : [String(value)]} // Ensure values is always a string array
+              onValueChange={setValue}
+              placeholder="Enter your tags"
+            />
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'Textarea':

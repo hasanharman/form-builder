@@ -205,7 +205,7 @@ const generateFormCode = (formFields: FormFieldType[]) => {
           { label: "Chinese", value: "zh" },
           ] as const;`)
         break
-      case 'DatePicker':
+      case 'Date Picker':
         importSet.add('import { format } from "date-fns"')
         importSet.add(
           'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
@@ -213,7 +213,7 @@ const generateFormCode = (formFields: FormFieldType[]) => {
         importSet.add('import { Calendar } from "@/components/ui/calendar"')
         importSet.add('import { Calendar as CalendarIcon } from "lucide-react"')
         break
-      case 'InputOTP':
+      case 'Input OTP':
         importSet.add(
           'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"',
         )
@@ -223,7 +223,7 @@ const generateFormCode = (formFields: FormFieldType[]) => {
           'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
         )
         break
-      case 'FileInput':
+      case 'File Input':
         importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
         importSet.add(
           'import { FileInput, FileUploader, FileUploaderContent, FileUploaderItem } from "@/components/ui/file-upload"',
