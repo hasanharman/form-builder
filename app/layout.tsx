@@ -8,6 +8,7 @@ import './globals.css'
 
 import Header from '@/components/header'
 import AllProviders from '@/providers'
+import { Footer } from '@/components/footer'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -76,8 +77,9 @@ export default function RootLayout({
             <Toaster />
             <Header />
             <AllProviders>
-              <main>{children}</main>
+              <main className='min-h-[70vh]'>{children}</main>
             </AllProviders>
+            <Footer />
           </div>
         </body>
       </html>

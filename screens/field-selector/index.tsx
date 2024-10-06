@@ -13,7 +13,7 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
   addFormField,
 }) => {
   return (
-    <div className="flex md:flex-col items-start flex-wrap gap-3">
+    <div className="flex md:flex-col items-start flex-wrap md:flex-nowrap gap-3">
       {fieldTypes.map((type) => (
         <div className="flex items-center gap-1" key={type.name}>
           <Button
