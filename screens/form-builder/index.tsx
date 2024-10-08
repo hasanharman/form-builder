@@ -108,7 +108,7 @@ export default function FormBuilder() {
   )
 
   return (
-    <section className="max-h-screen space-y-8">
+    <section className="md:max-h-screen space-y-8">
       <div className="max-w-5xl mx-auto space-y-4">
         <h1 className="text-2xl font-semibold">Playground</h1>
         <p className="text-sm text-muted-foreground">
@@ -125,7 +125,7 @@ export default function FormBuilder() {
       <If
         condition={formFields.length > 0}
         render={() => (
-          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5 h-full">
             <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
               <FieldSelectorWithSeparator
                 addFormField={(type: string, index: number = 0) =>
