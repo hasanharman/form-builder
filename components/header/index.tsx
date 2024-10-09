@@ -55,7 +55,7 @@ const tabs: Tabs[] = [
 
 export default function Header() {
   return (
-    <header className="max-w-5xl mx-auto flex justify-between items-center my-5">
+    <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
       <Link href="/" className="cursor-pointer">
         <Logo />
       </Link>

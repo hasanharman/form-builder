@@ -29,7 +29,7 @@ const links: Link[] = [
 
 export function Footer() {
   return (
-    <footer className="max-w-5xl mx-auto flex flex-col gap-y-3 pt-10 pb-5">
+    <footer className="max-w-5xl mx-auto flex flex-col gap-y-3 pt-10 pb-5 px-5 lg:px-0">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-2">
           <Link href="/" className="cursor-pointer">

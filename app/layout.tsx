@@ -68,18 +68,16 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <div className="px-5 lg:px-0">
+          <div>
             <NextTopLoader color="#FF9432" showSpinner={false} />
             <Toaster />
-            <Header />
             <AllProviders>
-              <main className='min-h-[70vh]'>{children}</main>
+              <main className="min-h-[70vh]">{children}</main>
             </AllProviders>
-            <Footer />
           </div>
         </body>
       </html>

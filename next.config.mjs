@@ -28,7 +28,12 @@ const nextConfig = {
     return config
   },
   images: {
-    domains: ['img.youtube.com'],
+    domains: [
+      'img.youtube.com',
+      'randomuser.me',
+      'avatars.githubusercontent.com',
+      'pbs.twimg.com',
+    ],
   },
 }
 
