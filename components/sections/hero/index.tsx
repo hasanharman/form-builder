@@ -5,11 +5,12 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 
 import { cn } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 
-import { LuStar, LuGithub } from 'react-icons/lu'
 import HeroVideoDialog from '@/components/sections/hero/hero-video'
 import { NumberTicker } from '@/components/number-ticker'
+
+import { LuStar, LuHeart } from 'react-icons/lu'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -34,20 +35,48 @@ function HeroPill() {
   }, [])
 
   return (
-    <motion.a
-      href="https://github.com/hasanharman/form-builder"
-      target="_blank"
-      className="cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 py-1 ring-1 ring-accent whitespace-pre shadow hover:shadow-lg"
+    <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease }}
+      className="flex items-center"
     >
-      <p className="font-medium text-primary text-sm">Star Project on GitHub</p>
-      <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm border ">
-        <LuStar />
-        <NumberTicker className="ml-1" value={stars} />
+      <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
+        <Link
+          href="https://github.com/sponsors/hasanharman"
+          target="_blank"
+          className="group"
+        >
+          <Button className="h-10 w-36 flex justify-start rounded-full border-2 border-white dark:border-gray-800 shadow">
+            <LuHeart className="mr-1 group-hover:text-red-500" />
+            Sponsor
+          </Button>
+        </Link>
+        <Link
+          href="https://github.com/hasanharman/form-builder"
+          target="_blank"
+          className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
+        >
+          <p className="font-medium text-primary  text-sm">
+            Star Project on GitHub
+          </p>
+          <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
+            <LuStar className="group-hover:text-yellow-500" />
+            <NumberTicker className="ml-1" value={stars} />
+          </div>
+        </Link>
+        {/* <Link href={'url'} target="_blank">
+          <Button className="h-10 rounded-full border-2 border-white dark:border-gray-800">
+            Hello
+          </Button>
+        </Link>
+        <Link href={'url'} target="_blank">
+          <Button className="h-10 rounded-full border-2 border-white dark:border-gray-800">
+            Hello
+          </Button>
+        </Link> */}
       </div>
-    </motion.a>
+    </motion.div>
   )
 }
 
