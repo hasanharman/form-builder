@@ -1,7 +1,7 @@
 import { FormFieldType } from '@/types'
 
 export const generateCodeSnippet = (field: FormFieldType) => {
-  switch (field.type) {
+  switch (field.variant) {
     case 'Checkbox':
       return `<FormField
           control={form.control}
@@ -148,6 +148,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 <Input 
                 placeholder="${field.placeholder}"
                 ${field.disabled ? 'disabled' : ''}
+                type="${field.type}"
                 {...field} />
               </FormControl>
               ${
@@ -262,11 +263,13 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                 <FormLabel>Price - {value}</FormLabel>
                 <FormControl>
                   <Slider
-                    min={0}
-                    max={100}
-                    step={1}
-                    defaultValue={[value]}
-                    onValueChange={onChange}
+                    min=${field.min ? field.min : '{0}'}
+                    max=${field.max ? field.max : '{100}'}
+                    step=${field.step ? field.step : '{5}'}
+                    defaultValue={[5]}
+                    onValueChange={(vals) => {
+                      onChange(vals[0]);
+                    }}
                   />
                 </FormControl>
                 ${

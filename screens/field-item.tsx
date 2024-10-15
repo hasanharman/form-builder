@@ -2,7 +2,7 @@ import { useMotionValue, motion, Reorder } from 'framer-motion'
 
 import { cn } from '@/lib/utils'
 import { FormFieldType } from '@/types'
-import { fieldTypes } from '@/constants'
+import { defaultFieldConfig, fieldTypes } from '@/constants'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
@@ -44,7 +44,7 @@ export const FieldItem = ({
 
   const path = subIndex !== undefined ? [index, subIndex] : [index]
 
-  const addNewColumn = (type: string, index: number) => {
+  const addNewColumn = (variant: string, index: number) => {
     const newFieldName = `name_${Math.random().toString().slice(-10)}`
 
     // Check for duplicates
@@ -58,20 +58,27 @@ export const FieldItem = ({
       return
     }
 
-    const newField: FormFieldType = {
-      type: type,
-      label: newFieldName,
-      value: '',
-      checked: true,
-      name: newFieldName,
-      placeholder: 'Enter Placeholder',
+    const { label, description, placeholder } = defaultFieldConfig[variant] || {
+      label: '',
       description: '',
-      required: true,
+      placeholder: '',
+    }
+
+    const newField: FormFieldType = {
+      checked: true,
+      description: description || '',
       disabled: false,
+      label: label || newFieldName,
+      name: newFieldName,
       onChange: () => {},
-      setValue: () => {},
       onSelect: () => {},
+      placeholder: placeholder || 'Placeholder',
+      required: true,
       rowIndex: index,
+      setValue: () => {},
+      type: '',
+      value: '',
+      variant,
     }
 
     setFormFields((prevFields) => {
@@ -156,14 +163,15 @@ export const FieldItem = ({
             render={() => <LuColumns className="cursor-grab w-4 h-4" />}
           />
           <div className="flex items-center w-full">
-            <div className="w-full">
-              <Input
+            <div className="w-full text-sm">
+              {field.variant}
+              {/* <Input
                 value={field.label}
                 onChange={(e) =>
                   updateFormField(path, { label: e.target.value })
                 }
                 placeholder="Enter label"
-              />
+              /> */}
             </div>
             <Button
               variant="ghost"

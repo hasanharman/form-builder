@@ -15,6 +15,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import EmptyListImage from '@/assets/oc-thinking.png'
 import If from '@/components/ui/if'
 import Image from 'next/image'
+import { defaultFieldConfig } from '@/constants'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -25,23 +26,33 @@ export default function FormBuilder() {
   const [selectedField, setSelectedField] = useState<FormFieldType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const addFormField = (type: string, index: number) => {
-    const uniqueId = Math.random().toString().slice(-10)
+  const addFormField = (variant: string, index: number) => {
+    const newFieldName = `name_${Math.random().toString().slice(-10)}`
+
+    const { label, description, placeholder } = defaultFieldConfig[variant] || {
+      label: '',
+      description: '',
+      placeholder: '',
+    }
 
     const newField: FormFieldType = {
-      type,
-      label: `name_${uniqueId}`,
-      value: '',
       checked: true,
-      name: `name_${uniqueId}`, // Set default name
-      placeholder: 'Enter Placeholder',
-      description: '',
-      required: true,
+      description: description || '',
       disabled: false,
+      label: label || newFieldName,
+      name: newFieldName,
       onChange: () => {},
-      setValue: () => {},
       onSelect: () => {},
+      placeholder: placeholder || 'Placeholder',
+      required: true,
       rowIndex: index,
+      setValue: () => {},
+      type: '',
+      value: '',
+      variant,
+      // min: 1,
+      // max: 100,
+      // step: 5,
     }
     setFormFields([...formFields, newField])
   }
@@ -99,7 +110,7 @@ export default function FormBuilder() {
   const FieldSelectorWithSeparator = ({
     addFormField,
   }: {
-    addFormField: (type: string, index?: number) => void
+    addFormField: (variant: string, index?: number) => void
   }) => (
     <div className="flex flex-col md:flex-row gap-3">
       <FieldSelector addFormField={addFormField} />
@@ -128,8 +139,8 @@ export default function FormBuilder() {
           <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5 h-full">
             <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
               <FieldSelectorWithSeparator
-                addFormField={(type: string, index: number = 0) =>
-                  addFormField(type, index)
+                addFormField={(variant: string, index: number = 0) =>
+                  addFormField(variant, index)
                 }
               />
               <div className="overflow-y-auto flex-1">
@@ -149,8 +160,8 @@ export default function FormBuilder() {
         otherwise={() => (
           <div className="flex flex-col md:flex-row items-center gap-3 md:px-5">
             <FieldSelectorWithSeparator
-              addFormField={(type: string, index: number = 0) =>
-                addFormField(type, index)
+              addFormField={(variant: string, index: number = 0) =>
+                addFormField(variant, index)
               }
             />
             <Image

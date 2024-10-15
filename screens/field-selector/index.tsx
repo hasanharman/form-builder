@@ -6,7 +6,7 @@ import If from '@/components/ui/if'
 import Link from 'next/link'
 
 type FieldSelectorProps = {
-  addFormField: (type: string, index?: number) => void
+  addFormField: (variant: string, index?: number) => void
 }
 
 export const FieldSelector: React.FC<FieldSelectorProps> = ({
@@ -14,18 +14,18 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
 }) => {
   return (
     <div className="flex md:flex-col items-start flex-wrap md:flex-nowrap gap-3">
-      {fieldTypes.map((type) => (
-        <div className="flex items-center gap-1" key={type.name}>
+      {fieldTypes.map((variant) => (
+        <div className="flex items-center gap-1" key={variant.name}>
           <Button
-            key={type.name}
+            key={variant.name}
             variant="outline"
-            onClick={() => addFormField(type.name, type.index)}
+            onClick={() => addFormField(variant.name, variant.index)}
             className="rounded-full"
             size="sm"
           >
-            {type.name}
+            {variant.name}
             <If
-              condition={type.isNew}
+              condition={variant.isNew}
               render={() => (
                 <div className="md:hidden ml-1 text-[10px] p-1 bg-yellow-200 rounded">
                   New
@@ -34,7 +34,7 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
             />
           </Button>
           <If
-            condition={type.isNew}
+            condition={variant.isNew}
             render={() => (
               <div className="hidden md:block ml-1 text-[10px] p-1 bg-yellow-200 rounded">
                 New

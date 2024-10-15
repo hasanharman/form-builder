@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import {
   FormControl,
   FormDescription,
+  FormField,
   FormItem,
   FormLabel,
   FormMessage,
@@ -64,6 +65,7 @@ import {
   MultiSelectorList,
   MultiSelectorTrigger,
 } from '@/components/ui/multi-select'
+import { DateRange } from 'react-day-picker'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -75,6 +77,33 @@ const languages = [
   { label: 'Japanese', value: 'ja' },
   { label: 'Korean', value: 'ko' },
   { label: 'Chinese', value: 'zh' },
+] as const
+
+const items = [
+  {
+    id: 'recents',
+    label: 'Recents',
+  },
+  {
+    id: 'home',
+    label: 'Home',
+  },
+  {
+    id: 'applications',
+    label: 'Applications',
+  },
+  {
+    id: 'desktop',
+    label: 'Desktop',
+  },
+  {
+    id: 'downloads',
+    label: 'Downloads',
+  },
+  {
+    id: 'documents',
+    label: 'Documents',
+  },
 ] as const
 
 const FileSvgDraw = () => {
@@ -106,9 +135,9 @@ const FileSvgDraw = () => {
   )
 }
 
-export const renderFormField = (field: FormFieldType) => {
+export const renderFormField = (field: FormFieldType, form: any) => {
   const [checked, setChecked] = useState<boolean>(field.checked)
-  const [value, setValue] = useState(field.value)
+  const [value, setValue] = useState<any>(field.value)
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
   const [date, setDate] = useState<Date>()
 
@@ -118,7 +147,7 @@ export const renderFormField = (field: FormFieldType) => {
     multiple: true,
   }
 
-  switch (field.type) {
+  switch (field.variant) {
     case 'Checkbox':
       return (
         <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
@@ -175,7 +204,7 @@ export const renderFormField = (field: FormFieldType) => {
                         key={language.value}
                         onSelect={() => {
                           setValue(language.value)
-                          field.setValue(value as any)
+                          form.setValue(field.name, language.value)
                         }}
                       >
                         <Check
@@ -195,6 +224,7 @@ export const renderFormField = (field: FormFieldType) => {
             </PopoverContent>
           </Popover>
           <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'Date Picker':
@@ -219,15 +249,18 @@ export const renderFormField = (field: FormFieldType) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="single"
+              {/* <Calendar
+                mode="range"
+                numberOfMonths={2}
+                defaultMonth={date?.from}
                 selected={date}
                 onSelect={setDate}
                 initialFocus
-              />
+              /> */}
             </PopoverContent>
           </Popover>
           <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'File Input':
@@ -269,9 +302,14 @@ export const renderFormField = (field: FormFieldType) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
-            <Input placeholder={field.placeholder} disabled={field.disabled} />
+            <Input
+              placeholder={field.placeholder}
+              disabled={field.disabled}
+              type={field?.type}
+            />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'Input OTP':
@@ -349,9 +387,21 @@ export const renderFormField = (field: FormFieldType) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <Slider min={0} max={100} step={1} defaultValue={[5]} />
+            <Slider
+              min={field.min}
+              max={field.max}
+              step={field.step}
+              defaultValue={[5]}
+              onValueChange={(value) => {
+                setValue(value[0])
+              }} // Update to set the first value as a number
+            />
           </FormControl>
-          <FormDescription>{field.description}</FormDescription>
+          <FormDescription className='py-3'>
+            {field.description} Selected value is {value}, minimun valus is{' '}
+            {field.min}, maximim values is {field.max}, step size is{' '}
+            {field.step}
+          </FormDescription>
           <FormMessage />
         </FormItem>
       )

@@ -12,7 +12,6 @@ import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import If from '@/components/ui/if'
 import { FormFieldType } from '@/types'
-import { generateCodeSnippet } from '../generate-code-field'
 
 import { Files } from 'lucide-react'
 import {
@@ -41,7 +40,7 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
                 <FormItem className={`col-span-${colSpan}`}>
                   <FormControl>
                     {React.cloneElement(
-                      renderFormField(field) as React.ReactElement,
+                      renderFormField(field, form) as React.ReactElement,
                       {
                         ...formField,
                       },
@@ -63,7 +62,7 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
             <FormItem>
               <FormControl>
                 {React.cloneElement(
-                  renderFormField(fieldOrGroup) as React.ReactElement,
+                  renderFormField(fieldOrGroup, form) as React.ReactElement,
                   {
                     ...formField,
                   },
@@ -85,6 +84,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   })
 
   function onSubmit(data: any) {
+    console.log('HEY', data)
     try {
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">

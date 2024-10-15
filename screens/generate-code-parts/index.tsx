@@ -10,50 +10,62 @@ export const generateZodSchema = (
   const schemaObject: Record<string, z.ZodTypeAny> = {}
 
   const processField = (field: FormFieldType): void => {
-    if (field.type === 'Label') return
+    if (field.variant === 'Label') return
 
     let fieldSchema: z.ZodTypeAny
 
-    switch (field.type) {
+    switch (field.variant) {
       case 'Checkbox':
+        fieldSchema = z.boolean().default(true)
+        break
       case 'Date Picker':
-        fieldSchema = z.date()
+        fieldSchema = z.coerce.date()
+        break
+      case 'Input':
+        if (field.type === 'email') {
+          fieldSchema = z.string().email()
+        } else if (field.type === 'number') {
+          fieldSchema = z.coerce.number()
+        } else {
+          fieldSchema = z.string()
+        }
         break
       case 'Slider':
         fieldSchema = z.coerce.number()
+      case 'Number':
+        fieldSchema = z.coerce.number()
+        break
       case 'Switch':
         fieldSchema = z.boolean()
         break
       case 'Tags Input':
-        fieldSchema = z.array(z.string()).nonempty('Please at least one item')
-        break
       case 'Multi Select':
-        fieldSchema = z.array(z.string())
-        break
-      case 'Number':
-        fieldSchema = z.array(z.string()).nonempty('Please at least one item')
+        fieldSchema = z
+          .array(z.string())
+          .nonempty('Please select at least one item')
         break
       default:
         fieldSchema = z.string()
     }
 
-    if (field.required) {
-      fieldSchema = fieldSchema.refine(
-        (value) => {
-          if (typeof value === 'string') return value.trim().length > 0
-          if (typeof value === 'number') return value > 0
-          if (value instanceof Date) return !isNaN(value.getTime())
-          return !!value
-        },
-        {
-          message: `${field.label} is required`,
-        },
+    if (field.min !== undefined && 'min' in fieldSchema) {
+      fieldSchema = (fieldSchema as any).min(
+        field.min,
+        `Must be at least ${field.min}`,
       )
-    } else {
+    }
+    if (field.max !== undefined && 'max' in fieldSchema) {
+      fieldSchema = (fieldSchema as any).max(
+        field.max,
+        `Must be at most ${field.max}`,
+      )
+    }
+
+    if (field.required !== true) {
       fieldSchema = fieldSchema.optional()
     }
 
-    schemaObject[field.name] = fieldSchema
+    schemaObject[field.name] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
   }
 
   formFields.flat().forEach(processField)
@@ -62,20 +74,64 @@ export const generateZodSchema = (
 }
 
 export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
-  if (schema instanceof z.ZodBoolean) {
-    return 'z.boolean()'
-  } else if (schema instanceof z.ZodNumber) {
-    return 'z.number()'
-  } else if (schema instanceof z.ZodString) {
-    return 'z.string()'
-  } else if (schema instanceof z.ZodDate) {
-    return 'z.date()'
-  } else if (schema instanceof z.ZodArray) {
-    return 'z.array(z.string())'
-  } else if (schema instanceof z.ZodEffects) {
-    const baseSchema = zodSchemaToString(schema._def.schema)
-    return `${baseSchema}`
+  if (schema instanceof z.ZodDefault) {
+    return `${zodSchemaToString(schema._def.innerType)}.default(${JSON.stringify(schema._def.defaultValue())})`
   }
+
+  if (schema instanceof z.ZodBoolean) {
+    return `z.boolean()`
+  }
+
+  if (schema instanceof z.ZodNumber) {
+    let result = 'z.number()'
+    if ('checks' in schema._def) {
+      schema._def.checks.forEach((check: any) => {
+        if (check.kind === 'min') {
+          result += `.min(${check.value})`
+        } else if (check.kind === 'max') {
+          result += `.max(${check.value})`
+        }
+      })
+    }
+    return result
+  }
+
+  if (schema instanceof z.ZodString) {
+    let result = 'z.string()'
+    if ('checks' in schema._def) {
+      schema._def.checks.forEach((check: any) => {
+        if (check.kind === 'min') {
+          result += `.min(${check.value})`
+        } else if (check.kind === 'max') {
+          result += `.max(${check.value})`
+        }
+      })
+    }
+    return result
+  }
+
+  if (schema instanceof z.ZodDate) {
+    return `z.coerce.date()`
+  }
+
+  if (schema instanceof z.ZodArray) {
+    return `z.array(${zodSchemaToString(schema.element)}).nonempty()`
+  }
+
+  if (schema instanceof z.ZodObject) {
+    const shape = schema.shape
+    const shapeStrs = Object.entries(shape).map(
+      ([key, value]) => `${key}: ${zodSchemaToString(value as ZodTypeAny)}`,
+    )
+    return `z.object({
+  ${shapeStrs.join(',\n  ')}
+})`
+  }
+
+  if (schema instanceof z.ZodOptional) {
+    return `${zodSchemaToString(schema.unwrap())}.optional()`
+  }
+
   return 'z.unknown()'
 }
 
@@ -106,7 +162,7 @@ export const generateImports = (
   ])
 
   const processField = (field: FormFieldType) => {
-    switch (field.type) {
+    switch (field.variant) {
       case 'Combobox':
         importSet.add(
           'import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"',
@@ -160,7 +216,7 @@ export const generateImports = (
         break
       default:
         importSet.add(
-          `import { ${field.type} } from "@/components/ui/${field.type.toLowerCase()}"`,
+          `import { ${field.variant} } from "@/components/ui/${field.variant.toLowerCase()}"`,
         )
         break
     }
@@ -177,7 +233,7 @@ export const generateConstants = (
   const constantSet: Set<string> = new Set()
 
   formFields.flat().forEach((field) => {
-    if (field.type === 'Combobox') {
+    if (field.variant === 'Combobox') {
       constantSet.add(`const languages = [
         { label: "English", value: "en" },
         { label: "French", value: "fr" },
@@ -189,7 +245,7 @@ export const generateConstants = (
         { label: "Korean", value: "ko" },
         { label: "Chinese", value: "zh" },
       ] as const;`)
-    } else if (field.type === 'File Input') {
+    } else if (field.variant === 'File Input') {
       constantSet.add(`
         const [files, setFiles] = useState<File[] | null>(null); 
 
@@ -202,6 +258,45 @@ export const generateConstants = (
   })
 
   return constantSet
+}
+
+// New function to generate defaultValues
+export const generateDefaultValues = (
+  fields: FormFieldOrGroup[],
+  existingDefaultValues: Record<string, any> = {},
+): Record<string, any> => {
+  const defaultValues: Record<string, any> = existingDefaultValues
+
+  fields.flat().forEach((field) => {
+    if (!defaultValues[field.name]) {
+      if (field.variant === 'Multi Select') {
+        defaultValues[field.name] = ['React']
+      } else if (field.variant === 'Tags Input') {
+        defaultValues[field.name] = ['']
+      }
+    }
+  })
+
+  return defaultValues
+}
+
+export const generateDefaultValuesString = (
+  fields: FormFieldOrGroup[],
+): string => {
+  const defaultValues: Record<string, any> = {}
+
+  fields.flat().forEach((field) => {
+    if (field.variant === 'Multi Select') {
+      defaultValues[field.name] = ['React']
+    } else if (field.variant === 'Tags Input') {
+      defaultValues[field.name] = ['']
+    }
+  })
+
+  if (Object.keys(defaultValues).length > 0) {
+    return `defaultValues: ${JSON.stringify(defaultValues)},`
+  }
+  return ''
 }
 
 export const generateFormCode = (formFields: FormFieldOrGroup[]): string => {
@@ -233,25 +328,7 @@ export const generateFormCode = (formFields: FormFieldOrGroup[]): string => {
       .join('\n        ')
   }
 
-  // New function to generate defaultValues
-  const generateDefaultValues = (fields: FormFieldOrGroup[]): string => {
-    const defaultValues: Record<string, any> = {}
-
-    fields.flat().forEach((field) => {
-      if (field.type === 'Multi Select') {
-        defaultValues[field.name] = ['React']
-      } else if (field.type === 'Tags Input') {
-        defaultValues[field.name] = ['']
-      }
-    })
-
-    if (Object.keys(defaultValues).length > 0) {
-      return `defaultValues: ${JSON.stringify(defaultValues)},`
-    }
-    return ''
-  }
-
-  const defaultValuesString = generateDefaultValues(formFields)
+  const defaultValuesString = generateDefaultValuesString(formFields)
 
   const component = `
 export default function MyForm() {

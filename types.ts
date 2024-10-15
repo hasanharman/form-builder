@@ -1,18 +1,26 @@
 // Define the FormField type
 export type FormFieldType = {
   type: string
+  variant: string
   name: string
   label: string
-  value: string | boolean | Date | number | string[]
-  checked: boolean
-  setValue: (value: string | boolean) => void
   placeholder?: string
-  required: boolean
-  disabled: boolean
   description?: string
-  onChange: (value: string | string[] | boolean | Date) => void
-  onSelect: (value: string | string[] | boolean | Date) => void
+  disabled: boolean
+  value: string | boolean | Date | number | string[]
+  setValue: (value: string | boolean) => void
+  checked: boolean
+  onChange: (
+    value: string | string[] | boolean | Date | number | number[],
+  ) => void
+  onSelect: (
+    value: string | string[] | boolean | Date | number | number[],
+  ) => void
   rowIndex: number
+  required?: boolean
+  min?: number
+  max?: number
+  step?: number
 }
 
 export type FieldType = { name: string; isNew: boolean; index?: number }
