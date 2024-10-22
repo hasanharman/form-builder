@@ -30,6 +30,7 @@ type Tabs = {
     | 'secondary'
     | 'ghost'
     | 'link'
+    | 'arrow'
     | null
     | undefined
   className?: string
@@ -41,15 +42,16 @@ const tabs: Tabs[] = [
   {
     name: 'Roadmap',
     href: 'https://shadcnform.featurebase.app/',
-    variant: 'link',
+    variant: 'arrow',
     isNewTab: true,
   },
+  { name: 'Templates', href: '/templates', variant: 'link' },
   {
-    name: 'Open Playground',
+    name: 'Playground',
     href: '/playground',
     variant: 'default',
-    className: 'bg-primary text-white rounded-full',
-    isUpdated: true,
+    className: 'bg-primary text-white rounded-full px-2',
+    isUpdated: false,
   },
 ]
 
@@ -70,7 +72,7 @@ export default function Header() {
           >
             <Button
               variant={tab.variant}
-              className={cn('w-full', tab?.className)}
+              className={cn('w-full px-1', tab?.className)}
             >
               {tab.name}
               <If

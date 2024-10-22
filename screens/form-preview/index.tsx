@@ -84,7 +84,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   })
 
   function onSubmit(data: any) {
-    console.log('HEY', data)
     try {
       toast(
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
@@ -180,7 +179,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                   variant="secondary"
                   size="icon"
                   onClick={() => {
-                    navigator.clipboard.writeText(generatedCode)
+                    navigator.clipboard.writeText(formattedCode)
                     toast.success('Code copied to clipboard!')
                   }}
                 >

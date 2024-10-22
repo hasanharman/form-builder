@@ -1,3 +1,5 @@
+import { Icons } from './components/icons'
+
 // Define the FormField type
 export type FormFieldType = {
   type: string
