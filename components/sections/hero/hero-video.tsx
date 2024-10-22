@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 
 import { Play, XIcon } from 'lucide-react'
-import ThumbnailImage from '@/assets/demo2.png'
+import ThumbnailImage from '@/assets/yt3.png'
 
 type AnimationStyle =
   | 'from-bottom'
@@ -87,7 +87,7 @@ export default function HeroVideoDialog({
         onClick={() => setIsVideoOpen(true)}
       >
         <Image
-          // src="https://img.youtube.com/vi/7r0n7A3OL7s/maxresdefault.jpg"
+          // src="https://img.youtube.com/vi/25IzTkU3En4/maxresdefault.jpg"
           src={ThumbnailImage}
           alt={thumbnailAlt}
           width={1920}
