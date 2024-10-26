@@ -34,7 +34,7 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   onSave,
 }) => {
   const [editedField, setEditedField] = useState<FormFieldType | null>(null)
-  const [isTypeNumber, setIsTypeNumber] = useState<boolean>()
+  const [fieldType, setFieldType] = useState<string>()
 
   useEffect(() => {
     setEditedField(field)
@@ -106,11 +106,7 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
                   // id="type"
                   value={editedField.type}
                   onValueChange={(value) => {
-                    if (value === 'number') {
-                      setIsTypeNumber(true)
-                    } else {
-                      setIsTypeNumber(false)
-                    }
+                    setFieldType(value)
                     setEditedField({ ...editedField, type: value })
                   }}
                 >
@@ -128,7 +124,7 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
             )}
           />
           <If
-            condition={field?.type === 'number' || isTypeNumber === true}
+            condition={fieldType === 'number' || fieldType === 'text'}
             render={() => (
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-1 flex flex-col gap-1 ">
