@@ -65,7 +65,9 @@ export default function ResetPasswordPreview() {
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Reset Password</CardTitle>
-          <CardDescription>Enter your new password below.</CardDescription>
+          <CardDescription>
+            Enter your new password to reset your password.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
