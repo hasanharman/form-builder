@@ -16,6 +16,7 @@ import EmptyListImage from '@/assets/oc-thinking.png'
 import If from '@/components/ui/if'
 import Image from 'next/image'
 import { defaultFieldConfig } from '@/constants'
+import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -118,6 +119,8 @@ export default function FormBuilder() {
     </div>
   )
 
+  console.log('form fields', formFields)
+
   return (
     <section className="md:max-h-screen space-y-8">
       <div className="max-w-5xl mx-auto space-y-4">
@@ -152,7 +155,8 @@ export default function FormBuilder() {
                 />
               </div>
             </div>
-            <div className="col-span-1 w-full h-full">
+            <div className="col-span-1 w-full h-full space-y-3">
+              <SpecialComponentsNotice formFields={formFields} />
               <FormPreview formFields={formFields} />
             </div>
           </div>
@@ -174,7 +178,6 @@ export default function FormBuilder() {
           </div>
         )}
       />
-
       <EditFieldDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
