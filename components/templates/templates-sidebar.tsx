@@ -21,7 +21,7 @@ import { templates } from '@/constants/templates'
 export function AppSidebar() {
   const pathname = usePathname()
   return (
-    <Sidebar className="sticky ">
+    <Sidebar className="sticky">
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>

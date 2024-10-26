@@ -1,12 +1,30 @@
+'use client'
 import dynamic from 'next/dynamic'
 import { Link } from 'next-view-transitions'
 
 import { CodeViewer } from '@/components/templates/code-viewer'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb'
 import If from '@/components/ui/if'
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar' // Check this import
+import { Button } from '@/components/ui/button'
 
-export default function Page({ params }: { params: { slug: string } }) {
+export default function Page({
+  params,
+}: {
+  params: { slug: string; category: string }
+}) {
   const pathname = params.slug
+  const category = params.category
+
+  const { toggleSidebar } = useSidebar()
 
   // Dynamically import the preview component
   const PreviewComponent = dynamic(
@@ -21,6 +39,34 @@ export default function Page({ params }: { params: { slug: string } }) {
   return (
     <div className="space-y-6">
       <div className="space-y-3">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={() => toggleSidebar()}
+                className="cursor-pointer"
+              >
+                Templates
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink
+                onClick={() => toggleSidebar()}
+                className="capitalize cursor-pointer"
+              >
+                {category}
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="capitalize">
+                {pathname.replace(/-/g, ' ')} Form
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <h1 className="text-xl font-semibold capitalize">
           {pathname.replace(/-/g, ' ')} Form
         </h1>
