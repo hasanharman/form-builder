@@ -174,18 +174,20 @@ const testimonials = [
     img: 'https://pbs.twimg.com/profile_images/1705145078937681920/o7-eZKwQ_400x400.jpg',
     description: (
       <p>
-        Wow, that&apos;s awesome! How about adding a feature that allows users to
-        customize the design of their forms with different themes and colors? It
-        would take the user experience to the next level! 🚀🎨
+        Wow, that&apos;s awesome! How about adding a feature that allows users
+        to customize the design of their forms with different themes and colors?
+        It would take the user experience to the next level! 🚀🎨
       </p>
     ),
   },
   {
     name: 'Aidan Sunbury',
     username: '@aidansunbury',
-    img: 'https://pbs.twimg.com/profile_images/1833678724170186752/gDRGWrM5_400x400.pngƒ',
+    img: 'https://pbs.twimg.com/profile_images/1833678724170186752/gDRGWrM5_400x400.png',
     description: (
-      <p>The initial version works great! Can&apos;t wait to see where it goes.</p>
+      <p>
+        The initial version works great! Can&apos;t wait to see where it goes.
+      </p>
     ),
   },
   {

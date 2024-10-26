@@ -3,16 +3,21 @@ A dynamic form-building tool that allows users to create, customize, and validat
 
 ## Table of Contents
 
-- [Features](#features)
-- [Demo](#demo)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Components](#components)
-- [Validation](#validation)
-- [API](#api)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgements](#acknowledgements)
+- [Form Builder](#form-builder)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Live Demo](#live-demo)
+  - [YouTube Demo](#youtube-demo)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Creating a Form](#creating-a-form)
+  - [Components](#components)
+  - [Validation](#validation)
+  - [API](#api)
+    - [Form Submission](#form-submission)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Acknowledgements](#acknowledgements)
 
 ## Features
 
@@ -24,11 +29,11 @@ A dynamic form-building tool that allows users to create, customize, and validat
 
 ## Live Demo
 
-Check out the live demo of the Form Builder [here](https://form-builder-demo.vercel.app/).
+Check out the live demo of the Form Builder [here](https://www.shadcn-form.com/).
 
 ## YouTube Demo
 
-[![Watch the demo](https://img.youtube.com/vi/7r0n7A3OL7s/0.jpg)](https://www.youtube.com/watch?v=7r0n7A3OL7s)
+[![Watch the demo](https://img.youtube.com/vi/25IzTkU3En4/0.jpg)](https://www.youtube.com/watch?v=25IzTkU3En4)
 
 ## Installation
 
