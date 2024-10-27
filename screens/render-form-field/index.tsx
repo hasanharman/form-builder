@@ -65,7 +65,6 @@ import {
   MultiSelectorList,
   MultiSelectorTrigger,
 } from '@/components/ui/multi-select'
-import { DateRange } from 'react-day-picker'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -138,6 +137,8 @@ const FileSvgDraw = () => {
 export const renderFormField = (field: FormFieldType, form: any) => {
   const [checked, setChecked] = useState<boolean>(field.checked)
   const [value, setValue] = useState<any>(field.value)
+  const [selectedValues, setSelectedValues] = useState<string[]>(['React'])
+  const [tagsValue, setTagsValue] = useState<string[]>([])
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
   const [date, setDate] = useState<Date>()
 
@@ -341,9 +342,14 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
             <MultiSelector
-              values={Array.isArray(value) ? value : [String(value)]} // Ensure values is always a string array
-              onValuesChange={setValue}
-              loop
+              values={selectedValues}
+              onValuesChange={(newValues) => {
+                setSelectedValues(newValues)
+                form.setValue(field.name, newValues, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
               className="max-w-xs"
             >
               <MultiSelectorTrigger>
@@ -397,7 +403,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               }} // Update to set the first value as a number
             />
           </FormControl>
-          <FormDescription className='py-3'>
+          <FormDescription className="py-3">
             {field.description} Selected value is {value}, minimun valus is{' '}
             {field.min}, maximim values is {field.max}, step size is{' '}
             {field.step}
@@ -423,13 +429,23 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         </FormItem>
       )
     case 'Tags Input':
+      const currentTags = Array.isArray(form.watch(field.name))
+        ? form.watch(field.name)
+        : []
+
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
             <TagsInput
-              value={Array.isArray(value) ? value : [String(value)]} // Ensure values is always a string array
-              onValueChange={setValue}
+              value={tagsValue}
+              onValueChange={(newTags) => {
+                setTagsValue(newTags)
+                form.setValue(field.name, newTags, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
               placeholder="Enter your tags"
             />
           </FormControl>

@@ -39,6 +39,10 @@ export const generateZodSchema = (
         fieldSchema = z.boolean()
         break
       case 'Tags Input':
+        fieldSchema = z
+          .array(z.string())
+          .nonempty('Please enter at least one item')
+        break
       case 'Multi Select':
         fieldSchema = z
           .array(z.string())
@@ -115,7 +119,7 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   }
 
   if (schema instanceof z.ZodArray) {
-    return `z.array(${zodSchemaToString(schema.element)}).nonempty()`
+    return `z.array(${zodSchemaToString(schema.element)}).nonempty("Please at least one item")`
   }
 
   if (schema instanceof z.ZodObject) {
@@ -272,7 +276,7 @@ export const generateDefaultValues = (
       if (field.variant === 'Multi Select') {
         defaultValues[field.name] = ['React']
       } else if (field.variant === 'Tags Input') {
-        defaultValues[field.name] = ['']
+        defaultValues[field.name] = []
       }
     }
   })
@@ -289,7 +293,7 @@ export const generateDefaultValuesString = (
     if (field.variant === 'Multi Select') {
       defaultValues[field.name] = ['React']
     } else if (field.variant === 'Tags Input') {
-      defaultValues[field.name] = ['']
+      defaultValues[field.name] = ['test']
     }
   })
 
@@ -362,6 +366,5 @@ export default function MyForm() {
   )
 }
   `
-
   return imports + '\n\n' + schema + '\n' + component
 }

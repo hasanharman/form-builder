@@ -4,7 +4,6 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { js_beautify } from 'js-beautify'
 
 import { renderFormField } from '@/screens/render-form-field'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -17,7 +16,9 @@ import { Files } from 'lucide-react'
 import {
   generateZodSchema,
   generateFormCode,
+  generateDefaultValues,
 } from '@/screens/generate-code-parts'
+import { formatJSXCode } from '@/lib/utils'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -79,8 +80,11 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
 export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   const formSchema = generateZodSchema(formFields)
 
+  const defaultVals = generateDefaultValues(formFields)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: defaultVals,
   })
 
   function onSubmit(data: any) {
@@ -94,28 +98,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
       console.error('Form submission error', error)
       toast.error('Failed to submit the form. Please try again.')
     }
-  }
-
-  function formatJSXCode(code: string): string {
-    return js_beautify(code, {
-      indent_size: 2,
-      indent_char: ' ',
-      max_preserve_newlines: 2,
-      preserve_newlines: true,
-      keep_array_indentation: false,
-      break_chained_methods: false,
-      // indent_scripts: "normal",
-      // brace_style: "collapse,preserve-inline",
-      space_before_conditional: true,
-      unescape_strings: false,
-      jslint_happy: false,
-      end_with_newline: false,
-      wrap_line_length: 0,
-      // indent_inner_html: false,
-      comma_first: false,
-      e4x: true,
-      indent_empty_lines: false,
-    })
   }
 
   const generatedCode = generateFormCode(formFields)

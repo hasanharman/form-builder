@@ -48,7 +48,7 @@ export const defaultFieldConfig: Record<
     description: 'Please enter the one-time password sent to your phone.',
   },
   'Multi Select': {
-    label: 'Default Multi Select Label',
+    label: 'Select your framework',
     description: 'Select multiple options.',
   },
   Select: {
@@ -64,7 +64,7 @@ export const defaultFieldConfig: Record<
     label: 'Marketing emails',
     description: 'Receive emails about new products, features, and more.',
   },
-  'Tags Input': { label: 'Default Tags Input Label', description: 'Add tags.' },
+  'Tags Input': { label: 'Enter your tech stack.', description: 'Add tags.' },
   Textarea: {
     label: 'Bio',
     description: 'You can @mention other users and organizations.',
