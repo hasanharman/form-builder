@@ -187,7 +187,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 >
                   {value
                     ? languages.find((language) => language.value === value)
-                        ?.label
+                      ?.label
                     : 'Select language'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -389,24 +389,29 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         </FormItem>
       )
     case 'Slider':
+      const min = field.min || 0
+      const max = field.max || 100
+      const step = field.step || 1
+      const defaultValue = 5
+
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
             <Slider
-              min={field.min}
-              max={field.max}
-              step={field.step}
-              defaultValue={[5]}
+              min={min}
+              max={max}
+              step={step}
+              defaultValue={[defaultValue]}
               onValueChange={(value) => {
                 setValue(value[0])
               }} // Update to set the first value as a number
             />
           </FormControl>
           <FormDescription className="py-3">
-            {field.description} Selected value is {value}, minimun valus is{' '}
-            {field.min}, maximim values is {field.max}, step size is{' '}
-            {field.step}
+            {field.description} Selected value is {value || defaultValue}, minimun valus is{' '}
+            {min}, maximim values is {max}, step size is{' '}
+            {step}
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -461,7 +466,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <Textarea
               placeholder={field.placeholder}
               className="resize-none"
-              // {...field}
+            // {...field}
             />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
