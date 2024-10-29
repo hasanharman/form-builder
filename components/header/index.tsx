@@ -1,3 +1,5 @@
+'use client'
+
 import { Link } from 'next-view-transitions'
 
 import { Button } from '@/components/ui/button'
@@ -18,6 +20,7 @@ import { FaXTwitter } from 'react-icons/fa6'
 import Logo from '@/assets/logo.svg'
 import { cn } from '@/lib/utils'
 import If from '../ui/if'
+import { usePathname } from 'next/navigation'
 
 type Tabs = {
   name: string
@@ -37,25 +40,38 @@ type Tabs = {
   isUpdated?: boolean
 }
 
-const tabs: Tabs[] = [
-  { name: 'Readme', href: '/readme', variant: 'link' },
-  {
-    name: 'Roadmap',
-    href: 'https://shadcnform.featurebase.app/',
-    variant: 'arrow',
-    isNewTab: true,
-  },
-  { name: 'Templates', href: '/templates', variant: 'link' },
-  {
-    name: 'Playground',
-    href: '/playground',
-    variant: 'default',
-    className: 'bg-primary text-white rounded-full px-2',
-    isUpdated: false,
-  },
-]
 
 export default function Header() {
+  const pathname = usePathname()
+
+  const tabs: Tabs[] = [
+    {
+      name: 'Readme',
+      href: '/readme',
+      variant: pathname === '/readme' ? 'default' : 'link',
+      className: pathname === '/readme' ? 'bg-primary text-white rounded-full px-2 transition-colors duration-300' : 'rounded-full transition-colors duration-300',
+    },
+    {
+      name: 'Roadmap',
+      href: 'https://shadcnform.featurebase.app/',
+      variant: 'arrow',
+      isNewTab: true,
+    },
+    {
+      name: 'Templates',
+      href: '/templates',
+      variant: pathname.includes('/templates') ? 'default' : 'link',
+      className: pathname.includes('/templates') ? 'bg-primary text-white rounded-full px-2 transition-colors duration-300' : 'rounded-full transition-colors duration-300',
+    },
+    {
+      name: 'Playground',
+      href: '/playground',
+      variant: pathname === '/playground' || pathname === '/' ? 'default' : 'link',
+      className: pathname === '/playground' ? 'bg-primary text-white rounded-full px-2 transition-colors duration-300' : 'rounded-full transition-colors duration-300',
+      isUpdated: false,
+    },
+  ]
+
   return (
     <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
       <Link href="/" className="cursor-pointer">
