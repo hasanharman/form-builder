@@ -21,17 +21,26 @@ export const generateZodSchema = (
       case 'Date Picker':
         fieldSchema = z.coerce.date()
         break
+      case 'Datetime Picker':
+        fieldSchema = z.coerce.date()
+        break
       case 'Input':
         if (field.type === 'email') {
           fieldSchema = z.string().email()
+          break
         } else if (field.type === 'number') {
           fieldSchema = z.coerce.number()
+          break
         } else {
           fieldSchema = z.string()
+          break
         }
-        break
       case 'Slider':
         fieldSchema = z.coerce.number()
+        break
+      case 'Smart Datetime Input':
+        fieldSchema = z.coerce.date()
+        break
       case 'Number':
         fieldSchema = z.coerce.number()
         break
@@ -179,10 +188,20 @@ export const generateImports = (
       case 'Date Picker':
         importSet.add('import { format } from "date-fns"')
         importSet.add(
-          'import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"',
+          'import { Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover"',
         )
         importSet.add('import { Calendar } from "@/components/ui/calendar"')
         importSet.add('import { Calendar as CalendarIcon } from "lucide-react"')
+        break
+      case 'Datetime Picker':
+        importSet.add(
+          'import { DatetimePicker } from "@/components/ui/datetime-picker"',
+        )
+        break
+      case 'Smart Datetime Input':
+        importSet.add(
+          'import { SmartDatetimeInput } from "@/components/ui/smart-datetime-input"',
+        )
         break
       case 'File Input':
         importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
@@ -269,15 +288,25 @@ export const generateDefaultValues = (
   fields: FormFieldOrGroup[],
   existingDefaultValues: Record<string, any> = {},
 ): Record<string, any> => {
-  const defaultValues: Record<string, any> = existingDefaultValues
+  const defaultValues: Record<string, any> = { ...existingDefaultValues }
 
   fields.flat().forEach((field) => {
-    if (!defaultValues[field.name]) {
-      if (field.variant === 'Multi Select') {
+    // Skip if field already has a default value
+    if (defaultValues[field.name]) return
+
+    // Handle field variants
+    switch (field.variant) {
+      case 'Multi Select':
         defaultValues[field.name] = ['React']
-      } else if (field.variant === 'Tags Input') {
+        break
+      case 'Tags Input':
         defaultValues[field.name] = []
-      }
+        break
+      case 'Datetime Picker':
+      case 'Smart Datetime Input':
+      case 'Date Picker':
+        defaultValues[field.name] = new Date()
+        break
     }
   })
 
@@ -288,19 +317,42 @@ export const generateDefaultValuesString = (
   fields: FormFieldOrGroup[],
 ): string => {
   const defaultValues: Record<string, any> = {}
+  const dateFields: string[] = []
 
   fields.flat().forEach((field) => {
     if (field.variant === 'Multi Select') {
       defaultValues[field.name] = ['React']
     } else if (field.variant === 'Tags Input') {
       defaultValues[field.name] = ['test']
+    } else if (
+      field.variant === 'Datetime Picker' ||
+      field.variant === 'Smart Datetime Input' ||
+      field.variant === 'Date Picker'
+    ) {
+      dateFields.push(field.name)
+      delete defaultValues[field.name]
     }
   })
 
-  if (Object.keys(defaultValues).length > 0) {
-    return `defaultValues: ${JSON.stringify(defaultValues)},`
+  if (Object.keys(defaultValues).length === 0 && dateFields.length === 0) {
+    return ''
   }
-  return ''
+
+  // Convert defaultValues to string, handling both regular values and date fields
+  const regularValuesString =
+    Object.keys(defaultValues).length > 0
+      ? JSON.stringify(defaultValues).slice(1, -1) // Remove the outer {}
+      : ''
+
+  const dateFieldsString = dateFields
+    .map((fieldName) => `"${fieldName}": new Date()`)
+    .join(',')
+
+  const combinedString = [regularValuesString, dateFieldsString]
+    .filter(Boolean)
+    .join(',')
+
+  return `defaultValues: {${combinedString}},`
 }
 
 export const generateFormCode = (formFields: FormFieldOrGroup[]): string => {

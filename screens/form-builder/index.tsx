@@ -1,22 +1,21 @@
 'use client'
 
 import React, { useState } from 'react'
+import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
+import { defaultFieldConfig } from '@/constants'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
+import If from '@/components/ui/if'
+import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
 import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
 import { EditFieldDialog } from '@/screens/edit-field-dialog'
 
-import { useMediaQuery } from '@/hooks/use-media-query'
-
 import EmptyListImage from '@/assets/oc-thinking.png'
-import If from '@/components/ui/if'
-import Image from 'next/image'
-import { defaultFieldConfig } from '@/constants'
-import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 

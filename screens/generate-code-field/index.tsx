@@ -136,6 +136,29 @@ export const generateCodeSnippet = (field: FormFieldType) => {
         </FormItem>
       )}
     />`
+    case 'Datetime Picker':
+      return `
+      <FormField
+      control={form.control}
+      name="${field.name}"
+      render={({ field }) => (
+        <FormItem className="flex flex-col">
+          <FormLabel>${field.label}</FormLabel>
+          <DatetimePicker
+            {...field}
+            format={[
+              ["months", "days", "years"],
+              ["hours", "minutes", "am/pm"],
+            ]}
+          />
+       ${
+         field.description &&
+         `<FormDescription>${field.description}</FormDescription>`
+       }
+          <FormMessage />
+        </FormItem>
+      )}
+    />`
     case 'Input':
       return `
         <FormField
@@ -190,6 +213,29 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
+    case 'Location Field':
+      return `
+           <FormField
+              control={form.control}
+              name="${field.name}"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>${field.label}</FormLabel>
+                  <FormControl>
+                  <LocationSelector
+                    value={field.value}
+                    onChange={field.onChange}
+                    disabled={field.disabled}
+                  />
+                  </FormControl>
+                  ${
+                    field.description &&
+                    `<FormDescription>${field.description}</FormDescription>`
+                  }
+                  <FormMessage />
+                </FormItem>
+              )}
+            />`
     case 'Multi Select':
       return `
            <FormField
@@ -270,6 +316,29 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                     onValueChange={(vals) => {
                       onChange(vals[0]);
                     }}
+                  />
+                </FormControl>
+                ${
+                  field.description &&
+                  `<FormDescription>${field.description}</FormDescription>`
+                }
+                <FormMessage />
+              </FormItem>
+              )}
+            />`
+    case 'Smart Datetime Input':
+      return `
+            <FormField
+              control={form.control}
+              name="${field.name}"
+              render={({ field }) => (
+              <FormItem>
+                <FormLabel>${field.label}</FormLabel>
+                <FormControl>
+                  <SmartDatetimeInput
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    placeholder="e.g. Tomorrow morning 9am"
                   />
                 </FormControl>
                 ${

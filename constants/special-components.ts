@@ -1,5 +1,13 @@
 export const SPECIAL_COMPONENTS = [
   {
+    variant: 'Smart Datetime Input',
+    url: 'https://shadcn-extension.vercel.app/docs/smart-datetime-input',
+  },
+  {
+    variant: 'Datetime Picker',
+    url: 'https://shadcn-extension.vercel.app/docs/datetime-picker',
+  },
+  {
     variant: 'File Input',
     url: 'https://shadcn-extension.vercel.app/docs/file-upload',
   },

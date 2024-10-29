@@ -65,6 +65,9 @@ import {
   MultiSelectorList,
   MultiSelectorTrigger,
 } from '@/components/ui/multi-select'
+import { DatetimePicker } from '@/components/ui/datetime-picker'
+import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
+import LocationSelector from '@/components/ui/location-input'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -76,33 +79,6 @@ const languages = [
   { label: 'Japanese', value: 'ja' },
   { label: 'Korean', value: 'ko' },
   { label: 'Chinese', value: 'zh' },
-] as const
-
-const items = [
-  {
-    id: 'recents',
-    label: 'Recents',
-  },
-  {
-    id: 'home',
-    label: 'Home',
-  },
-  {
-    id: 'applications',
-    label: 'Applications',
-  },
-  {
-    id: 'desktop',
-    label: 'Desktop',
-  },
-  {
-    id: 'downloads',
-    label: 'Downloads',
-  },
-  {
-    id: 'documents',
-    label: 'Documents',
-  },
 ] as const
 
 const FileSvgDraw = () => {
@@ -141,6 +117,8 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [tagsValue, setTagsValue] = useState<string[]>([])
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
   const [date, setDate] = useState<Date>()
+  const [datetime, setDatetime] = useState<Date>()
+  const [smartDatetime, setSmartDatetime] = useState<Date>()
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -187,7 +165,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 >
                   {value
                     ? languages.find((language) => language.value === value)
-                      ?.label
+                        ?.label
                     : 'Select language'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -250,16 +228,36 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               </FormControl>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              {/* <Calendar
-                mode="range"
-                numberOfMonths={2}
-                defaultMonth={date?.from}
+              <Calendar
+                mode="single"
                 selected={date}
                 onSelect={setDate}
+                disabled={(date) =>
+                  date > new Date() || date < new Date('1900-01-01')
+                }
                 initialFocus
-              /> */}
+              />
             </PopoverContent>
           </Popover>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Datetime Picker':
+      return (
+        <FormItem className="flex flex-col">
+          <div>
+            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          </div>
+          <DatetimePicker
+            {...field}
+            value={datetime}
+            onChange={setDatetime}
+            format={[
+              ['months', 'days', 'years'],
+              ['hours', 'minutes', 'am/pm'],
+            ]}
+          />
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
         </FormItem>
@@ -332,6 +330,22 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               </InputOTPGroup>
             </InputOTP>
           </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Location Input':
+      return (
+        <FormItem className="flex flex-col">
+          <div>
+            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          </div>
+          <LocationSelector
+            onCountryChange={(country) =>
+              console.log('Selected country:', country)
+            }
+            onStateChange={(state) => console.log('Selected state:', state)}
+          />
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
         </FormItem>
@@ -409,9 +423,25 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             />
           </FormControl>
           <FormDescription className="py-3">
-            {field.description} Selected value is {value || defaultValue}, minimun valus is{' '}
-            {min}, maximim values is {max}, step size is{' '}
-            {step}
+            {field.description} Selected value is {value || defaultValue},
+            minimun valus is {min}, maximim values is {max}, step size is {step}
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Smart Datetime Input':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <SmartDatetimeInput
+              value={smartDatetime}
+              onValueChange={(newDate) => setSmartDatetime(newDate)}
+              placeholder="e.g. tomorrow at 3pm"
+            />
+          </FormControl>
+          <FormDescription className="py-3">
+            {field.description}
           </FormDescription>
           <FormMessage />
         </FormItem>
@@ -466,7 +496,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <Textarea
               placeholder={field.placeholder}
               className="resize-none"
-            // {...field}
+              // {...field}
             />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
