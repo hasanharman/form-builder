@@ -35,6 +35,14 @@ export const generateZodSchema = (
           fieldSchema = z.string()
           break
         }
+      case 'Location Input':
+        fieldSchema = z.tuple([
+          z.string({
+            required_error: 'Country is required',
+          }),
+          z.string().optional(), // State name, optional
+        ])
+        break
       case 'Slider':
         fieldSchema = z.coerce.number()
         break
@@ -87,6 +95,8 @@ export const generateZodSchema = (
 }
 
 export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
+  console.log('SCHEMA', schema)
+
   if (schema instanceof z.ZodDefault) {
     return `${zodSchemaToString(schema._def.innerType)}.default(${JSON.stringify(schema._def.defaultValue())})`
   }
@@ -129,6 +139,10 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
 
   if (schema instanceof z.ZodArray) {
     return `z.array(${zodSchemaToString(schema.element)}).nonempty("Please at least one item")`
+  }
+
+  if (schema instanceof z.ZodTuple) {
+    return `z.tuple([${schema.items.map((item: z.ZodTypeAny) => zodSchemaToString(item)).join(', ')}])`
   }
 
   if (schema instanceof z.ZodObject) {
@@ -214,6 +228,11 @@ export const generateImports = (
           'import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"',
         )
         break
+      case 'Location Input':
+        importSet.add(
+          'import LocationSelector from "@/components/ui/location-input"',
+        )
+        break
       case 'Select':
         importSet.add(
           'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
@@ -277,6 +296,11 @@ export const generateConstants = (
           maxSize: 1024 * 1024 * 4,
           multiple: true,
         };`)
+    } else if (field.variant === 'Location Input') {
+      constantSet.add(`
+        const [countryName, setCountryName] = useState<string>('')
+        const [stateName, setStateName] = useState<string>('')
+        `)
     }
   })
 

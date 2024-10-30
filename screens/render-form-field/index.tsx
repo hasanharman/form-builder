@@ -119,6 +119,8 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [date, setDate] = useState<Date>()
   const [datetime, setDatetime] = useState<Date>()
   const [smartDatetime, setSmartDatetime] = useState<Date>()
+  const [countryName, setCountryName] = useState<string>('')
+  const [stateName, setStateName] = useState<string>('')
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -341,10 +343,14 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           </div>
           <LocationSelector
-            onCountryChange={(country) =>
-              console.log('Selected country:', country)
-            }
-            onStateChange={(state) => console.log('Selected state:', state)}
+            onCountryChange={(country) => {
+              setCountryName(country?.name || '')
+              form.setValue(field.name, [country?.name || '', stateName || ''])
+            }}
+            onStateChange={(state) => {
+              setStateName(state?.name || '')
+              form.setValue(field.name, [countryName || '', state?.name || ''])
+            }}
           />
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />

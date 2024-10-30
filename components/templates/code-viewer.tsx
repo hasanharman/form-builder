@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
-import { js_beautify } from 'js-beautify'
 import { toast } from 'sonner'
-import { formatJSXCode } from '@/lib/utils'
 import { Files } from 'lucide-react'
-import { Button } from '../ui/button'
+
+import { Button } from '@/components/ui/button'
 
 interface CodeViewerProps {
   filename: string

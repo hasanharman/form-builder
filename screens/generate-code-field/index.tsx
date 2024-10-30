@@ -213,7 +213,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             </FormItem>
           )}
         />`
-    case 'Location Field':
+    case 'Location Input':
       return `
            <FormField
               control={form.control}
@@ -223,9 +223,14 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                   <FormLabel>${field.label}</FormLabel>
                   <FormControl>
                   <LocationSelector
-                    value={field.value}
-                    onChange={field.onChange}
-                    disabled={field.disabled}
+                    onCountryChange={(country) => {
+                      setCountryName(country?.name || '')
+                      form.setValue(field.name, [country?.name || '', stateName || ''])
+                    }}
+                    onStateChange={(state) => {
+                      setStateName(state?.name || '')
+                      form.setValue(field.name, [countryName || '', state?.name || ''])
+                    }}
                   />
                   </FormControl>
                   ${

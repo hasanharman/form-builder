@@ -118,8 +118,6 @@ export default function FormBuilder() {
     </div>
   )
 
-  console.log('form fields', formFields)
-
   return (
     <section className="md:max-h-screen space-y-8">
       <div className="max-w-5xl mx-auto space-y-4">

@@ -13,8 +13,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import If from '@/components/ui/if'
-import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar' // Check this import
-import { Button } from '@/components/ui/button'
+import { useSidebar } from '@/components/ui/sidebar' // Check this import
 
 export default function Page({
   params,
