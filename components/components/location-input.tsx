@@ -14,7 +14,7 @@ const code = `<LocationSelector
   }}
 />`
 
-const installationCode = `npx shadcn@latest add https://wwww.shadcn-form.com/registry/location-input.json`
+const installationCode = `npx shadcn@latest add https://www.shadcn-form.com/registry/location-input.json`
 
 const installationManuel = `import React, { useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
