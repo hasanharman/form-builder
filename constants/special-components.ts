@@ -27,4 +27,8 @@ export const SPECIAL_COMPONENTS = [
     variant: 'Phone',
     url: 'https://shadcn-phone-input.vercel.app/',
   },
+  {
+    variant: 'Location Input',
+    url: 'https://www.shadcn-form.com/components/location-input',
+  },
 ] as const
