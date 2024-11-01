@@ -53,7 +53,7 @@
     "next-themes": "^0.3.0",
     "next-view-transitions": "^0.3.2",
     "nextjs-toploader": "^3.6.15",
-    "posthog-js": "^1.165.0",
+    "posthog-js": "^1.180.1",
     "prism-react-renderer": "^2.4.0",
     "react": "^18",
     "react-day-picker": "^8.10.1",
