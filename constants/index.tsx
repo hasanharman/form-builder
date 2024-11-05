@@ -13,6 +13,7 @@ export const fieldTypes: FieldType[] = [
   { name: 'Password', isNew: false },
   { name: 'Phone', isNew: false },
   { name: 'Select', isNew: false },
+  { name: 'Signature Input', isNew: true },
   { name: 'Slider', isNew: false },
   { name: 'Smart Datetime Input', isNew: true },
   { name: 'Switch', isNew: false },
@@ -71,6 +72,10 @@ export const defaultFieldConfig: Record<
   Slider: {
     label: 'Set Price Range',
     description: 'Adjust the price by sliding.',
+  },
+  'Signature Input': {
+    label: 'Sign here',
+    description: 'Please provide your signature above',
   },
   'Smart Datetime Input': {
     label: "What's the best time for you?",

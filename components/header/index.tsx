@@ -1,3 +1,5 @@
+'use client'
+
 import { Link } from 'next-view-transitions'
 
 import { Button } from '@/components/ui/button'
@@ -5,19 +7,17 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { cn } from '@/lib/utils'
+import If from '@/components/ui/if'
 
 import { LuGithub, LuMenu } from 'react-icons/lu'
 import { FaXTwitter } from 'react-icons/fa6'
 
 import Logo from '@/assets/logo.svg'
-import { cn } from '@/lib/utils'
-import If from '../ui/if'
+import { usePathname } from 'next/navigation'
 
 type Tabs = {
   name: string
@@ -31,6 +31,8 @@ type Tabs = {
     | 'ghost'
     | 'link'
     | 'arrow'
+    | 'smile'
+    | 'linkHover2'
     | null
     | undefined
   className?: string
@@ -38,31 +40,30 @@ type Tabs = {
 }
 
 const tabs: Tabs[] = [
-  { name: 'Readme', href: '/readme', variant: 'link' },
+  { name: 'Hi', href: '/readme', variant: 'smile' },
   {
     name: 'Roadmap',
     href: 'https://shadcnform.featurebase.app/',
     variant: 'arrow',
     isNewTab: true,
   },
-  { name: 'Templates', href: '/templates', variant: 'link' },
-  {
-    name: 'Playground',
-    href: '/playground',
-    variant: 'default',
-    className: 'bg-primary text-white rounded-full px-2',
-    isUpdated: false,
-  },
+  { name: 'Components', href: '/components', variant: 'linkHover2' },
+  { name: 'Templates', href: '/templates', variant: 'linkHover2' },
 ]
 
 export default function Header() {
+  const pathname = usePathname()
+  const currentBasePath = '/' + pathname.split('/')[1]
+
   return (
     <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
-      <Link href="/" className="cursor-pointer">
-        <Logo />
+      <Link href="/" className="cursor-pointer md:hidden">
+        <Logo className="w-9 h-9" />
       </Link>
-
       <nav className="hidden md:flex items-center gap-3">
+        <Link href="/" className="cursor-pointer">
+          <Logo className="w-9 h-9" />
+        </Link>
         {tabs.map((tab, i) => (
           <Link
             href={tab.href}
@@ -72,7 +73,12 @@ export default function Header() {
           >
             <Button
               variant={tab.variant}
-              className={cn('w-full px-1', tab?.className)}
+              className={cn(
+                'w-full px-1',
+                tab?.className,
+                currentBasePath !== tab.href && 'text-muted-foreground',
+                currentBasePath === tab.href && 'text-primary',
+              )}
             >
               {tab.name}
               <If
@@ -84,7 +90,17 @@ export default function Header() {
             </Button>
           </Link>
         ))}
+      </nav>
 
+      <div className="hidden md:flex items-center gap-3">
+        <Link href="/playground">
+          <Button
+            variant="gooeyLeft"
+            className="g-primary text-white rounded-full px-4"
+          >
+            Playground
+          </Button>
+        </Link>
         <Link
           href="https://github.com/hasanharman/form-builder"
           target="_blank"
@@ -98,7 +114,7 @@ export default function Header() {
             <FaXTwitter className="text-lg" />
           </Button>
         </Link>
-      </nav>
+      </div>
 
       <nav className="md:hidden">
         <Drawer>
@@ -140,7 +156,11 @@ export default function Header() {
                     </Link>
                   </DrawerClose>
                 ))}
-
+                <Link href="/playground">
+                  <Button className="w-full bg-primary text-white px-2">
+                    Playground
+                  </Button>
+                </Link>
                 <DrawerClose asChild>
                   <Button variant="outline" className="rounded-full">
                     Cancel

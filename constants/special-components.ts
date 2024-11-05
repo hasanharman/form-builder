@@ -31,4 +31,8 @@ export const SPECIAL_COMPONENTS = [
     variant: 'Location Input',
     url: 'https://www.shadcn-form.com/components/location-input',
   },
+  {
+    variant: 'Signature Input',
+    url: 'https://www.shadcn-form.com/components/signature-input',
+  },
 ] as const

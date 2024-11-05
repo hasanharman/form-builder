@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -101,7 +101,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   }
 
   const generatedCode = generateFormCode(formFields)
-
   const formattedCode = formatJSXCode(generatedCode)
 
   return (

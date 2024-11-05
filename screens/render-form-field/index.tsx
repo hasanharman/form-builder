@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { FormFieldType } from '@/types'
 import { cn } from '@/lib/utils'
@@ -68,6 +68,7 @@ import {
 import { DatetimePicker } from '@/components/ui/datetime-picker'
 import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
 import LocationSelector from '@/components/ui/location-input'
+import SignatureInput from '@/components/ui/signature-input'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -121,6 +122,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [smartDatetime, setSmartDatetime] = useState<Date>()
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const dropZoneConfig = {
     maxFiles: 5,
@@ -431,6 +433,24 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <FormDescription className="py-3">
             {field.description} Selected value is {value || defaultValue},
             minimun valus is {min}, maximim values is {max}, step size is {step}
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Signature Input':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <SignatureInput
+              canvasRef={canvasRef}
+              onSignatureChange={(signature) => {
+                if (signature) field.onChange(signature)
+              }}
+            />
+          </FormControl>
+          <FormDescription className="py-3">
+            {field.description}
           </FormDescription>
           <FormMessage />
         </FormItem>

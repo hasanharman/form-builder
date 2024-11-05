@@ -331,6 +331,27 @@ export const generateCodeSnippet = (field: FormFieldType) => {
               </FormItem>
               )}
             />`
+    case 'Signature Input':
+      return `<FormField
+          control={form.control}
+          name="${field.name}"
+          render={({ field }) => (
+          <FormItem>
+            <FormLabel>${field.label}</FormLabel>
+            <FormControl>
+            <SignatureInput
+              canvasRef={canvasRef}
+              onSignatureChange={field.onChange}
+            />
+            </FormControl>
+            ${
+              field.description &&
+              `<FormDescription>${field.description}</FormDescription>`
+            }
+            <FormMessage />
+          </FormItem>
+          )}
+        />`
     case 'Smart Datetime Input':
       return `
             <FormField

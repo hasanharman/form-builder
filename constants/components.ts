@@ -14,7 +14,12 @@ export const components: Components[] = [
       {
         title: 'Location Input',
         path: '/components/location-input',
-        description: 'Location Inpute',
+        description: 'Location Input',
+      },
+      {
+        title: 'Signature Input',
+        path: '/components/signature-input',
+        description: 'Location Input',
       },
     ],
   },

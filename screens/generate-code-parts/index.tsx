@@ -46,6 +46,11 @@ export const generateZodSchema = (
       case 'Slider':
         fieldSchema = z.coerce.number()
         break
+      case 'Signature Input':
+        fieldSchema = z.string({
+          required_error: 'Signature is required',
+        })
+        break
       case 'Smart Datetime Input':
         fieldSchema = z.coerce.date()
         break
@@ -85,7 +90,6 @@ export const generateZodSchema = (
     if (field.required !== true) {
       fieldSchema = fieldSchema.optional()
     }
-
     schemaObject[field.name] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
   }
 
@@ -95,8 +99,6 @@ export const generateZodSchema = (
 }
 
 export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
-  console.log('SCHEMA', schema)
-
   if (schema instanceof z.ZodDefault) {
     return `${zodSchemaToString(schema._def.innerType)}.default(${JSON.stringify(schema._def.defaultValue())})`
   }
@@ -235,7 +237,13 @@ export const generateImports = (
         break
       case 'Select':
         importSet.add(
-          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from "@/components/ui/select"',
+          'import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select"',
+        )
+        break
+      case 'Signature Input':
+        importSet.add('import { useRef } from "react"')
+        importSet.add(
+          "import SignatureInput from '@/components/ui/signature-input'",
         )
         break
       case 'Tags Input':
@@ -301,6 +309,8 @@ export const generateConstants = (
         const [countryName, setCountryName] = useState<string>('')
         const [stateName, setStateName] = useState<string>('')
         `)
+    } else if (field.variant === 'Signature Input') {
+      constantSet.add(`const canvasRef = useRef<HTMLCanvasElement>(null)`)
     }
   })
 

@@ -1,0 +1,15 @@
+{
+  "name": "signature-input",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "button"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport { useEffect, useState } from 'react'\nimport { Button } from '@/components/ui/button'\nimport { Eraser } from 'lucide-react'\n\ntype SignatureInputProps = {\n  canvasRef: React.RefObject<HTMLCanvasElement>\n  onSignatureChange: (signature: string | null) => void\n}\n\nexport default function SignatureInput({\n  canvasRef,\n  onSignatureChange,\n}: SignatureInputProps) {\n  const [isDrawing, setIsDrawing] = useState(false)\n\n  useEffect(() => {\n    const canvas = canvasRef.current\n    if (canvas) {\n      const ctx = canvas.getContext('2d')\n      if (ctx) {\n        ctx.lineWidth = 2\n        ctx.lineCap = 'round'\n        ctx.strokeStyle = 'black'\n      }\n    }\n  }, [canvasRef])\n\n  const startDrawing = (\n    e:\n      | React.MouseEvent<HTMLCanvasElement>\n      | React.TouchEvent<HTMLCanvasElement>,\n  ) => {\n    setIsDrawing(true)\n    draw(e)\n  }\n\n  const stopDrawing = () => {\n    setIsDrawing(false)\n    const canvas = canvasRef.current\n    if (canvas) {\n      const dataUrl = canvas.toDataURL()\n      onSignatureChange(dataUrl) // Pass data URL to the form's onChange\n    }\n  }\n\n  const draw = (\n    e:\n      | React.MouseEvent<HTMLCanvasElement>\n      | React.TouchEvent<HTMLCanvasElement>,\n  ) => {\n    if (!isDrawing) return\n\n    const canvas = canvasRef.current\n    const ctx = canvas?.getContext('2d')\n    if (canvas && ctx) {\n      const rect = canvas.getBoundingClientRect()\n      const x = ('touches' in e ? e.touches[0].clientX : e.clientX) - rect.left\n      const y = ('touches' in e ? e.touches[0].clientY : e.clientY) - rect.top\n\n      ctx.lineTo(x, y)\n      ctx.stroke()\n      ctx.beginPath()\n      ctx.moveTo(x, y)\n    }\n  }\n\n  const clearSignature = () => {\n    const canvas = canvasRef.current\n    const ctx = canvas?.getContext('2d')\n    if (canvas && ctx) {\n      ctx.clearRect(0, 0, canvas.width, canvas.height)\n      onSignatureChange(null) // Clear signature in the form as well\n    }\n  }\n\n  return (\n    <div className=\"border border-gray-300 rounded-md overflow-hidden relative\">\n      <canvas\n        ref={canvasRef}\n        width={400}\n        height={200}\n        className=\"w-full\"\n        onMouseDown={startDrawing}\n        onMouseUp={stopDrawing}\n        onMouseOut={stopDrawing}\n        onMouseMove={draw}\n        onTouchStart={startDrawing}\n        onTouchEnd={stopDrawing}\n        onTouchMove={draw}\n      />\n      <Button\n        type=\"button\"\n        size=\"icon\"\n        variant=\"outline\"\n        className=\"absolute left-1 bottom-1 z-10 rounded-full\"\n        onClick={clearSignature}\n      >\n        <Eraser className=\"w-4 h-4 text-muted-foreground hover:text-primary\" />\n      </Button>\n    </div>\n  )\n}\n",
+      "path": "ui/signature-input.tsx",
+      "target": "components/ui/signature-input.tsx"
+    }
+  ]
+}
