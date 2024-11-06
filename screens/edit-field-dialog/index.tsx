@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import * as Locales from 'date-fns/locale'
+
 import {
   Dialog,
   DialogContent,
@@ -203,6 +205,50 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
                       })
                     }
                   />
+                </div>
+              </div>
+            )}
+          />
+          <If
+            condition={field?.variant === 'Smart Datetime Input'}
+            render={() => (
+              <div className="grid grid-cols-2 gap-3">
+                <div className="col-span-1 flex flex-col gap-1 ">
+                  <Label htmlFor="locale">Locale</Label>
+                  <Select
+                    // id="locale"
+                    value={editedField.locale ?? ''}
+                    onValueChange={(value) => {
+                      setEditedField({
+                        ...editedField,
+                        locale: value as keyof typeof Locales,
+                      })
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select locale" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.keys(Locales).map((locale) => (
+                        <SelectItem key={locale} value={locale}>
+                          {locale}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="col-span-1 flex items-end gap-1 p-3 rounded">
+                  <Checkbox
+                    // id="hour12"
+                    checked={editedField.hour12}
+                    onCheckedChange={(checked) =>
+                      setEditedField({
+                        ...editedField,
+                        hour12: checked as boolean,
+                      })
+                    }
+                  />
+                  <Label htmlFor="hour12">12 Hour Clock</Label>
                 </div>
               </div>
             )}

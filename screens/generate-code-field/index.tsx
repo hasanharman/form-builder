@@ -365,6 +365,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                     value={field.value}
                     onValueChange={field.onChange}
                     placeholder="e.g. Tomorrow morning 9am"
+                    ${field.locale ? `locale={${field.locale}}` : ''}
+                    ${field.hour12 ? `hour12` : ''}
                   />
                 </FormControl>
                 ${

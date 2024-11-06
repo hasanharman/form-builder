@@ -119,7 +119,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
   const [date, setDate] = useState<Date>()
   const [datetime, setDatetime] = useState<Date>()
-  const [smartDatetime, setSmartDatetime] = useState<Date>()
+  const [smartDatetime, setSmartDatetime] = useState<Date | null>()
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -461,6 +461,8 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
             <SmartDatetimeInput
+              locale={field.locale}
+              hour12={field.hour12}
               value={smartDatetime}
               onValueChange={(newDate) => setSmartDatetime(newDate)}
               placeholder="e.g. tomorrow at 3pm"
