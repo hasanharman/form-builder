@@ -11,26 +11,66 @@ import HeroVideoDialog from '@/components/sections/hero/hero-video'
 import { NumberTicker } from '@/components/number-ticker'
 
 import { LuStar, LuHeart } from 'react-icons/lu'
+import StarIcon from '@/components/star-icon'
+import HeartIcon from '@/components/hearth-icon'
 
 const ease = [0.16, 1, 0.3, 1]
 
 function HeroPill() {
-  const [stars, setStars] = useState<number>(0)
-  const [forks, setForks] = useState<number>(0)
+  const [stats, setStats] = useState({
+    stars: 0,
+    lastUpdate: '',
+  })
+
+  const getRelativeTime = (date: Date): string => {
+    const now = new Date()
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+    if (diffInSeconds < 60) return 'just now'
+
+    const minutes = Math.floor(diffInSeconds / 60)
+    if (diffInSeconds < 3600)
+      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`
+
+    const hours = Math.floor(diffInSeconds / 3600)
+    if (diffInSeconds < 86400)
+      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`
+
+    const days = Math.floor(diffInSeconds / 86400)
+    if (diffInSeconds < 604800)
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`
+
+    const weeks = Math.floor(diffInSeconds / 604800)
+    if (diffInSeconds < 2592000)
+      return `${weeks} ${weeks === 1 ? 'week' : 'weeks'} ago`
+
+    const months = Math.floor(diffInSeconds / 2592000)
+    if (diffInSeconds < 31536000)
+      return `${months} ${months === 1 ? 'month' : 'months'} ago`
+
+    const years = Math.floor(diffInSeconds / 31536000)
+    return `${years} ${years === 1 ? 'year' : 'years'} ago`
+  }
 
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        const response = await fetch(
+        const repoResponse = await fetch(
           'https://api.github.com/repos/hasanharman/form-builder',
         )
-        const data = await response.json()
-        setStars(data.stargazers_count)
-        setForks(data.forks_count)
+        const repoData = await repoResponse.json()
+
+        const lastUpdateDate = new Date(repoData.pushed_at)
+
+        setStats({
+          stars: repoData.stargazers_count,
+          lastUpdate: getRelativeTime(lastUpdateDate),
+        })
       } catch (error) {
         console.error('Error fetching GitHub data:', error)
       }
     }
+
     fetchGitHubData()
   }, [])
 
@@ -41,40 +81,35 @@ function HeroPill() {
       transition={{ duration: 0.8, ease }}
       className="flex items-center"
     >
-      <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
-        <Link
-          href="https://github.com/sponsors/hasanharman"
-          target="_blank"
-          className="group"
-        >
-          <Button className="h-10 w-36 flex justify-start rounded-full border-2 border-white dark:border-gray-800 shadow">
-            <LuHeart className="mr-1 group-hover:text-red-500" />
-            Sponsor
-          </Button>
-        </Link>
-        <Link
-          href="https://github.com/hasanharman/form-builder"
-          target="_blank"
-          className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
-        >
-          <p className="font-medium text-primary  text-sm">
-            Star Project on GitHub
-          </p>
-          <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
-            <LuStar className="group-hover:text-yellow-500" />
-            <NumberTicker className="ml-1" value={stars} />
-          </div>
-        </Link>
-        {/* <Link href={'url'} target="_blank">
-          <Button className="h-10 rounded-full border-2 border-white dark:border-gray-800">
-            Hello
-          </Button>
-        </Link>
-        <Link href={'url'} target="_blank">
-          <Button className="h-10 rounded-full border-2 border-white dark:border-gray-800">
-            Hello
-          </Button>
-        </Link> */}
+      <div className="space-y-1">
+        <p className="text-center text-xs text-muted-foreground">
+          Last Update {stats.lastUpdate}
+        </p>
+        <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
+          <Link
+            href="https://github.com/sponsors/hasanharman"
+            target="_blank"
+            className="group"
+          >
+            <Button className="h-10 w-[9.5rem] flex justify-start rounded-full border-2 border-white dark:border-gray-800 shadow">
+              <HeartIcon />
+              Sponsor
+            </Button>
+          </Link>
+          <Link
+            href="https://github.com/hasanharman/form-builder"
+            target="_blank"
+            className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
+          >
+            <p className="font-medium text-primary  text-sm">
+              Star Project on GitHub
+            </p>
+            <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
+              <StarIcon />
+              <NumberTicker className="ml-1" value={stats.stars} />
+            </div>
+          </Link>
+        </div>
       </div>
     </motion.div>
   )
@@ -93,7 +128,7 @@ function HeroTitles() {
           staggerChildren: 0.2,
         }}
       >
-        {['Build', 'your', 'Forms', 'Faster'].map((text, index) => (
+        {['Build', 'Forms', 'Faster'].map((text, index) => (
           <motion.span
             key={index}
             className="inline-block px-1 md:px-2"
@@ -161,7 +196,7 @@ function HeroCTA() {
         <Link
           href="/playground"
           className={cn(
-            buttonVariants({ variant: 'default' }),
+            buttonVariants({ variant: 'gooeyLeft' }),
             'w-full sm:w-auto text-background flex gap-2 rounded-full',
           )}
         >

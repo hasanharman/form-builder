@@ -12,7 +12,12 @@ interface LayoutProps {
 
 export default function TemplateLayout({ children, params }: LayoutProps) {
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      style={{
+        '--sidebar-width': '14rem',
+        '--sidebar-width-mobile': '20rem',
+      } as React.CSSProperties}
+    >
       <AppSidebar />
       <main className="w-full lg:pl-3">{children}</main>
     </SidebarProvider>

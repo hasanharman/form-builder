@@ -12,6 +12,11 @@ export const components: Components[] = [
     path: '/components',
     sub: [
       {
+        title: 'Autocomplete',
+        path: '/components/autocomplete',
+        description: 'Autocomplete',
+      },
+      {
         title: 'Location Input',
         path: '/components/location-input',
         description: 'Location Input',
