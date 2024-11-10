@@ -1,3 +1,5 @@
+import * as Locales from 'date-fns/locale'
+
 // Define the FormField type
 export type FormFieldType = {
   type: string
@@ -21,6 +23,8 @@ export type FormFieldType = {
   min?: number
   max?: number
   step?: number
+  locale?: keyof typeof Locales
+  hour12?: boolean
 }
 
 export type FieldType = { name: string; isNew: boolean; index?: number }

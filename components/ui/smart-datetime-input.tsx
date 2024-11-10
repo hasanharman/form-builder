@@ -1,20 +1,21 @@
 'use client'
 
 import React from 'react'
-import { parseDate } from 'chrono-node'
+import * as chrono from 'chrono-node'
+import { enUS as localeEnUS, type Locale } from 'date-fns/locale'
+import { Calendar as CalendarIcon } from 'lucide-react'
+import { ActiveModifiers } from 'react-day-picker'
+
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { ActiveModifiers } from 'react-day-picker'
 import { Calendar, CalendarProps } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { Calendar as CalendarIcon, LucideTextCursorInput } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { format } from 'date-fns'
+import { cn } from '@/lib/utils'
 
 /* -------------------------------------------------------------------------- */
 /*                               Inspired By:                                 */
@@ -22,16 +23,60 @@ import { format } from 'date-fns'
 /* ------------------https://dub.co/blog/smart-datetime-picker--------------- */
 /* -------------------------------------------------------------------------- */
 
+const localesUsings12HourTime = [
+  'en-US',
+  'en-CA',
+  'en-AU',
+  'en-NZ',
+  'en-PH',
+  'en-IN',
+  'en-IE',
+  'en-GB',
+  'en-ZA',
+  'en-NG',
+  'en-MY',
+  'en-BD',
+  'en-PK',
+  'es-US',
+  'es-MX',
+  'es-CO',
+  'es-PH',
+  'ar-SA',
+  'ar-EG',
+]
+
+const chronoLocales = [
+  'en',
+  'de',
+  'fr',
+  'ja',
+  'pt',
+  'nl',
+  'zh',
+  'ru',
+  'es',
+  'uk',
+] as const
+type ChronoLocale = (typeof chronoLocales)[number]
+
 /**
  * Utility function that parses dates.
  * Parses a given date string using the `chrono-node` library.
  *
  * @param str - A string representation of a date and time.
+ * @param locale - The locale to use for parsing the date and time.
  * @returns A `Date` object representing the parsed date and time, or `null` if the string could not be parsed.
  */
-export const parseDateTime = (str: Date | string) => {
+export const parseDateTime = (str: Date | string, locale: Locale) => {
   if (str instanceof Date) return str
-  return parseDate(str)
+
+  const localeCode = chronoLocales.includes(locale.code as ChronoLocale)
+    ? (locale.code as ChronoLocale)
+    : chronoLocales.includes(locale.code.split('-')[0] as ChronoLocale)
+      ? (locale.code.split('-')[0] as ChronoLocale)
+      : 'en'
+
+  return chrono[localeCode].parseDate(str)
 }
 
 /**
@@ -44,6 +89,7 @@ export const parseDateTime = (str: Date | string) => {
 export const getDateTimeLocal = (timestamp?: Date): string => {
   const d = timestamp ? new Date(timestamp) : new Date()
   if (d.toString() === 'Invalid Date') return ''
+
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
     .toISOString()
     .split(':')
@@ -56,18 +102,23 @@ export const getDateTimeLocal = (timestamp?: Date): string => {
  * "MMM D, YYYY h:mm A" (e.g. "Jan 1, 2023 12:00 PM").
  *
  * @param datetime - {Date | string}
+ * @param hour12 - Whether to use 12-hour time (true) or 24-hour time (false).
+ * @param locale - The locale to use for formatting the date and time.
  * @returns A string representation of the date and time
  */
-export const formatDateTime = (datetime: Date | string) => {
-  return new Date(datetime).toLocaleTimeString('en-US', {
+export const formatDateTime = (
+  datetime: Date | string,
+  locale: Locale,
+  hour12: boolean,
+) =>
+  new Date(datetime).toLocaleTimeString(locale.code, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    hour12: true,
+    hour12,
   })
-}
 
 const inputBase =
   'bg-transparent focus:outline-none focus:ring-0 focus-within:outline-none focus-within:ring-0 sm:text-sm disabled:cursor-not-allowed disabled:opacity-50'
@@ -82,13 +133,16 @@ const DEFAULT_SIZE = 96
 /**
  * Smart time input Docs: {@link: https://shadcn-extension.vercel.app/docs/smart-time-input}
  */
-
-interface SmartDatetimeInputProps {
-  value?: Date
-  onValueChange: (date: Date) => void
+type SmartDatetimeInputProps = Omit<
+  CalendarProps,
+  'id' | 'mode' | 'selected' | 'onSelect' | 'initialFocus'
+> & {
+  value?: Date | null
+  onValueChange: (date: Date | null) => void
+  hour12?: boolean
 }
 
-interface SmartDatetimeInputContextProps extends SmartDatetimeInputProps {
+type SmartDatetimeInputContextProps = SmartDatetimeInputProps & {
   Time: string
   onTimeChange: (time: string) => void
 }
@@ -110,51 +164,76 @@ export const SmartDatetimeInput = React.forwardRef<
   HTMLInputElement,
   Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    'type' | 'ref' | 'value' | 'defaultValue' | 'onBlur'
+    'type' | 'ref' | 'value' | 'defaultValue' | 'onBlur' | 'disabled'
   > &
     SmartDatetimeInputProps
->(({ className, value, onValueChange, placeholder, disabled }, ref) => {
-  // ? refactor to be only used with controlled input
-  /*  const [dateTime, setDateTime] = React.useState<Date | undefined>(
+>(
+  (
+    {
+      className,
+      value,
+      locale = localeEnUS,
+      hour12 = localesUsings12HourTime.includes(locale.code),
+      onValueChange,
+      placeholder,
+      disabled,
+      ...dateTimeInputProps
+    },
+    ref,
+  ) => {
+    // ? refactor to be only used with controlled input
+    /*  const [dateTime, setDateTime] = React.useState<Date | undefined>(
     value ?? undefined
   ); */
 
-  const [Time, setTime] = React.useState<string>('')
+    const [Time, setTime] = React.useState<string>('')
 
-  const onTimeChange = React.useCallback((time: string) => {
-    setTime(time)
-  }, [])
+    const onTimeChange = React.useCallback((time: string) => {
+      setTime(time)
+    }, [])
 
-  return (
-    <SmartDatetimeInputContext.Provider
-      value={{ value, onValueChange, Time, onTimeChange }}
-    >
-      <div className="flex items-center justify-center">
-        <div
-          className={cn(
-            'flex gap-1 w-full p-1 items-center justify-between rounded-md border transition-all',
-            'focus-within:outline-0 focus:outline-0 focus:ring-0',
-            'placeholder:text-muted-foreground focus-visible:outline-0 ',
-            className,
-          )}
-        >
-          <DateTimeLocalInput />
-          <NaturalLanguageInput
-            placeholder={placeholder}
-            disabled={disabled}
-            ref={ref}
-          />
+    return (
+      <SmartDatetimeInputContext.Provider
+        value={{ value, onValueChange, Time, onTimeChange }}
+      >
+        <div className="flex items-center justify-center">
+          <div
+            className={cn(
+              'flex gap-1 w-full p-1 items-center justify-between rounded-md border transition-all',
+              'focus-within:outline-0 focus:outline-0 focus:ring-0',
+              'placeholder:text-muted-foreground focus-visible:outline-0 ',
+              className,
+            )}
+          >
+            <DateTimeLocalInput
+              locale={locale}
+              hour12={hour12}
+              disabled={disabled}
+              {...dateTimeInputProps}
+            />
+            <NaturalLanguageInput
+              ref={ref}
+              locale={locale}
+              hour12={hour12}
+              placeholder={placeholder}
+              disabled={typeof disabled === 'boolean' ? disabled : undefined}
+            />
+          </div>
         </div>
-      </div>
-    </SmartDatetimeInputContext.Provider>
-  )
-})
+      </SmartDatetimeInputContext.Provider>
+    )
+  },
+)
 
 SmartDatetimeInput.displayName = 'DatetimeInput'
 
 // Make it a standalone component
+type TimePickerProps = {
+  locale: Locale
+  hour12: boolean
+}
 
-const TimePicker = () => {
+const TimePicker = ({ hour12, locale }: TimePickerProps) => {
   const { value, onValueChange, Time, onTimeChange } = useSmartDateInput()
   const [activeIndex, setActiveIndex] = React.useState(-1)
   const timestamp = 15
@@ -163,8 +242,7 @@ const TimePicker = () => {
     (time: string, hour: number, partStamp: number) => {
       onTimeChange(time)
 
-      const newVal = parseDateTime(value ?? new Date())
-
+      const newVal = parseDateTime(value ?? new Date(), locale)
       if (!newVal) return
 
       newVal.setHours(
@@ -176,7 +254,7 @@ const TimePicker = () => {
 
       onValueChange(newVal)
     },
-    [value],
+    [locale, value, onValueChange, onTimeChange],
   )
 
   const handleKeydown = React.useCallback(
@@ -216,22 +294,22 @@ const TimePicker = () => {
 
         const timeValue = currentElm.textContent ?? ''
 
-        // this should work now haha that hour is what does the trick
+        let hour = parseInt(timeValue.split(':')[0])
+        const minutes = parseInt(timeValue.split(':')[1].split(' ')[0])
 
-        const PM_AM = timeValue.split(' ')[1]
-        const PM_AM_hour = parseInt(timeValue.split(' ')[0].split(':')[0])
-        const hour =
-          PM_AM === 'AM'
-            ? PM_AM_hour === 12
-              ? 0
-              : PM_AM_hour
-            : PM_AM_hour === 12
-              ? 12
-              : PM_AM_hour + 12
+        if (hour12) {
+          const PM_AM = timeValue.split(' ')[1]
+          hour =
+            PM_AM === 'AM'
+              ? hour === 12
+                ? 0
+                : hour
+              : hour === 12
+                ? 12
+                : hour + 12
+        }
 
-        const part = Math.floor(
-          parseInt(timeValue.split(' ')[0].split(':')[1]) / 15,
-        )
+        const part = Math.floor(minutes / 15)
 
         formateSelectedTime(timeValue, hour, part)
       }
@@ -260,19 +338,23 @@ const TimePicker = () => {
           break
       }
     },
-    [activeIndex, formateSelectedTime],
+    [activeIndex, formateSelectedTime, hour12],
   )
 
   const handleClick = React.useCallback(
     (hour: number, part: number, PM_AM: string, currentIndex: number) => {
-      formateSelectedTime(
-        `${hour}:${part === 0 ? '00' : timestamp * part} ${PM_AM}`,
-        hour,
-        part,
-      )
+      let displayHour = hour
+      if (hour12 && hour > 12) {
+        displayHour = hour % 12
+      }
+      const formattedHour = displayHour === 0 ? 12 : displayHour
+      const formattedTime = hour12
+        ? `${formattedHour}:${part === 0 ? '00' : timestamp * part} ${PM_AM}`
+        : `${hour}:${part === 0 ? '00' : timestamp * part}`
+      formateSelectedTime(formattedTime, hour, part)
       setActiveIndex(currentIndex)
     },
-    [formateSelectedTime],
+    [formateSelectedTime, hour12],
   )
 
   const currentTime = React.useMemo(() => {
@@ -288,19 +370,25 @@ const TimePicker = () => {
       const timeVal = Time.split(' ')[0]
       const hours = parseInt(timeVal.split(':')[0])
       const minutes = parseInt(timeVal.split(':')[1])
-      const PM_AM = Time.split(' ')[1]
+      const PM_AM = hour12 ? Time.split(' ')[1] : ''
 
-      const formatIndex =
-        PM_AM === 'AM' ? hours : hours === 12 ? hours : hours + 12
+      const formatIndex = !hour12
+        ? hours
+        : PM_AM === 'AM'
+          ? hours
+          : hours === 12
+            ? hours
+            : hours + 12
       const formattedHours = formatIndex
-
-      console.log(formatIndex)
 
       for (let j = 0; j <= 3; j++) {
         const diff = Math.abs(j * timestamp - minutes)
         const selected =
-          PM_AM === (formattedHours >= 12 ? 'PM' : 'AM') &&
-          (minutes <= 53 ? diff < Math.ceil(timestamp / 2) : diff < timestamp)
+          !hour12 ||
+          (PM_AM === (formattedHours >= 12 ? 'PM' : 'AM') &&
+            (minutes <= 53
+              ? diff < Math.ceil(timestamp / 2)
+              : diff < timestamp))
 
         if (selected) {
           const trueIndex =
@@ -318,7 +406,7 @@ const TimePicker = () => {
     }
 
     getCurrentElementTime()
-  }, [Time, activeIndex])
+  }, [Time, activeIndex, hour12])
 
   const height = React.useMemo(() => {
     if (!document) return
@@ -329,10 +417,9 @@ const TimePicker = () => {
 
   return (
     <div className="space-y-2 pr-3 py-3 relative ">
-      <h3 className="text-sm font-medium ">Time</h3>
       <ScrollArea
         onKeyDown={handleKeydown}
-        className="h-[90%] w-full focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-0 py-0.5"
+        className="h-full w-full focus-visible:outline-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:border-0 py-0.5"
         style={{
           height,
         }}
@@ -345,25 +432,27 @@ const TimePicker = () => {
           {Array.from({ length: 24 }).map((_, i) => {
             const PM_AM = i >= 12 ? 'PM' : 'AM'
             const formatIndex = i > 12 ? i % 12 : i === 0 || i === 12 ? 12 : i
+
             return Array.from({ length: 4 }).map((_, part) => {
               const diff = Math.abs(part * timestamp - currentTime.minutes)
 
               const trueIndex = i * 4 + part
 
-              // ? refactor : add the select of the default time on the current device (H:MM)
               const isSelected =
                 (currentTime.hours === i ||
                   currentTime.hours === formatIndex) &&
-                Time.split(' ')[1] === PM_AM &&
+                (!hour12 || Time.split(' ')[1] === PM_AM) &&
                 (currentTime.minutes <= 53
                   ? diff < Math.ceil(timestamp / 2)
                   : diff < timestamp)
 
               const isSuggested = !value && isSelected
 
-              const currentValue = `${formatIndex}:${
-                part === 0 ? '00' : timestamp * part
-              } ${PM_AM}`
+              const currentValue = !hour12
+                ? `${i}:${part === 0 ? '00' : timestamp * part}`
+                : `${formatIndex}:${
+                    part === 0 ? '00' : timestamp * part
+                  } ${PM_AM}`
 
               return (
                 <li
@@ -398,55 +487,78 @@ const TimePicker = () => {
 const NaturalLanguageInput = React.forwardRef<
   HTMLInputElement,
   {
+    locale: Locale
+    hour12: boolean
     placeholder?: string
     disabled?: boolean
   }
->(({ placeholder, ...props }, ref) => {
+>(({ locale, hour12, placeholder, ...props }, ref) => {
   const { value, onValueChange, Time, onTimeChange } = useSmartDateInput()
 
-  const _placeholder = placeholder ?? 'e.g. "tomorrow at 5pm" or "in 2 hours"'
+  const _placeholder =
+    placeholder ??
+    (locale.code.split('-')[0] === 'fr'
+      ? 'e.g. "demain à 17h" ou "dans 2 heures"'
+      : 'e.g. "tomorrow at 5pm" or "in 2 hours"')
 
   const [inputValue, setInputValue] = React.useState<string>('')
 
   React.useEffect(() => {
     const hour = new Date().getHours()
-    const timeVal = `${
-      hour >= 12 ? hour % 12 : hour
-    }:${new Date().getMinutes()} ${hour >= 12 ? 'PM' : 'AM'}`
-    setInputValue(value ? formatDateTime(value) : '')
+    const timeVal = hour12
+      ? `${hour >= 12 ? hour % 12 : hour}:${new Date().getMinutes()} ${
+          hour >= 12 ? 'PM' : 'AM'
+        }`
+      : `${hour}:${new Date().getMinutes()}`
+
+    setInputValue(value ? formatDateTime(value, locale, hour12) : '')
     onTimeChange(value ? Time : timeVal)
-  }, [value, Time])
+  }, [hour12, locale, value, Time, onTimeChange])
 
   const handleParse = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.currentTarget.value === '') {
+        onTimeChange('')
+        onValueChange(null)
+        return
+      }
+
       // parse the date string when the input field loses focus
-      const parsedDateTime = parseDateTime(e.currentTarget.value)
+      const parsedDateTime = parseDateTime(e.currentTarget.value, locale)
       if (parsedDateTime) {
-        const PM_AM = parsedDateTime.getHours() >= 12 ? 'PM' : 'AM'
-        //fix the time format for this value
+        if (hour12) {
+          const PM_AM = parsedDateTime.getHours() >= 12 ? 'PM' : 'AM'
+          //fix the time format for this value
 
-        const PM_AM_hour = parsedDateTime.getHours()
+          const PM_AM_hour = parsedDateTime.getHours()
 
-        const hour =
-          PM_AM_hour > 12
-            ? PM_AM_hour % 12
-            : PM_AM_hour === 0 || PM_AM_hour === 12
-              ? 12
-              : PM_AM_hour
+          const hour =
+            PM_AM_hour > 12
+              ? PM_AM_hour % 12
+              : PM_AM_hour === 0 || PM_AM_hour === 12
+                ? 12
+                : PM_AM_hour
 
-        onValueChange(parsedDateTime)
-        setInputValue(formatDateTime(parsedDateTime))
-        onTimeChange(`${hour}:${parsedDateTime.getMinutes()} ${PM_AM}`)
+          onValueChange(parsedDateTime)
+          setInputValue(formatDateTime(parsedDateTime, locale, hour12))
+          onTimeChange(`${hour}:${parsedDateTime.getMinutes()} ${PM_AM}`)
+        } else {
+          onValueChange(parsedDateTime)
+          setInputValue(formatDateTime(parsedDateTime, locale, hour12))
+          onTimeChange(
+            `${parsedDateTime.getHours()}:${parsedDateTime.getMinutes()}`,
+          )
+        }
       }
     },
-    [value],
+    [locale, hour12, onValueChange, onTimeChange],
   )
 
   const handleKeydown = React.useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       switch (e.key) {
         case 'Enter':
-          const parsedDateTime = parseDateTime(e.currentTarget.value)
+          const parsedDateTime = parseDateTime(e.currentTarget.value, locale)
           if (parsedDateTime) {
             const PM_AM = parsedDateTime.getHours() >= 12 ? 'PM' : 'AM'
             //fix the time format for this value
@@ -461,13 +573,13 @@ const NaturalLanguageInput = React.forwardRef<
                   : PM_AM_hour
 
             onValueChange(parsedDateTime)
-            setInputValue(formatDateTime(parsedDateTime))
+            setInputValue(formatDateTime(parsedDateTime, locale, hour12))
             onTimeChange(`${hour}:${parsedDateTime.getMinutes()} ${PM_AM}`)
           }
           break
       }
     },
-    [value],
+    [locale, hour12, onValueChange, onTimeChange],
   )
 
   return (
@@ -476,7 +588,9 @@ const NaturalLanguageInput = React.forwardRef<
       type="text"
       placeholder={_placeholder}
       value={inputValue}
-      onChange={(e) => setInputValue(e.currentTarget.value)}
+      onChange={(e) => {
+        setInputValue(e.target.value)
+      }}
       onKeyDown={handleKeydown}
       onBlur={handleParse}
       className={cn('px-2 mr-0.5 flex-1 border-none h-8 rounded', inputBase)}
@@ -487,9 +601,14 @@ const NaturalLanguageInput = React.forwardRef<
 
 NaturalLanguageInput.displayName = 'NaturalLanguageInput'
 
-type DateTimeLocalInputProps = {} & CalendarProps
+type DateTimeLocalInputProps = {
+  locale: Locale
+  hour12: boolean
+} & Omit<CalendarProps, 'locale'>
 
 const DateTimeLocalInput = ({
+  locale,
+  hour12,
   className,
   ...props
 }: DateTimeLocalInputProps) => {
@@ -502,7 +621,7 @@ const DateTimeLocalInput = ({
       m: ActiveModifiers,
       e: React.MouseEvent,
     ) => {
-      const parsedDateTime = parseDateTime(selectedDate)
+      const parsedDateTime = parseDateTime(selectedDate, locale)
 
       if (parsedDateTime) {
         parsedDateTime.setHours(
@@ -512,7 +631,7 @@ const DateTimeLocalInput = ({
         onValueChange(parsedDateTime)
       }
     },
-    [value, Time],
+    [locale, Time, onValueChange],
   )
 
   return (
@@ -534,14 +653,15 @@ const DateTimeLocalInput = ({
         <div className="flex gap-1">
           <Calendar
             {...props}
+            locale={locale}
             id={'calendar'}
             className={cn('peer flex justify-end', inputBase, className)}
             mode="single"
-            selected={value}
+            selected={value ?? undefined}
             onSelect={formateSelectedDate}
             initialFocus
           />
-          <TimePicker />
+          <TimePicker locale={locale} hour12={hour12} />
         </div>
       </PopoverContent>
     </Popover>

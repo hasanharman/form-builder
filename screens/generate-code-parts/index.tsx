@@ -218,6 +218,8 @@ export const generateImports = (
         importSet.add(
           'import { SmartDatetimeInput } from "@/components/ui/smart-datetime-input"',
         )
+        field.locale &&
+          importSet.add(`import { ${field.locale} } from "date-fns/locale"`)
         break
       case 'File Input':
         importSet.add('import { CloudUpload, Paperclip } from "lucide-react"')
