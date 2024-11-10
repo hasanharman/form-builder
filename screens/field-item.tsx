@@ -1,9 +1,9 @@
-import { useMotionValue, motion, Reorder } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, Reorder } from 'framer-motion'
 
 import { cn } from '@/lib/utils'
 import { FormFieldType } from '@/types'
 import { defaultFieldConfig, fieldTypes } from '@/constants'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import If from '@/components/ui/if'
 
-import { LuGrip, LuColumns, LuPencil, LuTrash2 } from 'react-icons/lu'
+import { LuColumns, LuPencil, LuTrash2 } from 'react-icons/lu'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -43,6 +43,9 @@ export const FieldItem = ({
     subIndex === (formFields[index] as FormFieldType[]).length - 1
 
   const path = subIndex !== undefined ? [index, subIndex] : [index]
+  const [columnCount, setColumnCount] = useState(() =>
+    Array.isArray(formFields[index]) ? formFields[index].length : 1,
+  )
 
   const addNewColumn = (variant: string, index: number) => {
     const newFieldName = `name_${Math.random().toString().slice(-10)}`
@@ -103,37 +106,42 @@ export const FieldItem = ({
   }
 
   const removeColumn = () => {
-    // Extracting the exact row and subIndex from path
     const rowIndex = path[0]
     const subIndex = path.length > 1 ? path[1] : null
 
     setFormFields((prevFields) => {
-      const newFields = [...prevFields] // Create a shallow copy of formFields
+      const newFields = [...prevFields]
 
       if (Array.isArray(newFields[rowIndex])) {
-        // If it's an array (a row with multiple fields)
-        const row = [...(newFields[rowIndex] as FormFieldType[])] // Shallow copy of the row
+        const row = [...(newFields[rowIndex] as FormFieldType[])]
 
         if (subIndex !== null && subIndex >= 0 && subIndex < row.length) {
-          // Only remove the specific field at subIndex
           row.splice(subIndex, 1)
 
-          // Update the row after removal
           if (row.length > 0) {
-            newFields[rowIndex] = row // Replace the row with the updated row
+            newFields[rowIndex] = row
+            // Update column count immediately after removal
+            setColumnCount(row.length)
           } else {
-            // If the row becomes empty, remove the entire row
             newFields.splice(rowIndex, 1)
+            setColumnCount(1)
           }
         }
       } else {
-        // If it's a single field, simply remove it
         newFields.splice(rowIndex, 1)
+        setColumnCount(1)
       }
 
-      return newFields // Update formFields state
+      return newFields
     })
   }
+
+  useEffect(() => {
+    const newColumnCount = Array.isArray(formFields[index])
+      ? formFields[index].length
+      : 1
+    setColumnCount(newColumnCount)
+  }, [formFields, index])
 
   return (
     <Reorder.Item
@@ -148,31 +156,25 @@ export const FieldItem = ({
       exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
       whileDrag={{ backgroundColor: '#9ca3af', borderRadius: '12px' }}
       className={cn('w-full', {
-        'col-span-12':
-          Array.isArray(formFields[index]) && formFields[index].length === 1,
-        'col-span-6':
-          Array.isArray(formFields[index]) && formFields[index].length === 2,
-        'col-span-4':
-          Array.isArray(formFields[index]) && formFields[index].length === 3,
+        'col-span-12': columnCount === 1,
+        'col-span-6': columnCount === 2,
+        'col-span-4': columnCount === 3,
       })}
+      key={`${field.name}-${columnCount}`}
     >
-      <motion.div layout="position" className="flex items-center gap-3">
+      {/* Rest of your component JSX */}
+      <motion.div
+        layout="position"
+        className="flex items-center gap-3"
+        key={`${field.name}-${columnCount}`}
+      >
         <div className="flex items-center gap-1 border rounded-xl px-3 py-1.5 w-full">
           <If
             condition={Array.isArray(formFields[index])}
             render={() => <LuColumns className="cursor-grab w-4 h-4" />}
           />
           <div className="flex items-center w-full">
-            <div className="w-full text-sm">
-              {field.variant}
-              {/* <Input
-                value={field.label}
-                onChange={(e) =>
-                  updateFormField(path, { label: e.target.value })
-                }
-                placeholder="Enter label"
-              /> */}
-            </div>
+            <div className="w-full text-sm">{field.variant}</div>
             <Button
               variant="ghost"
               size="icon"
@@ -180,28 +182,7 @@ export const FieldItem = ({
             >
               <LuPencil />
             </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={removeColumn}
-              // onClick={() => {
-              //   setFormFields((prevFields) => {
-              //     const newFields = [...prevFields]
-              //     if (Array.isArray(newFields[index])) {
-              //       // If it's an array, remove the specific subfield
-              //       ;(newFields[index] as FormFieldType[]).splice(subIndex!, 1)
-              //       // If the array becomes empty, remove it entirely
-              //       if ((newFields[index] as FormFieldType[]).length === 0) {
-              //         newFields.splice(index, 1)
-              //       }
-              //     } else {
-              //       // If it's a single field, remove it
-              //       newFields.splice(index, 1)
-              //     }
-              //     return newFields
-              //   })
-              // }}
-            >
+            <Button variant="ghost" size="icon" onClick={removeColumn}>
               <LuTrash2 />
             </Button>
           </div>
@@ -225,7 +206,10 @@ export const FieldItem = ({
                 {fieldTypes.map((fieldType) => (
                   <DropdownMenuItem
                     key={fieldType.name}
-                    onClick={() => addNewColumn(fieldType.name, index)}
+                    onClick={() => {
+                      addNewColumn(fieldType.name, index)
+                      setColumnCount((prev) => prev + 1)
+                    }}
                   >
                     {fieldType.name}
                   </DropdownMenuItem>

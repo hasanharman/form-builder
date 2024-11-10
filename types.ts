@@ -25,6 +25,7 @@ export type FormFieldType = {
   step?: number
   locale?: keyof typeof Locales
   hour12?: boolean
+  className?: string
 }
 
 export type FieldType = { name: string; isNew: boolean; index?: number }

@@ -66,7 +66,7 @@ const DatetimeGrid = forwardRef<
     return (
       <div
         className={cn(
-          'flex items-center w-fit p-1 border-2',
+          'flex items-center w-fit p-1 border',
           className,
           'border-input rounded-md gap-1 selection:bg-transparent selection:text-foreground',
         )}
@@ -81,7 +81,7 @@ const DatetimeGrid = forwardRef<
                       <React.Fragment key={unit}>
                         <Input
                           className={cn(timePickerInputBase, 'min-w-8', {
-                            'min-w-12': unit === 'years',
+                            'min-w-10': unit === 'years',
                             'bg-foreground/15': unit === 'am/pm',
                           })}
                           {...timescape.getInputProps(unit)}

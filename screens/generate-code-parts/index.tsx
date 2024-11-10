@@ -52,7 +52,7 @@ export const generateZodSchema = (
         })
         break
       case 'Smart Datetime Input':
-        fieldSchema = z.coerce.date()
+        fieldSchema = z.date()
         break
       case 'Number':
         fieldSchema = z.coerce.number()

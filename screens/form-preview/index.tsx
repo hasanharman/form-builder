@@ -29,7 +29,18 @@ export type FormPreviewProps = {
 const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
   return fields.map((fieldOrGroup, index) => {
     if (Array.isArray(fieldOrGroup)) {
-      const colSpan = fieldOrGroup.length === 2 ? 6 : 4
+      // Calculate column span based on number of fields in the group
+      const getColSpan = (totalFields: number) => {
+        switch (totalFields) {
+          case 2:
+            return 6 // Two columns
+          case 3:
+            return 4 // Three columns
+          default:
+            return 12 // Single column or fallback
+        }
+      }
+
       return (
         <div key={index} className="grid grid-cols-12 gap-4">
           {fieldOrGroup.map((field, subIndex) => (
@@ -38,7 +49,9 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
               control={form.control}
               name={field.name}
               render={({ field: formField }) => (
-                <FormItem className={`col-span-${colSpan}`}>
+                <FormItem
+                  className={`col-span-${getColSpan(fieldOrGroup.length)}`}
+                >
                   <FormControl>
                     {React.cloneElement(
                       renderFormField(field, form) as React.ReactElement,
@@ -60,7 +73,7 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
           control={form.control}
           name={fieldOrGroup.name}
           render={({ field: formField }) => (
-            <FormItem>
+            <FormItem className="col-span-12">
               <FormControl>
                 {React.cloneElement(
                   renderFormField(fieldOrGroup, form) as React.ReactElement,

@@ -89,6 +89,16 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
             />
           </div>
           <div>
+            <Label htmlFor="className">className</Label>
+            <Input
+              id="className"
+              value={editedField.className}
+              onChange={(e) =>
+                setEditedField({ ...editedField, className: e.target.value })
+              }
+            />
+          </div>
+          <div>
             <Label htmlFor="label">Name</Label>
             <Input
               id="name"

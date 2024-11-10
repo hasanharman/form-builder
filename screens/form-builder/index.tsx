@@ -50,9 +50,6 @@ export default function FormBuilder() {
       type: '',
       value: '',
       variant,
-      // min: 1,
-      // max: 100,
-      // step: 5,
     }
     setFormFields([...formFields, newField])
   }

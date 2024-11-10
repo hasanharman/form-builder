@@ -133,7 +133,12 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   switch (field.variant) {
     case 'Checkbox':
       return (
-        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+        <FormItem
+          className={cn(
+            'flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4',
+            field.className,
+          )}
+        >
           <FormControl>
             <Checkbox
               checked={checked} // Ensure this is handled as boolean
@@ -235,10 +240,13 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               <Calendar
                 mode="single"
                 selected={date}
-                onSelect={setDate}
-                disabled={(date) =>
-                  date > new Date() || date < new Date('1900-01-01')
-                }
+                onSelect={(newDate) => {
+                  setDate(newDate)
+                  form.setValue(field.name, newDate, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
+                }}
                 initialFocus
               />
             </PopoverContent>
@@ -256,7 +264,14 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <DatetimePicker
             {...field}
             value={datetime}
-            onChange={setDatetime}
+            // onChange={setDatetime}
+            onChange={(newDate) => {
+              setDatetime(newDate)
+              form.setValue(field.name, newDate, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }}
             format={[
               ['months', 'days', 'years'],
               ['hours', 'minutes', 'am/pm'],
@@ -461,10 +476,16 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
             <SmartDatetimeInput
-              locale={field.locale}
+              locale={field.locale as any}
               hour12={field.hour12}
               value={smartDatetime}
-              onValueChange={(newDate) => setSmartDatetime(newDate)}
+              onValueChange={(newDate) => {
+                setSmartDatetime(newDate)
+                form.setValue(field.name, newDate, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
               placeholder="e.g. tomorrow at 3pm"
             />
           </FormControl>
