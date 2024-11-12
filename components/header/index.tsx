@@ -18,6 +18,7 @@ import { FaXTwitter } from 'react-icons/fa6'
 
 import Logo from '@/assets/logo.svg'
 import { usePathname } from 'next/navigation'
+import { ThemeSwitch } from '../ui/theme-switch'
 
 type Tabs = {
   name: string
@@ -114,6 +115,7 @@ export default function Header() {
             <FaXTwitter className="text-lg" />
           </Button>
         </Link>
+        <ThemeSwitch />
       </div>
 
       <nav className="md:hidden">
@@ -142,6 +144,7 @@ export default function Header() {
                       <FaXTwitter className="text-lg" />
                     </Button>
                   </Link>
+                  <ThemeSwitch />
                 </div>
 
                 {tabs.map((tab) => (
@@ -157,7 +160,7 @@ export default function Header() {
                   </DrawerClose>
                 ))}
                 <Link href="/playground">
-                  <Button className="w-full bg-primary text-white px-2">
+                  <Button className="w-full bg-primary  px-2">
                     Playground
                   </Button>
                 </Link>
