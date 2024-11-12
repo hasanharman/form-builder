@@ -4,6 +4,7 @@ import { FormFieldType } from '@/types'
 import { FieldItem } from '@/screens/field-item'
 
 import { LuRows } from 'react-icons/lu'
+import { Badge } from '@/components/ui/badge'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -40,6 +41,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
 
   return (
     <div className="mt-3 lg:mt-0">
+      
       <Reorder.Group
         axis="y"
         onReorder={setFormFields}
