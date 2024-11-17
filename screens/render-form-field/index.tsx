@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { ChangeEvent, useRef, useState } from 'react'
 
 import { FormFieldType } from '@/types'
 import { cn } from '@/lib/utils'
@@ -122,6 +122,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [smartDatetime, setSmartDatetime] = useState<Date | null>()
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const dropZoneConfig = {
@@ -557,7 +558,17 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <PasswordInput value="password" />
+            <PasswordInput 
+              value={password}
+              placeholder='password'
+              onChange={(e:ChangeEvent<HTMLInputElement>)=>{
+                setPassword(e.target.value)
+                form.setValue(field.name, e.target.value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
+            />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
@@ -568,7 +579,15 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <PhoneInput defaultCountry="TR" />
+
+            <PhoneInput 
+              defaultCountry="TR" 
+              onChange={(phoneNumber)=>{
+              form.setValue(field.name, phoneNumber, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            }}/>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
