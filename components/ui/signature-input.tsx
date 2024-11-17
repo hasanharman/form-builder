@@ -9,21 +9,55 @@ type SignatureInputProps = {
   onSignatureChange: (signature: string | null) => void
 }
 
+const disableTouchScroll = (canvas: HTMLCanvasElement) => {
+  const preventScroll = (e: TouchEvent) => {
+    e.preventDefault() // Disable scroll
+  }
+
+  canvas.addEventListener('touchstart', preventScroll, { passive: false })
+  canvas.addEventListener('touchmove', preventScroll, { passive: false })
+  canvas.addEventListener('touchend', preventScroll, { passive: false })
+
+  return () => {
+    canvas.removeEventListener('touchstart', preventScroll)
+    canvas.removeEventListener('touchmove', preventScroll)
+    canvas.removeEventListener('touchend', preventScroll)
+  }
+}
+
+const SCALE = 10
+
 export default function SignatureInput({
   canvasRef,
   onSignatureChange,
 }: SignatureInputProps) {
   const [isDrawing, setIsDrawing] = useState(false)
+  const [lastPosition, setLastPosition] = useState<{
+    x: number
+    y: number
+  } | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
     if (canvas) {
       const ctx = canvas.getContext('2d')
       if (ctx) {
+        const width = 440
+        const height = 220
+        // scaling the canvas for better image quality but
+        canvas.width = width * SCALE
+        canvas.height = height * SCALE
+        // keeping display size of the canvas the same
+        canvas.style.width = `${width}px`
+        canvas.style.height = `${height}px`
+        ctx.scale(SCALE, SCALE)
+
         ctx.lineWidth = 2
         ctx.lineCap = 'round'
         ctx.strokeStyle = 'black'
       }
+      // removing scroll behavior on touch screens, while drawing
+      return disableTouchScroll(canvas)
     }
   }, [canvasRef])
 
@@ -32,14 +66,18 @@ export default function SignatureInput({
       | React.MouseEvent<HTMLCanvasElement>
       | React.TouchEvent<HTMLCanvasElement>,
   ) => {
+    e.preventDefault()
     setIsDrawing(true)
     draw(e)
   }
 
   const stopDrawing = () => {
     setIsDrawing(false)
+    setLastPosition(null)
     const canvas = canvasRef.current
-    if (canvas) {
+    const ctx = canvas?.getContext('2d')
+    if (canvas && ctx) {
+      ctx.beginPath()
       const dataUrl = canvas.toDataURL()
       onSignatureChange(dataUrl) // Pass data URL to the form's onChange
     }
@@ -50,6 +88,7 @@ export default function SignatureInput({
       | React.MouseEvent<HTMLCanvasElement>
       | React.TouchEvent<HTMLCanvasElement>,
   ) => {
+    e.preventDefault()
     if (!isDrawing) return
 
     const canvas = canvasRef.current
@@ -59,10 +98,21 @@ export default function SignatureInput({
       const x = ('touches' in e ? e.touches[0].clientX : e.clientX) - rect.left
       const y = ('touches' in e ? e.touches[0].clientY : e.clientY) - rect.top
 
-      ctx.lineTo(x, y)
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.moveTo(x, y)
+      if (lastPosition) {
+        const midX = (lastPosition.x + x) / 2
+        const midY = (lastPosition.y + y) / 2
+
+        ctx.beginPath()
+        ctx.moveTo(lastPosition.x, lastPosition.y)
+        ctx.quadraticCurveTo(midX, midY, x, y) // Smooth transition
+        ctx.stroke()
+      } else {
+        // For the first point, simply move to the position without a stroke
+        ctx.beginPath()
+        ctx.moveTo(x, y)
+      }
+
+      setLastPosition({ x, y })
     }
   }
 
