@@ -152,7 +152,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
           <If
             condition={formFields.length > 0}
             render={() => (
-              <pre className="p-4 text-sm bg-gray-100 rounded-lg h-full md:max-h-[70vh] overflow-auto">
+              <pre className="p-4 text-sm bg-secondary rounded-lg h-full md:max-h-[70vh] overflow-auto">
                 {JSON.stringify(formFields, null, 2)}
               </pre>
             )}
