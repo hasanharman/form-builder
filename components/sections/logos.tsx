@@ -1,42 +1,21 @@
 import Marquee from '@/components/magicui/marquee'
-import Image from 'next/image'
 
 const companies = [
   {
-    img: '139895814',
-    link: 'shadcn/ui',
-    name: 'shadcn/ui',
-    author: 'shadcn',
+    id: 'iR63Ac2hum0',
+    title: 'Create Forms 500% Faster With This Shadcn Tool',
   },
   {
-    img: '53986236',
-    link: 'React Hook Forms',
-    name: 'react-hook-form',
-    author: 'react-hook-form',
+    id: '2q6GCUzJ6fc',
+    title: 'Build Forms 10x Faster with This Shadcn Tool',
   },
   {
-    img: '3084745',
-    link: 'Zod',
-    name: 'zod',
-    author: 'colinhacks',
+    id: 'v6-722-GOyU',
+    title: 'Build SHADCN Forms SUPER FAST with THIS TOOL!',
   },
   {
-    img: '106016365',
-    link: 'Shadcn Extensions',
-    name: 'shadcn-extensions',
-    author: 'shadcn',
-  },
-  {
-    img: '19254700',
-    link: 'shadcn-Phone-Input',
-    name: 'shadcn-phone-input',
-    author: 'shadcn',
-  },
-  {
-    img: '339286',
-    link: 'Yup',
-    name: 'yup',
-    author: 'yup',
+    id: 'uEiK91I4q9A',
+    title: '🚀 Supercharge Your Forms with This Shadcn Tool',
   },
 ]
 
@@ -45,23 +24,21 @@ export default function Logos() {
     <section id="logos">
       <div className="container mx-auto px-4 md:px-8 py-12">
         <h3 className="text-center text-sm font-semibold text-gray-500">
-          BUILD WITH USING
+          FEATURED IN
         </h3>
         <div className="relative mt-6">
           <Marquee className="max-w-full [--duration:40s] ">
             {companies.map((item) => (
-              <div
-                key={item.name}
-                className="h-10 w-40 grayscale opacity-30 flex items-center gap-1"
-              >
-                <Image
-                  width={112}
-                  height={40}
-                  src={`https://avatars.githubusercontent.com/u/${item.img}`}
-                  className="h-8 w-8 rounded "
-                  alt={item.name}
+              <div key={item.id} className="h-40 w-64 flex items-center gap-1">
+                <iframe
+                  width="256"
+                  height="144"
+                  src={`https://www.youtube.com/embed/${item.id}`}
+                  title={item.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="rounded"
                 />
-                <p className="text-sm whitespace-nowrap">{item.name}</p>
               </div>
             ))}
           </Marquee>
