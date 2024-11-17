@@ -4,6 +4,7 @@ import { fieldTypes } from '@/constants'
 import { Button } from '@/components/ui/button'
 import If from '@/components/ui/if'
 import Link from 'next/link'
+import { Badge } from '@/components/ui/badge'
 
 type FieldSelectorProps = {
   addFormField: (variant: string, index?: number) => void
@@ -27,18 +28,18 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
             <If
               condition={variant.isNew}
               render={() => (
-                <div className="md:hidden ml-1 text-[10px] p-1 bg-yellow-200 rounded">
+                <Badge variant={'new'} className='md:hidden ml-1 p-1 text-[10px]'>
                   New
-                </div>
+                </Badge>
               )}
             />
           </Button>
           <If
             condition={variant.isNew}
             render={() => (
-              <div className="hidden md:block ml-1 text-[10px] p-1 bg-yellow-200 rounded">
+              <Badge variant={'new'} className='hidden md:block ml-1 p-1 text-[10px]'>
                 New
-              </div>
+              </Badge>
             )}
           />
         </div>

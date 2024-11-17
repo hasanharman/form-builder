@@ -3,7 +3,6 @@ import { ViewTransitions } from 'next-view-transitions'
 import { Toaster } from 'sonner'
 import localFont from 'next/font/local'
 import NextTopLoader from 'nextjs-toploader'
-
 import './globals.css'
 
 import AllProviders from '@/providers'

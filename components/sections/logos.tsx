@@ -48,17 +48,17 @@ export default function Logos() {
           BUILD WITH USING
         </h3>
         <div className="relative mt-6">
-          <Marquee className="max-w-full [--duration:40s]">
+          <Marquee className="max-w-full [--duration:40s] ">
             {companies.map((item) => (
               <div
                 key={item.name}
-                className="h-10 w-40 dark:brightness-0 dark:invert grayscale opacity-30 flex items-center gap-1"
+                className="h-10 w-40 grayscale opacity-30 flex items-center gap-1"
               >
                 <Image
                   width={112}
                   height={40}
                   src={`https://avatars.githubusercontent.com/u/${item.img}`}
-                  className="h-8 w-8 rounded"
+                  className="h-8 w-8 rounded "
                   alt={item.name}
                 />
                 <p className="text-sm whitespace-nowrap">{item.name}</p>
