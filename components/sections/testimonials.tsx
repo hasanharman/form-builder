@@ -67,7 +67,7 @@ export default function Testimonials() {
                     }}
                   >
                     {/* <TestimonialCard {...card} /> */}
-                    <ClientTweetCard id={tweet} />;
+                    <ClientTweetCard id={tweet} />
                   </motion.div>
                 ))}
               </Marquee>
