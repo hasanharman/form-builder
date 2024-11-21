@@ -181,7 +181,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 </Button>
               </FormControl>
             </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0">
+            <PopoverContent className="p-0">
               <Command>
                 <CommandInput placeholder="Search language..." />
                 <CommandList>
@@ -558,10 +558,10 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-            <PasswordInput 
+            <PasswordInput
               value={password}
-              placeholder='password'
-              onChange={(e:ChangeEvent<HTMLInputElement>)=>{
+              placeholder="password"
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setPassword(e.target.value)
                 form.setValue(field.name, e.target.value, {
                   shouldValidate: true,
@@ -579,15 +579,15 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         <FormItem>
           <FormLabel>{field.label}</FormLabel>
           <FormControl>
-
-            <PhoneInput 
-              defaultCountry="TR" 
-              onChange={(phoneNumber)=>{
-              form.setValue(field.name, phoneNumber, {
-                shouldValidate: true,
-                shouldDirty: true,
-              })
-            }}/>
+            <PhoneInput
+              defaultCountry="TR"
+              onChange={(phoneNumber) => {
+                form.setValue(field.name, phoneNumber, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
+            />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
