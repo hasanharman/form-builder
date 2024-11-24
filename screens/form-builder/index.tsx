@@ -14,8 +14,7 @@ import { FieldSelector } from '@/screens/field-selector'
 import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
 import { EditFieldDialog } from '@/screens/edit-field-dialog'
-
-import EmptyListImage from '@/assets/oc-thinking.png'
+import EmptyListSvg from '@/assets/oc-thinking.svg'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -41,12 +40,12 @@ export default function FormBuilder() {
       disabled: false,
       label: label || newFieldName,
       name: newFieldName,
-      onChange: () => { },
-      onSelect: () => { },
+      onChange: () => {},
+      onSelect: () => {},
       placeholder: placeholder || 'Placeholder',
       required: true,
       rowIndex: index,
-      setValue: () => { },
+      setValue: () => {},
       type: '',
       value: '',
       variant,
@@ -162,13 +161,7 @@ export default function FormBuilder() {
                 addFormField(variant, index)
               }
             />
-            <Image
-              src={EmptyListImage}
-              width={585}
-              height={502}
-              alt="Empty Image"
-              className="object-contain mx-auto p-5 md:p-20"
-            />
+            <EmptyListSvg className="mx-auto" />
           </div>
         )}
       />
