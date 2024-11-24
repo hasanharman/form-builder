@@ -43,6 +43,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
           flagComponent={FlagComponent}
           countrySelectComponent={CountrySelect}
           inputComponent={InputComponent}
+          smartCaret={false}
           /**
            * Handles the onChange event.
            *
@@ -101,7 +102,7 @@ const CountrySelect = ({
         <Button
           type="button"
           variant={'outline'}
-          className={cn('flex gap-1 rounded-e-none rounded-s-lg px-3')}
+          className="flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10"
           disabled={disabled}
         >
           <FlagComponent country={value} countryName={value} />
@@ -115,9 +116,9 @@ const CountrySelect = ({
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
+          <CommandInput placeholder="Search country..." />
           <CommandList>
             <ScrollArea className="h-72">
-              <CommandInput placeholder="Search country..." />
               <CommandEmpty>No country found.</CommandEmpty>
               <CommandGroup>
                 {options
@@ -159,7 +160,7 @@ const FlagComponent = ({ country, countryName }: RPNInput.FlagProps) => {
   const Flag = flags[country]
 
   return (
-    <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm">
+    <span className="bg-foreground/20 flex h-4 w-6 overflow-hidden rounded-sm [&_svg]:size-full">
       {Flag && <Flag title={countryName} />}
     </span>
   )
