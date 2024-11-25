@@ -20,6 +20,12 @@ const nextConfig = {
         resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
         use: ['@svgr/webpack'],
       },
+      // Import the component's source code as a string using syntax like 'import Comp from '@/components/comp?raw'
+      {
+        test: /\.tsx$/i,
+        resourceQuery: /raw/,
+        use: 'raw-loader',
+      },
     )
 
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
