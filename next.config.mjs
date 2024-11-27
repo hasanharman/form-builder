@@ -33,6 +33,7 @@ const nextConfig = {
       'randomuser.me',
       'avatars.githubusercontent.com',
       'pbs.twimg.com',
+      'images.unsplash.com',
     ],
   },
 }

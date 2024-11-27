@@ -13,6 +13,7 @@ import { NumberTicker } from '@/components/number-ticker'
 import { LuStar, LuHeart } from 'react-icons/lu'
 import StarIcon from '@/components/star-icon'
 import HeartIcon from '@/components/hearth-icon'
+import { AnimatedTooltip } from '@/components/animated-tooltip'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -74,6 +75,21 @@ function HeroPill() {
     fetchGitHubData()
   }, [])
 
+  const sponsors = [
+    {
+      id: 1,
+      name: 'Maxim Ciebiera',
+      designation: 'Founder - datatino.de',
+      image: 'https://avatars.githubusercontent.com/u/47557243?v=4',
+    },
+    {
+      id: 2,
+      name: 'Radu Ciocan',
+      designation: 'React Native Developer',
+      image: 'https://avatars.githubusercontent.com/u/4984377?v=4',
+    },
+  ]
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -81,34 +97,39 @@ function HeroPill() {
       transition={{ duration: 0.8, ease }}
       className="flex items-center"
     >
-      <div className="space-y-1">
+      <div className="space-y-3">
         <p className="text-center text-xs text-muted-foreground">
           Last Update {stats.lastUpdate}
         </p>
-        <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
-          <Link
-            href="https://github.com/sponsors/hasanharman"
-            target="_blank"
-            className="group"
-          >
-            <Button className="h-10 w-[9.5rem] flex justify-start rounded-full border-2 border-white dark:border-gray-800 shadow">
-              <HeartIcon />
-              Sponsor
-            </Button>
-          </Link>
-          <Link
-            href="https://github.com/hasanharman/form-builder"
-            target="_blank"
-            className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
-          >
-            <p className="font-medium text-primary  text-sm">
-              Star Project on GitHub
-            </p>
-            <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
-              <StarIcon />
-              <NumberTicker className="ml-1" value={stats.stars} />
-            </div>
-          </Link>
+        <div className="flex gap-5">
+          <div className="flex flex-row items-center justify-center  w-full">
+            <AnimatedTooltip items={sponsors} />
+          </div>
+          <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
+            <Link
+              href="https://github.com/sponsors/hasanharman"
+              target="_blank"
+              className="group"
+            >
+              <Button className="h-10 w-[9.5rem] flex justify-start rounded-full border-2 border-white dark:border-gray-800 shadow">
+                <HeartIcon />
+                Sponsor
+              </Button>
+            </Link>
+            <Link
+              href="https://github.com/hasanharman/form-builder"
+              target="_blank"
+              className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
+            >
+              <p className="font-medium text-primary  text-sm">
+                Star Project on GitHub
+              </p>
+              <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
+                <StarIcon />
+                <NumberTicker className="ml-1" value={stats.stars} />
+              </div>
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>
