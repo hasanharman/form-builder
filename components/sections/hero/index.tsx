@@ -95,14 +95,14 @@ function HeroPill() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease }}
-      className="flex items-center"
+      className="flex items-center justify-center w-full"
     >
-      <div className="space-y-3">
+      <div className="w-full space-y-3">
         <p className="text-center text-xs text-muted-foreground">
           Last Update {stats.lastUpdate}
         </p>
-        <div className="flex gap-5">
-          <div className="flex flex-row items-center justify-center  w-full">
+        <div className="flex flex-wrap justify-center gap-5 w-full">
+          <div className="flex flex-row items-center justify-center">
             <AnimatedTooltip items={sponsors} />
           </div>
           <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
@@ -122,7 +122,7 @@ function HeroPill() {
               className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
             >
               <p className="font-medium text-primary  text-sm">
-                Star Project on GitHub
+                <span className='hidden sm:inline'>Star Project on{" "}</span>GitHub
               </p>
               <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
                 <StarIcon />
@@ -264,7 +264,7 @@ export default function HeroSection() {
         <HeroTitles />
         <HeroCTA />
         <HeroImage />
-        <div className="pointer-events-none absolute inset-x-0 -bottom-12 h-1/3 bg-gradient-to-t from-background via-background to-transparent lg:h-1/4"></div>
+        <div className=" pointer-events-none absolute inset-x-0 -bottom-12 h-1/5 sm:h-1/4 bg-gradient-to-t from-background via-background to-transparent"></div>
       </div>
     </section>
   )
