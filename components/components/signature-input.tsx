@@ -7,6 +7,9 @@ import Code from '@/components/code'
 import SignatureInput from '@/components/ui/signature-input'
 import { SignatureForm } from '@/components/components/signature-form'
 
+import installationManual from '@/components/ui/signature-input?raw'
+import formCode from '@/components/components/signature-form?raw'
+
 const code = `<SignatureInput
   canvasRef={canvasRef}
   onSignatureChange={field.onChange}
@@ -14,111 +17,6 @@ const code = `<SignatureInput
 
 const installationCode = `npx shadcn@latest add https://www.shadcn-form.com/registry/signature-input.json`
 
-const installationManuel = `
-'use client'
-
-import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Eraser } from 'lucide-react'
-
-type SignatureInputProps = {
-  canvasRef: React.RefObject<HTMLCanvasElement>
-  onSignatureChange: (signature: string | null) => void
-}
-
-export default function SignatureInput({
-  canvasRef,
-  onSignatureChange,
-}: SignatureInputProps) {
-  const [isDrawing, setIsDrawing] = useState(false)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (canvas) {
-      const ctx = canvas.getContext('2d')
-      if (ctx) {
-        ctx.lineWidth = 2
-        ctx.lineCap = 'round'
-        ctx.strokeStyle = 'black'
-      }
-    }
-  }, [canvasRef])
-
-  const startDrawing = (
-    e:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>,
-  ) => {
-    setIsDrawing(true)
-    draw(e)
-  }
-
-  const stopDrawing = () => {
-    setIsDrawing(false)
-    const canvas = canvasRef.current
-    if (canvas) {
-      const dataUrl = canvas.toDataURL()
-      onSignatureChange(dataUrl) // Pass data URL to the form's onChange
-    }
-  }
-
-  const draw = (
-    e:
-      | React.MouseEvent<HTMLCanvasElement>
-      | React.TouchEvent<HTMLCanvasElement>,
-  ) => {
-    if (!isDrawing) return
-
-    const canvas = canvasRef.current
-    const ctx = canvas?.getContext('2d')
-    if (canvas && ctx) {
-      const rect = canvas.getBoundingClientRect()
-      const x = ('touches' in e ? e.touches[0].clientX : e.clientX) - rect.left
-      const y = ('touches' in e ? e.touches[0].clientY : e.clientY) - rect.top
-
-      ctx.lineTo(x, y)
-      ctx.stroke()
-      ctx.beginPath()
-      ctx.moveTo(x, y)
-    }
-  }
-
-  const clearSignature = () => {
-    const canvas = canvasRef.current
-    const ctx = canvas?.getContext('2d')
-    if (canvas && ctx) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      onSignatureChange(null) // Clear signature in the form as well
-    }
-  }
-
-  return (
-    <div className="border border-gray-300 rounded-md overflow-hidden relative">
-      <canvas
-        ref={canvasRef}
-        width={400}
-        height={200}
-        className="w-full"
-        onMouseDown={startDrawing}
-        onMouseUp={stopDrawing}
-        onMouseOut={stopDrawing}
-        onMouseMove={draw}
-        onTouchStart={startDrawing}
-        onTouchEnd={stopDrawing}
-        onTouchMove={draw}
-      />
-      <Button
-        size="icon"
-        variant="outline"
-        className="absolute left-1 bottom-1 z-10 rounded-full"
-        onClick={clearSignature}
-      >
-        <Eraser className="w-4 h-4 text-muted-foreground hover:text-primary" />
-      </Button>
-    </div>
-  )
-}
-`
 const usageCode1 = `'use client'
 
 import SignatureInput from '@/components/ui/signature-input'`
@@ -126,75 +24,6 @@ const usageCode2 = `<SignatureInput
   canvasRef={canvasRef}
   onSignatureChange={field.onChange}
 />`
-const formCode = `
-'use client'
-
-import { useRef } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { toast } from 'sonner'
-
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import SignatureInput from '@/components/ui/signature-input'
-
-const FormSchema = z.object({
-  signature: z.string().min(1, 'Please sign the form'),
-})
-
-type SignatureFormData = z.infer<typeof FormSchema>
-
-export function SignatureForm() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const form = useForm<SignatureFormData>({
-    resolver: zodResolver(FormSchema),
-  })
-
-  const onSubmit = (data: SignatureFormData) => {
-    // console.log('Signature Data URL:', data.signature)
-    toast(
-      <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-        <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-      </pre>,
-    )
-  }
-
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="signature"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <div>
-                <FormLabel>Sign here</FormLabel>
-              </div>
-              <SignatureInput
-                canvasRef={canvasRef}
-                onSignatureChange={field.onChange}
-              />
-              <FormDescription>
-                Please provide your signature above
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">Submit</Button>
-      </form>
-    </Form>
-  )
-}
-`
 
 export default function Component() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -249,7 +78,7 @@ export default function Component() {
                     Copy and paste the following code into your project.
                   </div>
 
-                  <Code code={installationManuel} customStyle="h-[300px]" />
+                  <Code code={installationManual} customStyle="h-[300px]" />
                 </div>
                 <div className="grid gap-1 text-sm relative">
                   <div className="flex justify-center items-center aspect-square w-6 h-6 bg-gray-200 rounded-full absolute left-0 translate-x-[-31.5px] z-10 top-1 dark:bg-gray-50">
