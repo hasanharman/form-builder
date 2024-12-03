@@ -89,15 +89,11 @@ export type FeaturesDataProps = {
 
 export type FeaturesProps = {
   collapseDelay?: number
-  ltr?: boolean
-  linePosition?: 'left' | 'right' | 'top' | 'bottom'
   data: FeaturesDataProps[]
 }
 
 export default function Features({
   collapseDelay = 5000,
-  // ltr = false,
-  // linePosition = 'left',
   data = [],
 }: FeaturesProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(-1)
@@ -138,17 +134,6 @@ export default function Features({
     }
   }
 
-  // interval for changing images
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setCurrentIndex((prevIndex) =>
-  //       prevIndex !== undefined ? (prevIndex + 1) % data.length : 0,
-  //     )
-  //   }, collapseDelay)
-
-  //   return () => clearInterval(timer)
-  // }, [collapseDelay, data.length])
-
   useEffect(() => {
     if (data.length <= currentIndex) { // Only the case when you change data.length at runtime and you data.length goes <= currentIndex then we should reset our carousel.
       setCurrentIndex(0);
@@ -163,110 +148,11 @@ export default function Features({
     const autoScrollTimer = setInterval(handleAutoScroll, collapseDelay)
     return () => clearInterval(autoScrollTimer)
   }, [currentIndex, collapseDelay, data.length])
-  // No need to include data.length as a dependency here because this effect depends on currentIndex and collapseDelay, 
-  // and currentIndex will be updated by the below useEffect based on the carousel scroll position.
-
-
-  // useEffect(() => {
-  //   const carousel = carouselRef.current
-  //   if (carousel) {
-  //     const handleScroll = () => {
-  //       const scrollLeft = carousel.scrollLeft
-  //       const cardWidth = carousel.querySelector('.card')?.clientWidth || 0
-  //       const newIndex = Math.min(
-  //         Math.floor(scrollLeft / cardWidth),
-  //         data.length - 1,
-  //       )
-  //       setCurrentIndex(newIndex)
-  //     }
-  //     carousel.addEventListener('scroll', handleScroll)
-  //     return () => carousel.removeEventListener('scroll', handleScroll)
-  //   }
-  // }, [data.length])
-
 
   return (
     <section ref={ref} id="features" className="flex justify-center">
       <div className="container">
         <div className="mx-auto my-12 h-full grid grid-rows-auto lg:grid-rows-1 grid-cols-1 lg:grid-cols-2 lg:gap-10 items-center grid-flow-dense">
-
-          {/* <div
-            className={`hidden lg:flex order-1 lg:order-[0] ${ltr ? 'lg:order-2 lg:justify-end' : 'justify-start'
-              }`}
-          >
-            <Accordion.Root
-              className=""
-              type="single"
-              defaultValue={`item-${currentIndex}`}
-              value={`item-${currentIndex}`}
-              onValueChange={(value) =>
-                setCurrentIndex(Number(value.split('-')[1]))
-              }
-            >
-              {data.map((item, index) => (
-                <AccordionItem
-                  key={item.id}
-                  className="relative mb-8 last:mb-0"
-                  value={`item-${index}`}
-                >
-                  {linePosition === 'left' || linePosition === 'right' ? (
-                    <div
-                      className={`absolute bottom-0 top-0 h-full w-0.5 overflow-hidden rounded-lg bg-neutral-300/50 dark:bg-neutral-300/30 ${linePosition === 'right'
-                        ? 'left-auto right-0'
-                        : 'left-0 right-auto'
-                        }`}
-                    >
-                      <div
-                        className={`absolute left-0 top-0 w-full ${currentIndex === index ? 'h-full' : 'h-0'
-                          } origin-top bg-primary transition-all ease-linear dark:bg-white`}
-                        style={{
-                          transitionDuration:
-                            currentIndex === index
-                              ? `${collapseDelay}ms`
-                              : '0s',
-                        }}
-                      ></div>
-                    </div>
-                  ) : null}
-
-                  {linePosition === 'top' || linePosition === 'bottom' ? (
-                    <div
-                      className={`absolute left-0 right-0 lg:bottom-0 lg:top-0 w-0.5 lg:w-full h-full lg:h-0.5 overflow-hidden rounded-lg bg-neutral-300/50 dark:bg-neutral-300/30`}
-                    >
-                      <div
-                        className={`absolute left-0 ${linePosition === 'bottom' ? 'bottom-0' : 'top-0'
-                          } h-full ${currentIndex === index ? 'w-full' : 'w-0'
-                          } origin-left bg-primary transition-all ease-linear dark:bg-white`}
-                        style={{
-                          transitionDuration:
-                            currentIndex === index
-                              ? `${collapseDelay}ms`
-                              : '0s',
-                        }}
-                      ></div>
-                    </div>
-                  ) : null}
-
-                  <div className="flex items-center relative">
-                    <div className="item-box w-12 h-12 bg-primary/10 rounded-full sm:mx-6 mx-2 shrink-0 flex items-center justify-center">
-                      {item.icon}
-                    </div>
-
-                    <div>
-                      <AccordionTrigger className="text-xl font-bold">
-                        {item.title}
-                      </AccordionTrigger>
-
-                      <AccordionTrigger className="justify-start text-left leading-4 font-sans text-[16px]">
-                        {item.content}
-                      </AccordionTrigger>
-                    </div>
-                  </div>
-                </AccordionItem>
-              ))}
-            </Accordion.Root>
-          </div> */}
-
           <div ref={carouselRef} className="overflow-x-auto flex lg:flex-col gap-8 lg:gap-0 snap-x order-2 lg:order-1 [-ms-overflow-style:none]  [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-mandatory">
             {data.map((item, index) => (
               <Card key={item.id} className="card bg-background border-none shadow-none min-w-64" onClick={() => setCurrentIndex(index)}>
@@ -340,8 +226,6 @@ export default function Features({
               <div className="aspect-auto h-full w-full rounded-xl border border-neutral-300/50 bg-gray-200 p-1"></div>
             )}
           </div>
-
-
         </div>
       </div>
     </section>
