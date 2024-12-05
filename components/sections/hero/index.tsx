@@ -9,11 +9,12 @@ import { Button, buttonVariants } from '@/components/ui/button'
 
 import HeroVideoDialog from '@/components/sections/hero/hero-video'
 import { NumberTicker } from '@/components/number-ticker'
-
-import { LuStar, LuHeart } from 'react-icons/lu'
 import StarIcon from '@/components/star-icon'
 import HeartIcon from '@/components/hearth-icon'
 import { AnimatedTooltip } from '@/components/animated-tooltip'
+
+import { LuStar, LuHeart } from 'react-icons/lu'
+import { VscSourceControl } from 'react-icons/vsc'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -53,27 +54,27 @@ function HeroPill() {
     return `${years} ${years === 1 ? 'year' : 'years'} ago`
   }
 
-  useEffect(() => {
-    const fetchGitHubData = async () => {
-      try {
-        const repoResponse = await fetch(
-          'https://api.github.com/repos/hasanharman/form-builder',
-        )
-        const repoData = await repoResponse.json()
+  // useEffect(() => {
+  //   const fetchGitHubData = async () => {
+  //     try {
+  //       const repoResponse = await fetch(
+  //         'https://api.github.com/repos/hasanharman/form-builder',
+  //       )
+  //       const repoData = await repoResponse.json()
 
-        const lastUpdateDate = new Date(repoData.pushed_at)
+  //       const lastUpdateDate = new Date(repoData.pushed_at)
 
-        setStats({
-          stars: repoData.stargazers_count,
-          lastUpdate: getRelativeTime(lastUpdateDate),
-        })
-      } catch (error) {
-        console.error('Error fetching GitHub data:', error)
-      }
-    }
+  //       setStats({
+  //         stars: repoData.stargazers_count,
+  //         lastUpdate: getRelativeTime(lastUpdateDate),
+  //       })
+  //     } catch (error) {
+  //       console.error('Error fetching GitHub data:', error)
+  //     }
+  //   }
 
-    fetchGitHubData()
-  }, [])
+  //   fetchGitHubData()
+  // }, [])
 
   const sponsors = [
     {
@@ -116,7 +117,7 @@ function HeroPill() {
                 Sponsor
               </Button>
             </Link>
-            <Link
+            {/* <Link
               href="https://github.com/hasanharman/form-builder"
               target="_blank"
               className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
@@ -128,6 +129,16 @@ function HeroPill() {
                 <StarIcon />
                 <NumberTicker className="ml-1" value={stats.stars} />
               </div>
+            </Link> */}
+            <Link
+              href="https://harman.lemonsqueezy.com/buy/4ac0743f-3665-4c2c-b905-2ef58e589130"
+              target="_blank"
+              className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
+            >
+              <VscSourceControl />
+              <p className="font-medium text-primary  text-sm">
+                Access Source Code
+              </p>
             </Link>
           </div>
         </div>

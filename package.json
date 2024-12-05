@@ -11,6 +11,11 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@blocknote/core": "^0.20.0",
+    "@blocknote/mantine": "^0.20.0",
+    "@blocknote/react": "^0.20.0",
+    "@blocknote/shadcn": "^0.20.0",
+    "@blocknote/xl-multi-column": "^0.20.0",
     "@hookform/resolvers": "^3.9.0",
     "@next/third-parties": "^14.2.13",
     "@openpanel/nextjs": "^1.0.3",
