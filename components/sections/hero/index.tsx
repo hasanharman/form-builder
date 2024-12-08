@@ -54,27 +54,27 @@ function HeroPill() {
     return `${years} ${years === 1 ? 'year' : 'years'} ago`
   }
 
-  // useEffect(() => {
-  //   const fetchGitHubData = async () => {
-  //     try {
-  //       const repoResponse = await fetch(
-  //         'https://api.github.com/repos/hasanharman/form-builder',
-  //       )
-  //       const repoData = await repoResponse.json()
+  useEffect(() => {
+    const fetchGitHubData = async () => {
+      try {
+        const repoResponse = await fetch(
+          'https://api.github.com/repos/hasanharman/form-builder',
+        )
+        const repoData = await repoResponse.json()
 
-  //       const lastUpdateDate = new Date(repoData.pushed_at)
+        const lastUpdateDate = new Date(repoData.pushed_at)
 
-  //       setStats({
-  //         stars: repoData.stargazers_count,
-  //         lastUpdate: getRelativeTime(lastUpdateDate),
-  //       })
-  //     } catch (error) {
-  //       console.error('Error fetching GitHub data:', error)
-  //     }
-  //   }
+        setStats({
+          stars: repoData.stargazers_count,
+          lastUpdate: getRelativeTime(lastUpdateDate),
+        })
+      } catch (error) {
+        console.error('Error fetching GitHub data:', error)
+      }
+    }
 
-  //   fetchGitHubData()
-  // }, [])
+    fetchGitHubData()
+  }, [])
 
   const sponsors = [
     {
@@ -102,8 +102,8 @@ function HeroPill() {
         <p className="text-center text-xs text-muted-foreground">
           Last Update {stats.lastUpdate}
         </p>
-        <div className="flex gap-5">
-          <div className="flex flex-row items-center justify-center  w-full">
+        <div className="flex flex-col md:flex-row gap-3 md:gap-5">
+          <div className="flex flex-row items-center justify-center w-full">
             <AnimatedTooltip items={sponsors} />
           </div>
           <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
@@ -117,7 +117,7 @@ function HeroPill() {
                 Sponsor
               </Button>
             </Link>
-            {/* <Link
+            <Link
               href="https://github.com/hasanharman/form-builder"
               target="_blank"
               className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
@@ -129,16 +129,6 @@ function HeroPill() {
                 <StarIcon />
                 <NumberTicker className="ml-1" value={stats.stars} />
               </div>
-            </Link> */}
-            <Link
-              href="https://harman.lemonsqueezy.com/buy/4ac0743f-3665-4c2c-b905-2ef58e589130"
-              target="_blank"
-              className="h-10 cursor-pointer flex w-auto items-center space-x-1 rounded-full bg-muted px-3 group border-2 border-white whitespace-pre shadow hover:shadow-lg"
-            >
-              <VscSourceControl />
-              <p className="font-medium text-primary  text-sm">
-                Access Source Code
-              </p>
             </Link>
           </div>
         </div>
