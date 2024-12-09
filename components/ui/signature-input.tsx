@@ -39,25 +39,36 @@ export default function SignatureInput({
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (canvas) {
-      const ctx = canvas.getContext('2d')
-      if (ctx) {
-        const width = 440
-        const height = 220
-        // scaling the canvas for better image quality but
-        canvas.width = width * SCALE
-        canvas.height = height * SCALE
-        // keeping display size of the canvas the same
-        canvas.style.width = `${width}px`
-        canvas.style.height = `${height}px`
-        ctx.scale(SCALE, SCALE)
+    if (!canvas) return
 
-        ctx.lineWidth = 2
-        ctx.lineCap = 'round'
-        ctx.strokeStyle = 'black'
-      }
-      // removing scroll behavior on touch screens, while drawing
-      return disableTouchScroll(canvas)
+    const updateStrokeColor = () => {
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      const isDarkClass = document.documentElement.classList.contains('dark')
+      const isLightClass = document.documentElement.classList.contains('light')
+
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+      const isDarkMode = isDarkClass || (!isLightClass && systemPrefersDark)
+
+      ctx.strokeStyle = isDarkMode ? '#ffffff' : '#000000'
+    }
+
+    updateStrokeColor()
+
+    const observer = new MutationObserver(updateStrokeColor)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    mediaQuery.addEventListener('change', updateStrokeColor)
+
+    return () => {
+      observer.disconnect()
+      mediaQuery.removeEventListener('change', updateStrokeColor)
     }
   }, [canvasRef])
 
