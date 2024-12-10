@@ -15,6 +15,7 @@ import If from '@/components/ui/if'
 
 import { LuGithub, LuMenu } from 'react-icons/lu'
 import { FaXTwitter } from 'react-icons/fa6'
+import { SiBuymeacoffee } from 'react-icons/si'
 
 import Logo from '@/assets/logo.svg'
 import { usePathname } from 'next/navigation'
@@ -25,17 +26,17 @@ type Tabs = {
   href: string
   isNewTab?: boolean
   variant:
-  | 'default'
-  | 'destructive'
-  | 'outline'
-  | 'secondary'
-  | 'ghost'
-  | 'link'
-  | 'arrow'
-  | 'smile'
-  | 'linkHover2'
-  | null
-  | undefined
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link'
+    | 'arrow'
+    | 'smile'
+    | 'linkHover2'
+    | null
+    | undefined
   className?: string
   isUpdated?: boolean
 }
@@ -58,11 +59,17 @@ export default function Header() {
 
   return (
     <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
-      <Link href="/" className="cursor-pointer md:hidden dark:bg-white dark:rounded-lg p-2">
+      <Link
+        href="/"
+        className="cursor-pointer md:hidden dark:bg-white dark:rounded-lg p-2"
+      >
         <Logo className="w-9 h-9" />
       </Link>
       <nav className="hidden md:flex items-center gap-3">
-        <Link href="/" className="cursor-pointer dark:bg-white dark:rounded-lg p-1">
+        <Link
+          href="/"
+          className="cursor-pointer dark:bg-white dark:rounded-lg p-1"
+        >
           <Logo className="w-9 h-9" />
         </Link>
         {tabs.map((tab, i) => (
@@ -95,10 +102,7 @@ export default function Header() {
 
       <div className="hidden md:flex items-center gap-3">
         <Link href="/playground">
-          <Button
-            variant="gooeyLeft"
-            className="g-primary rounded-full px-4"
-          >
+          <Button variant="gooeyLeft" className="g-primary rounded-full px-4">
             Playground
           </Button>
         </Link>
@@ -113,6 +117,11 @@ export default function Header() {
         <Link href="https://x.com/strad3r" target="_blank">
           <Button variant="outline" className="rounded-full p-2">
             <FaXTwitter className="text-lg" />
+          </Button>
+        </Link>
+        <Link href="https://buymeacoffee.com/hasanharman" target="_blank">
+          <Button className="bg-yellow-400 text-black hover:text-white  rounded-full p-2">
+            <SiBuymeacoffee className="text-lg" />
           </Button>
         </Link>
         <ThemeSwitch />
@@ -142,6 +151,14 @@ export default function Header() {
                   <Link href="https://x.com/strad3r" target="_blank">
                     <Button variant="outline" className="rounded-full p-2">
                       <FaXTwitter className="text-lg" />
+                    </Button>
+                  </Link>
+                  <Link
+                    href="https://buymeacoffee.com/hasanharman"
+                    target="_blank"
+                  >
+                    <Button className="bg-yellow-400 text-black hover:text-white  rounded-full p-2">
+                      <SiBuymeacoffee className="text-lg" />
                     </Button>
                   </Link>
                   <ThemeSwitch />

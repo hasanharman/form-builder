@@ -9,11 +9,12 @@ import { Button, buttonVariants } from '@/components/ui/button'
 
 import HeroVideoDialog from '@/components/sections/hero/hero-video'
 import { NumberTicker } from '@/components/number-ticker'
-
-import { LuStar, LuHeart } from 'react-icons/lu'
 import StarIcon from '@/components/star-icon'
 import HeartIcon from '@/components/hearth-icon'
 import { AnimatedTooltip } from '@/components/animated-tooltip'
+
+import { LuStar, LuHeart } from 'react-icons/lu'
+import { VscSourceControl } from 'react-icons/vsc'
 
 const ease = [0.16, 1, 0.3, 1]
 

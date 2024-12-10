@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import If from '@/components/ui/if'
 
-import { LuColumns, LuPencil, LuTrash2 } from 'react-icons/lu'
+import { LuColumns2, LuPencil, LuTrash2 } from 'react-icons/lu'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -171,7 +171,7 @@ export const FieldItem = ({
         <div className="flex items-center gap-1 border rounded-xl px-3 py-1.5 w-full">
           <If
             condition={Array.isArray(formFields[index])}
-            render={() => <LuColumns className="cursor-grab w-4 h-4" />}
+            render={() => <LuColumns2 className="cursor-grab w-4 h-4" />}
           />
           <div className="flex items-center w-full">
             <div className="w-full text-sm">{field.variant}</div>
