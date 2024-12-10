@@ -229,7 +229,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                     }}
                     onStateChange={(state) => {
                       setStateName(state?.name || '')
-                      form.setValue(field.name, [countryName || '', state?.name || ''])
+                      form.setValue(field.name, [form.getValues(field.name)[0] || '', state?.name || ''])
                     }}
                   />
                   </FormControl>
