@@ -16,7 +16,13 @@ export const generateZodSchema = (
 
     switch (field.variant) {
       case 'Checkbox':
-        fieldSchema = z.boolean().default(true)
+        if (field.required === true) {
+          fieldSchema = z.boolean().refine((value) => value === true, {
+            message: 'Required',
+          })
+        } else {
+          fieldSchema = z.boolean().default(true)
+        }
         break
       case 'Date Picker':
         fieldSchema = z.coerce.date()

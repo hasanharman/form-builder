@@ -134,24 +134,26 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   switch (field.variant) {
     case 'Checkbox':
       return (
-        <FormItem
-          className={cn(
-            'flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4',
-            field.className,
-          )}
-        >
-          <FormControl>
-            <Checkbox
-              checked={checked} // Ensure this is handled as boolean
-              onCheckedChange={() => {
-                setChecked(!checked)
-              }}
-              disabled={field.disabled}
-            />
-          </FormControl>
-          <div className="space-y-1 leading-none">
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
-            <FormDescription>{field.description}</FormDescription>
+        <FormItem className="flex flex-col">
+          <div
+            className={cn(
+              'flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4',
+              field.className,
+            )}
+          >
+            <FormControl>
+              <Checkbox
+                checked={checked} // Ensure this is handled as boolean
+                onCheckedChange={() => {
+                  setChecked(!checked)
+                }}
+                disabled={field.disabled}
+              />
+            </FormControl>
+            <div className="space-y-1 leading-none">
+              <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+              <FormDescription>{field.description}</FormDescription>
+            </div>
           </div>
           <FormMessage />
         </FormItem>
