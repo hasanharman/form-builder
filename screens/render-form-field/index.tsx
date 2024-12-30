@@ -369,7 +369,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             }}
             onStateChange={(state) => {
               setStateName(state?.name || '')
-              form.setValue(field.name, [countryName || '', state?.name || ''])
+              form.setValue(field.name, [form.getValues(field.name)[0] || '', state?.name || ''])
             }}
           />
           <FormDescription>{field.description}</FormDescription>
