@@ -65,6 +65,7 @@ export default function Testimonials() {
                       delay: Math.random() * 0.8,
                       duration: 1.2,
                     }}
+                    className='flex justify-center'
                   >
                     {/* <TestimonialCard {...card} /> */}
                     <ClientTweetCard id={tweet} />
