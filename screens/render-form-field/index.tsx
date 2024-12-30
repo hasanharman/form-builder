@@ -69,6 +69,7 @@ import { DatetimePicker } from '@/components/ui/datetime-picker'
 import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
 import LocationSelector from '@/components/ui/location-input'
 import SignatureInput from '@/components/ui/signature-input'
+import { Rating } from '@/components/ui/rating'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -123,6 +124,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [rating, setRating] = useState<number>(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const dropZoneConfig = {
@@ -585,6 +587,26 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               defaultCountry="TR"
               onChange={(phoneNumber) => {
                 form.setValue(field.name, phoneNumber, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
+            />
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Rating':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <Rating
+              value={rating}
+              onChange={(value) => {
+                setRating(value)
+                form.setValue(field.name, value.toString(), {
                   shouldValidate: true,
                   shouldDirty: true,
                 })

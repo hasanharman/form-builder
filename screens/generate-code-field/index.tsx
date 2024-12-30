@@ -539,6 +539,26 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             )}
           />
             `
+    case 'Rating':
+      return `
+          <FormField
+            control={form.control}
+            name="${field.name}"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+              <FormLabel>${field.label}</FormLabel>
+                <FormControl className="w-full">
+                  <Rating {...field} />
+                </FormControl>
+              ${
+                field.description &&
+                `<FormDescription>${field.description}</FormDescription>`
+              }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            `
     default:
       return null
   }

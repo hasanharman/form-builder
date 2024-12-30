@@ -75,6 +75,10 @@ export const generateZodSchema = (
         fieldSchema = z
           .array(z.string())
           .nonempty('Please select at least one item')
+      case 'Ratings':
+        fieldSchema = z.coerce.number({
+          required_error: 'Rating is required'
+        })
         break
       default:
         fieldSchema = z.string()
@@ -348,6 +352,8 @@ export const generateDefaultValues = (
       case 'Smart Datetime Input':
       case 'Date Picker':
         defaultValues[field.name] = new Date()
+      case 'Rating':
+        defaultValues[field.name] = 0
         break
     }
   })
