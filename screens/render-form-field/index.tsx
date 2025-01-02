@@ -564,7 +564,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
           <FormControl>
             <PasswordInput
               value={password}
-              placeholder="password"
+              placeholder={field.placeholder}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setPassword(e.target.value)
                 form.setValue(field.name, e.target.value, {
