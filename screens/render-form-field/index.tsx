@@ -318,6 +318,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             </FileUploader>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'Input':
@@ -371,7 +372,10 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             }}
             onStateChange={(state) => {
               setStateName(state?.name || '')
-              form.setValue(field.name, [form.getValues(field.name)[0] || '', state?.name || ''])
+              form.setValue(field.name, [
+                form.getValues(field.name)[0] || '',
+                state?.name || '',
+              ])
             }}
           />
           <FormDescription>{field.description}</FormDescription>
@@ -381,7 +385,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Multi Select':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <MultiSelector
               values={selectedValues}
@@ -438,7 +442,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
 
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Slider
               min={min}
@@ -460,7 +464,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Signature Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <SignatureInput
               canvasRef={canvasRef}
@@ -478,7 +482,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Smart Datetime Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <SmartDatetimeInput
               locale={field.locale as any}
@@ -518,13 +522,9 @@ export const renderFormField = (field: FormFieldType, form: any) => {
         </FormItem>
       )
     case 'Tags Input':
-      const currentTags = Array.isArray(form.watch(field.name))
-        ? form.watch(field.name)
-        : []
-
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <TagsInput
               value={tagsValue}
@@ -545,7 +545,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Textarea':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Textarea
               placeholder={field.placeholder}
@@ -560,7 +560,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Password':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <PasswordInput
               value={password}
@@ -581,7 +581,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Phone':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <PhoneInput
               defaultCountry="TR"
@@ -600,7 +600,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Rating':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Rating
               value={rating}
