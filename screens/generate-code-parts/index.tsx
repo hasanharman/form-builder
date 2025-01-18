@@ -38,7 +38,7 @@ export const generateZodSchema = (
           fieldSchema = z.coerce.number()
           break
         } else {
-          fieldSchema = z.string()
+          fieldSchema = z.string().min(1, 'Required')
           break
         }
       case 'Location Input':
@@ -77,7 +77,7 @@ export const generateZodSchema = (
           .nonempty('Please select at least one item')
       case 'Ratings':
         fieldSchema = z.coerce.number({
-          required_error: 'Rating is required'
+          required_error: 'Rating is required',
         })
         break
       default:
