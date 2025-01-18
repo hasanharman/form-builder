@@ -352,6 +352,7 @@ export const generateDefaultValues = (
       case 'Smart Datetime Input':
       case 'Date Picker':
         defaultValues[field.name] = new Date()
+        break
       case 'Rating':
         defaultValues[field.name] = 0
         break
