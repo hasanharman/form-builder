@@ -118,8 +118,9 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(['React'])
   const [tagsValue, setTagsValue] = useState<string[]>([])
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
-  const [date, setDate] = useState<Date>()
-  const [datetime, setDatetime] = useState<Date>()
+  const [sliderValue, setSliderValue] = useState<number[]>([5])
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [datetime, setDatetime] = useState<Date | undefined>(new Date())
   const [smartDatetime, setSmartDatetime] = useState<Date | null>()
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
@@ -418,7 +419,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel> {field.required && '*'}
-          <Select onValueChange={field.onChange} defaultValue="m@example.com">
+          <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select a verified email to display" />
@@ -448,9 +449,9 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               min={min}
               max={max}
               step={step}
-              defaultValue={[defaultValue]}
+              value={sliderValue}
               onValueChange={(value) => {
-                setValue(value[0])
+                setSliderValue(value)
               }} // Update to set the first value as a number
             />
           </FormControl>
@@ -469,7 +470,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <SignatureInput
               canvasRef={canvasRef}
               onSignatureChange={(signature) => {
-                if (signature) field.onChange(signature)
+                form.setValue(field.name, signature || undefined)
               }}
             />
           </FormControl>
@@ -519,6 +520,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               }}
             />
           </FormControl>
+          <FormMessage />
         </FormItem>
       )
     case 'Tags Input':

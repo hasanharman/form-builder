@@ -58,7 +58,7 @@ export const generateZodSchema = (
         })
         break
       case 'Smart Datetime Input':
-        fieldSchema = z.date()
+        fieldSchema = z.union([z.string(), z.date()])
         break
       case 'Number':
         fieldSchema = z.coerce.number()
@@ -343,6 +343,10 @@ export const generateDefaultValues = (
 
     // Handle field variants
     switch (field.variant) {
+      case 'Checkbox':
+      case 'Switch':
+        defaultValues[field.name] = true
+        break
       case 'Multi Select':
         defaultValues[field.name] = ['React']
         break
@@ -350,12 +354,14 @@ export const generateDefaultValues = (
         defaultValues[field.name] = []
         break
       case 'Datetime Picker':
-      case 'Smart Datetime Input':
       case 'Date Picker':
         defaultValues[field.name] = new Date()
         break
       case 'Rating':
-        defaultValues[field.name] = 0
+        defaultValues[field.name] = '0'
+        break
+      case 'Slider':
+        defaultValues[field.name] = 5
         break
     }
   })

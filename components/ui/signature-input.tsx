@@ -48,7 +48,9 @@ export default function SignatureInput({
       const isDarkClass = document.documentElement.classList.contains('dark')
       const isLightClass = document.documentElement.classList.contains('light')
 
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const systemPrefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+      ).matches
 
       const isDarkMode = isDarkClass || (!isLightClass && systemPrefersDark)
 
@@ -60,7 +62,7 @@ export default function SignatureInput({
     const observer = new MutationObserver(updateStrokeColor)
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class']
+      attributeFilter: ['class'],
     })
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
@@ -83,6 +85,8 @@ export default function SignatureInput({
   }
 
   const stopDrawing = () => {
+    if (!isDrawing) return
+
     setIsDrawing(false)
     setLastPosition(null)
     const canvas = canvasRef.current
