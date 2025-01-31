@@ -3,7 +3,7 @@ import { Reorder, AnimatePresence } from 'framer-motion'
 import { FormFieldType } from '@/types'
 import { FieldItem } from '@/screens/field-item'
 
-import { LuRows } from 'react-icons/lu'
+import { LuRows2 } from 'react-icons/lu'
 import { Badge } from '@/components/ui/badge'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
@@ -41,7 +41,6 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
 
   return (
     <div className="mt-3 lg:mt-0">
-      
       <Reorder.Group
         axis="y"
         onReorder={setFormFields}
@@ -59,7 +58,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
             className="flex items-center gap-1"
             whileDrag={{ backgroundColor: '#e5e7eb', borderRadius: '12px' }}
           >
-            <LuRows className="cursor-grab w-4 h-4" />
+            <LuRows2 className="cursor-grab w-4 h-4" />
             {Array.isArray(item) ? (
               <Reorder.Group
                 as="ul"

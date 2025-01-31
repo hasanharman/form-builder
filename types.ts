@@ -29,3 +29,21 @@ export type FormFieldType = {
 }
 
 export type FieldType = { name: string; isNew: boolean; index?: number }
+
+export interface EditorColumn {
+  id: string
+  content: string
+  width: number // 1-12 representing tailwind grid columns
+}
+
+export interface EditorBlock {
+  id: string
+  type: 'text' | 'heading' | 'checkbox' | 'columns'
+  content: string
+  columns?: EditorColumn[]
+}
+
+export interface EditorHistoryState {
+  blocks: EditorBlock[]
+  timestamp: number
+}
