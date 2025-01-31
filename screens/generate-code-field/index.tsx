@@ -229,7 +229,7 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                     }}
                     onStateChange={(state) => {
                       setStateName(state?.name || '')
-                      form.setValue(field.name, [countryName || '', state?.name || ''])
+                      form.setValue(field.name, [form.getValues(field.name)[0] || '', state?.name || ''])
                     }}
                   />
                   </FormControl>
@@ -529,6 +529,26 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                     {...field}
                     defaultCountry="TR"
                   />
+                </FormControl>
+              ${
+                field.description &&
+                `<FormDescription>${field.description}</FormDescription>`
+              }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+            `
+    case 'Rating':
+      return `
+          <FormField
+            control={form.control}
+            name="${field.name}"
+            render={({ field }) => (
+              <FormItem className="flex flex-col items-start">
+              <FormLabel>${field.label}</FormLabel>
+                <FormControl className="w-full">
+                  <Rating {...field} />
                 </FormControl>
               ${
                 field.description &&
