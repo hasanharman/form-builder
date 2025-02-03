@@ -70,6 +70,7 @@ import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
 import LocationSelector from '@/components/ui/location-input'
 import SignatureInput from '@/components/ui/signature-input'
 import { Rating } from '@/components/ui/rating'
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -612,6 +613,39 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 })
               }}
             />
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'RadioGroup':
+      return (
+        <FormItem className="space-y-3">
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <RadioGroup
+              onValueChange={field.onChange}
+              className="flex flex-col space-y-1"
+            >
+              {
+                [ 
+                  ["Male", "male"], 
+                  ["Female", "female"], 
+                  ["Other", "other"] 
+                ].map((option, index)=>{
+                  return(
+                    <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormControl>
+                        <RadioGroupItem value={option[1]} />
+                      </FormControl>
+                      <FormLabel className="font-normal">
+                        {option[0]}
+                      </FormLabel>
+                    </FormItem>
+                  )
+                })
+              }
+            </RadioGroup>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />
