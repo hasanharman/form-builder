@@ -75,6 +75,7 @@ export const generateZodSchema = (
         fieldSchema = z
           .array(z.string())
           .nonempty('Please select at least one item')
+          break
       case 'Ratings':
         fieldSchema = z.coerce.number({
           required_error: 'Rating is required'
