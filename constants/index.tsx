@@ -20,6 +20,7 @@ export const fieldTypes: FieldType[] = [
   { name: 'Tags Input', isNew: false },
   { name: 'Textarea', isNew: false },
   { name: 'Rating', isNew: true },
+  { name: 'RadioGroup', isNew: true },
 ]
 
 export const defaultFieldConfig: Record<
@@ -103,4 +104,8 @@ export const defaultFieldConfig: Record<
     label: 'Rating',
     description: 'Please provide your rating.',
   },
+  RadioGroup: {
+    label: 'Gender',
+    description: 'Select your gender',
+  }
 }
