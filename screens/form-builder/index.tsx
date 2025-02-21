@@ -124,7 +124,7 @@ export default function FormBuilder() {
           the generated form components to get started. Some components may have
           additional dependencies, so make sure to review their documentation in
           the{' '}
-          <Link href="/readme" className="underline text-slate-800">
+          <Link href="/readme" className="underline text-slate-800  dark:text-white dark:font-semibold">
             README
           </Link>{' '}
           for further instructions.

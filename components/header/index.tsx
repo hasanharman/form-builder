@@ -120,8 +120,8 @@ export default function Header() {
           </Button>
         </Link>
         <Link href="https://buymeacoffee.com/hasanharman" target="_blank">
-          <Button className="bg-yellow-400 text-black hover:text-white  rounded-full p-2">
-            <SiBuymeacoffee className="text-lg" />
+        <Button className="bg-yellow-400 text-black hover:text-white hover:dark:text-black  rounded-full p-2">
+        <SiBuymeacoffee className="text-lg" />
           </Button>
         </Link>
         <ThemeSwitch />
