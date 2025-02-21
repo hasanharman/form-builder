@@ -118,8 +118,9 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [selectedValues, setSelectedValues] = useState<string[]>(['React'])
   const [tagsValue, setTagsValue] = useState<string[]>([])
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
-  const [date, setDate] = useState<Date>()
-  const [datetime, setDatetime] = useState<Date>()
+  const [sliderValue, setSliderValue] = useState<number[]>([5])
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [datetime, setDatetime] = useState<Date | undefined>(new Date())
   const [smartDatetime, setSmartDatetime] = useState<Date | null>()
   const [countryName, setCountryName] = useState<string>('')
   const [stateName, setStateName] = useState<string>('')
@@ -318,6 +319,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             </FileUploader>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
         </FormItem>
       )
     case 'Input':
@@ -371,7 +373,10 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             }}
             onStateChange={(state) => {
               setStateName(state?.name || '')
-              form.setValue(field.name, [form.getValues(field.name)[0] || '', state?.name || ''])
+              form.setValue(field.name, [
+                form.getValues(field.name)[0] || '',
+                state?.name || '',
+              ])
             }}
           />
           <FormDescription>{field.description}</FormDescription>
@@ -381,7 +386,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Multi Select':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <MultiSelector
               values={selectedValues}
@@ -414,7 +419,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem>
           <FormLabel>{field.label}</FormLabel> {field.required && '*'}
-          <Select onValueChange={field.onChange} defaultValue="m@example.com">
+          <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Select a verified email to display" />
@@ -438,15 +443,15 @@ export const renderFormField = (field: FormFieldType, form: any) => {
 
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Slider
               min={min}
               max={max}
               step={step}
-              defaultValue={[defaultValue]}
+              value={sliderValue}
               onValueChange={(value) => {
-                setValue(value[0])
+                setSliderValue(value)
               }} // Update to set the first value as a number
             />
           </FormControl>
@@ -460,12 +465,12 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Signature Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <SignatureInput
               canvasRef={canvasRef}
               onSignatureChange={(signature) => {
-                if (signature) field.onChange(signature)
+                form.setValue(field.name, signature || undefined)
               }}
             />
           </FormControl>
@@ -478,7 +483,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Smart Datetime Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <SmartDatetimeInput
               locale={field.locale as any}
@@ -515,16 +520,13 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               }}
             />
           </FormControl>
+          <FormMessage />
         </FormItem>
       )
     case 'Tags Input':
-      const currentTags = Array.isArray(form.watch(field.name))
-        ? form.watch(field.name)
-        : []
-
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <TagsInput
               value={tagsValue}
@@ -545,7 +547,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Textarea':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Textarea
               placeholder={field.placeholder}
@@ -560,7 +562,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Password':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <PasswordInput
               value={password}
@@ -581,7 +583,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Phone':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <PhoneInput
               defaultCountry="TR"
@@ -600,7 +602,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Rating':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel>
+          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
           <FormControl>
             <Rating
               value={rating}
