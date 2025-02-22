@@ -45,6 +45,11 @@ export const templates: Templates[] = [
         path: '/templates/contact/contact',
         description: 'Contact form template',
       },
+      {
+        title: 'Newsletter',
+        path: '/templates/contact/newsletter',
+        description: 'Newsletter form template',
+      },
       // {
       //   title: 'register',
       //   path: '/templates/contact/register',
