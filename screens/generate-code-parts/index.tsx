@@ -101,7 +101,12 @@ export const generateZodSchema = (
     if (field.required !== true) {
       fieldSchema = fieldSchema.optional()
     }
-    schemaObject[field.name] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
+    // if field name contains - then i add quotes around it to fix zod schema generation issue
+    let fieldName = field.name
+    if (field.name.includes('-')) {
+      fieldName = `'${field.name}'`
+    }
+    schemaObject[fieldName] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
   }
 
   formFields.flat().forEach(processField)
