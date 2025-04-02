@@ -38,7 +38,7 @@ export const generateZodSchema = (
           fieldSchema = z.coerce.number()
           break
         } else {
-          fieldSchema = z.string()
+          fieldSchema = z.string().min(1, 'Required')
           break
         }
       case 'Location Input':
@@ -58,7 +58,7 @@ export const generateZodSchema = (
         })
         break
       case 'Smart Datetime Input':
-        fieldSchema = z.date()
+        fieldSchema = z.union([z.string(), z.date()])
         break
       case 'Number':
         fieldSchema = z.coerce.number()
@@ -78,7 +78,7 @@ export const generateZodSchema = (
           break
       case 'Rating':
         fieldSchema = z.coerce.number({
-          required_error: 'Rating is required'
+          required_error: 'Rating is required',
         })
         break
       default:
@@ -101,7 +101,12 @@ export const generateZodSchema = (
     if (field.required !== true) {
       fieldSchema = fieldSchema.optional()
     }
-    schemaObject[field.name] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
+    // if field name contains - then i add quotes around it to fix zod schema generation issue
+    let fieldName = field.name
+    if (field.name.includes('-')) {
+      fieldName = `'${field.name}'`
+    }
+    schemaObject[fieldName] = fieldSchema as ZodTypeAny // Ensure fieldSchema is of type ZodTypeAny
   }
 
   formFields.flat().forEach(processField)
@@ -343,6 +348,10 @@ export const generateDefaultValues = (
 
     // Handle field variants
     switch (field.variant) {
+      case 'Checkbox':
+      case 'Switch':
+        defaultValues[field.name] = true
+        break
       case 'Multi Select':
         defaultValues[field.name] = ['React']
         break
@@ -350,11 +359,14 @@ export const generateDefaultValues = (
         defaultValues[field.name] = []
         break
       case 'Datetime Picker':
-      case 'Smart Datetime Input':
       case 'Date Picker':
         defaultValues[field.name] = new Date()
+        break
       case 'Rating':
-        defaultValues[field.name] = 0
+        defaultValues[field.name] = '0'
+        break
+      case 'Slider':
+        defaultValues[field.name] = 5
         break
     }
   })

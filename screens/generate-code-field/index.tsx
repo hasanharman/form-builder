@@ -559,6 +559,44 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             )}
           />
             `
+    case 'RadioGroup':
+      return `
+          <FormField
+            control={form.control}
+            name="${field.name}"
+            render={({ field }) => (
+              <FormItem className="space-y-3">
+                <FormLabel>${field.label}</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    className="flex flex-col space-y-1"
+                  >
+                    {[
+                      ["Male", "male"],
+                      ["Female", "female"],
+                      ["Other", "other"]
+                    ].map((option, index) => (
+                      <FormItem className="flex items-center space-x-3 space-y-0" key={index}>
+                        <FormControl>
+                          <RadioGroupItem value={option[1]} />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          {option[0]}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+                ${
+                  field.description &&
+                  `<FormDescription>${field.description}</FormDescription>`
+                }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        `
     default:
       return null
   }

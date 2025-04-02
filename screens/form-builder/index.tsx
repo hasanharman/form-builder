@@ -124,7 +124,7 @@ export default function FormBuilder() {
           the generated form components to get started. Some components may have
           additional dependencies, so make sure to review their documentation in
           the{' '}
-          <Link href="/readme" className="underline text-slate-800">
+          <Link href="/readme" className="underline text-slate-800  dark:text-white dark:font-semibold">
             README
           </Link>{' '}
           for further instructions.
@@ -152,7 +152,10 @@ export default function FormBuilder() {
             </div>
             <div className="col-span-1 w-full h-full space-y-3">
               <SpecialComponentsNotice formFields={formFields} />
-              <FormPreview formFields={formFields} />
+              <FormPreview
+                key={JSON.stringify(formFields)}
+                formFields={formFields}
+              />
             </div>
           </div>
         )}
