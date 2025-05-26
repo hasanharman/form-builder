@@ -1,6 +1,12 @@
 # Form Builder
 A dynamic form-building tool that allows users to create, customize, and validate forms seamlessly within web applications. Built with React, Next.js, and various other technologies, Form Builder provides an intuitive interface for developers and users alike.
 
+<br />
+<br />
+<a href="https://vercel.com/oss">
+  <img alt="Vercel OSS Program" src="https://vercel.com/oss/program-badge.svg" />
+</a>
+
 ## Table of Contents
 
 - [Form Builder](#form-builder)
