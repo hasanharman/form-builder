@@ -12,6 +12,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "target": "es2015",
+    "downlevelIteration": true,
     "plugins": [
       {
         "name": "next"
@@ -23,7 +25,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"],
-  "target": "es2015", // or "es6", "esnext", etc.
-  "downlevelIteration": true
+  "exclude": ["node_modules"]
 }

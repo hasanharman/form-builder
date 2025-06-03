@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Eraser } from 'lucide-react'
 
 type SignatureInputProps = {
-  canvasRef: React.RefObject<HTMLCanvasElement>
+  canvasRef?: React.RefObject<HTMLCanvasElement | null>
   onSignatureChange: (signature: string | null) => void
 }
 
@@ -28,9 +28,11 @@ const disableTouchScroll = (canvas: HTMLCanvasElement) => {
 const SCALE = 10
 
 export default function SignatureInput({
-  canvasRef,
+  canvasRef: externalCanvasRef,
   onSignatureChange,
 }: SignatureInputProps) {
+  const internalCanvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = externalCanvasRef || internalCanvasRef
   const [isDrawing, setIsDrawing] = useState(false)
   const [lastPosition, setLastPosition] = useState<{
     x: number
@@ -143,7 +145,7 @@ export default function SignatureInput({
   return (
     <div className="border border-gray-300 rounded-md overflow-hidden relative w-[400px] h-[200px]">
       <canvas
-        ref={canvasRef}
+        ref={internalCanvasRef}
         width={400}
         height={200}
         className="w-full"

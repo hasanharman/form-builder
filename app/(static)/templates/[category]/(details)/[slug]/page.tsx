@@ -1,5 +1,6 @@
 'use client'
 import dynamic from 'next/dynamic'
+import { use } from 'react'
 import { Link } from 'next-view-transitions'
 
 import { CodeViewer } from '@/components/templates/code-viewer'
@@ -18,10 +19,10 @@ import { useSidebar } from '@/components/ui/sidebar' // Check this import
 export default function Page({
   params,
 }: {
-  params: { slug: string; category: string }
+  params: Promise<{ slug: string; category: string }>
 }) {
-  const pathname = params.slug
-  const category = params.category
+  const { slug, category } = use(params)
+  const pathname = slug
 
   const { toggleSidebar } = useSidebar()
 

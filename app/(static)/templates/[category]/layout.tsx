@@ -5,12 +5,13 @@ import { AppSidebar } from '@/components/templates/templates-sidebar'
 
 interface LayoutProps {
   children: ReactNode
-  params: {
+  params: Promise<{
     category: string
-  }
+  }>
 }
 
-export default function TemplateLayout({ children, params }: LayoutProps) {
+export default async function TemplateLayout({ children, params }: LayoutProps) {
+  const { category } = await params;
   return (
     <SidebarProvider>
       <AppSidebar />

@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   RiH1,
   RiH2,
@@ -9,7 +10,7 @@ import {
 export interface CommandItem {
   title: string
   value: string
-  icon: JSX.Element
+  icon: React.ReactElement
   isNew?: boolean
 }
 
