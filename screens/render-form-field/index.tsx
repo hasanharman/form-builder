@@ -128,20 +128,13 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [stateName, setStateName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [rating, setRating] = useState<number>(0)
-  const [creditCard, setCreditCard] = useState<{
-    cardholderName: string
-    cardNumber: string
-    expiryMonth: string
-    expiryYear: string
-    cvv: string
-    cvvLabel: 'CCV' | 'CVC'
-  }>({
+  const [creditCard, setCreditCard] = useState({
     cardholderName: '',
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
     cvv: '',
-    cvvLabel: 'CVC'
+    cvvLabel: 'CVC' as 'CCV' | 'CVC'
   })
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -684,6 +677,10 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                     setCreditCard(value)
                     const jsonValue = JSON.stringify(value)
                     formField.onChange(jsonValue)
+                    form.setValue(field.name, jsonValue, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    })
                   }}
                 />
               </FormControl>

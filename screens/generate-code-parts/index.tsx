@@ -82,14 +82,17 @@ export const generateZodSchema = (
         })
         break
       case 'Credit Card':
-        fieldSchema = z.string().refine((value) => {
+        fieldSchema = z.string().min(1, 'Credit card information is required').refine((value) => {
           try {
             const parsed = JSON.parse(value)
-            return parsed.cardholderName?.trim() && 
-                   parsed.cardNumber?.trim() && 
-                   parsed.expiryMonth?.trim() && 
-                   parsed.expiryYear?.trim() && 
-                   parsed.cvv?.trim()
+            const isValid = !!(
+              parsed.cardholderName?.trim() && 
+              parsed.cardNumber?.trim() && 
+              parsed.expiryMonth?.trim() && 
+              parsed.expiryYear?.trim() && 
+              parsed.cvv?.trim()
+            )
+            return isValid
           } catch {
             return false
           }

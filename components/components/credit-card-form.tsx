@@ -19,14 +19,17 @@ import {
 import { CreditCard } from '@/components/ui/credit-card'
 
 const FormSchema = z.object({
-  creditCard: z.string().refine((value) => {
+  creditCard: z.string().min(1, 'Credit card information is required').refine((value) => {
     try {
       const parsed = JSON.parse(value)
-      return parsed.cardholderName?.trim() && 
-             parsed.cardNumber?.trim() && 
-             parsed.expiryMonth?.trim() && 
-             parsed.expiryYear?.trim() && 
-             parsed.cvv?.trim()
+      const isValid = !!(
+        parsed.cardholderName?.trim() && 
+        parsed.cardNumber?.trim() && 
+        parsed.expiryMonth?.trim() && 
+        parsed.expiryYear?.trim() && 
+        parsed.cvv?.trim()
+      )
+      return isValid
     } catch {
       return false
     }
@@ -49,6 +52,9 @@ export function CreditCardForm() {
 
   const form = useForm<CreditCardFormData>({
     resolver: zodResolver(FormSchema),
+    defaultValues: {
+      creditCard: JSON.stringify(creditCard)
+    }
   })
 
   const onSubmit = (data: CreditCardFormData) => {
@@ -76,7 +82,9 @@ export function CreditCardForm() {
                   value={creditCard}
                   onChange={(value) => {
                     setCreditCard(value)
-                    field.onChange(JSON.stringify(value))
+                    const jsonValue = JSON.stringify(value)
+                    field.onChange(jsonValue)
+                    form.trigger('creditCard')
                   }}
                 />
               </FormControl>

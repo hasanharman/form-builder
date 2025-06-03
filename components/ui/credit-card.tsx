@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Card } from '@/components/ui/card'
-import { CreditCard as CreditCardIcon, Lock, AlertCircle } from 'lucide-react'
+import { CreditCard as CreditCardIcon, Lock } from 'lucide-react'
 
 export interface CreditCardValue {
   cardholderName: string
@@ -143,7 +143,6 @@ function CreditCard({
   const [isFlipped, setIsFlipped] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
   const [errors, setErrors] = useState<ValidationErrors>({})
-  const [hasBeenSubmitted, setHasBeenSubmitted] = useState(false)
 
   // Internal refs for DOM elements
   const containerRef = useRef<HTMLDivElement>(null)
@@ -176,11 +175,7 @@ function CreditCard({
   ) => {
     const updatedValue = { ...currentValue, [field]: newValue }
     onChange?.(updatedValue)
-
-    // Always validate on change to provide real-time feedback
-    if (hasBeenSubmitted) {
-      validateAndUpdate(updatedValue)
-    }
+    validateAndUpdate(updatedValue)
   }
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,9 +193,6 @@ function CreditCard({
   const handleCvvBlur = () => {
     setIsFlipped(false)
     setFocusedField(null)
-    if (hasBeenSubmitted) {
-      validateAndUpdate(currentValue)
-    }
   }
 
   const handleFieldFocus = (fieldName: string) => {
@@ -209,34 +201,25 @@ function CreditCard({
 
   const handleFieldBlur = (fieldName: string) => {
     setFocusedField(null)
-    if (hasBeenSubmitted) {
-      validateAndUpdate(currentValue)
-    }
   }
 
   const handleValidate = () => {
-    setHasBeenSubmitted(true)
     const isValid = validateAndUpdate(currentValue)
 
     if (!isValid) {
-      // Show general error message
-      setErrors((prev) => ({
-        ...prev,
-        general: 'Please fill in all credit card fields correctly',
-      }))
-    } else {
-      // Clear general error if validation passes
-      setErrors((prev) => {
-        const { general, ...rest } = prev
-        return rest
-      })
+      if (errors.cardholderName) {
+        cardholderInputRef.current?.focus()
+      } else if (errors.cardNumber) {
+        cardNumberInputRef.current?.focus()
+      } else if (errors.cvv) {
+        cvvInputRef.current?.focus()
+      }
     }
 
     return isValid
   }
 
   const handleReset = () => {
-    setHasBeenSubmitted(false)
     setErrors({})
     setFocusedField(null)
     setIsFlipped(false)
@@ -268,7 +251,7 @@ function CreditCard({
         getErrors,
       }
     }
-  }, [ref, currentValue, errors])
+  }, [ref, currentValue, errors, handleValidate, handleReset, getErrors])
 
   const cardType = getCardType(currentValue.cardNumber)
   const currentYear = new Date().getFullYear()
@@ -286,13 +269,7 @@ function CreditCard({
       ref={containerRef}
       className={cn('w-full max-w-md mx-auto', className)}
     >
-      {/* General Error Message */}
-      {errors.general && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md flex items-center gap-2 text-red-700">
-          <AlertCircle className="w-4 h-4" />
-          <span className="text-sm">{errors.general}</span>
-        </div>
-      )}
+
 
       <div className="relative h-56 mb-6 perspective-1000">
         <motion.div
@@ -301,38 +278,32 @@ function CreditCard({
           transition={{ duration: 0.6, ease: 'easeInOut' }}
           style={{ transformStyle: 'preserve-3d' }}
         >
-          {/* Front of Card - Silver Amex Style */}
-          <Card className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-300 via-slate-200 to-slate-400 border-slate-300 text-slate-800 p-6 flex flex-col justify-between backface-hidden shadow-2xl">
-            {/* Enhanced metallic shine effects */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-black/10 pointer-events-none rounded-lg"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.5),transparent_50%)] pointer-events-none rounded-lg"></div>
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_30%,rgba(255,255,255,0.3)_50%,transparent_70%)] pointer-events-none rounded-lg"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,255,255,0.2),transparent_40%)] pointer-events-none rounded-lg"></div>
+          <Card className="absolute inset-0 w-full h-full bg-slate-800 border-slate-700 text-white p-6 flex flex-col justify-between backface-hidden shadow-xl">
 
-            <div className="flex justify-between items-start relative z-10">
-              <div className="w-12 h-8 bg-gradient-to-r from-yellow-300 via-yellow-400 to-yellow-500 rounded shadow-lg border border-yellow-600/20"></div>
-              <CreditCardIcon className="w-8 h-8 opacity-80 text-slate-700 drop-shadow-sm" />
+            <div className="flex justify-between items-start">
+              <div className="w-12 h-8 bg-yellow-400 rounded shadow-md"></div>
+              <CreditCardIcon className="w-8 h-8 opacity-80" />
             </div>
 
-            <div className="space-y-4 relative z-10">
-              <div className="text-xl font-mono tracking-wider text-slate-900 font-bold drop-shadow-sm">
+            <div className="space-y-4">
+              <div className="text-xl font-mono tracking-wider font-bold">
                 {currentValue.cardNumber || '•••• •••• •••• ••••'}
               </div>
 
               <div className="flex justify-between items-end">
                 <div>
-                  <div className="text-xs opacity-70 uppercase font-medium text-slate-600">
+                  <div className="text-xs opacity-70 uppercase font-medium">
                     Card Holder
                   </div>
-                  <div className="font-bold text-slate-900 drop-shadow-sm">
+                  <div className="font-bold">
                     {currentValue.cardholderName || 'YOUR NAME'}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs opacity-70 uppercase font-medium text-slate-600">
+                  <div className="text-xs opacity-70 uppercase font-medium">
                     Expires
                   </div>
-                  <div className="font-bold text-slate-900 drop-shadow-sm">
+                  <div className="font-bold">
                     {currentValue.expiryMonth && currentValue.expiryYear
                       ? `${currentValue.expiryMonth}/${currentValue.expiryYear.slice(-2)}`
                       : 'MM/YY'}
@@ -343,25 +314,22 @@ function CreditCard({
           </Card>
 
           {/* Back of Card */}
-          <Card className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-400 via-slate-300 to-slate-500 border-slate-400 text-white p-6 flex flex-col justify-between backface-hidden rotate-y-180 shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-black/20 pointer-events-none rounded-lg"></div>
-            <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_30%,rgba(255,255,255,0.1)_50%,transparent_70%)] pointer-events-none rounded-lg"></div>
+          <Card className="absolute inset-0 w-full h-full bg-slate-700 border-slate-600 text-white p-6 flex flex-col justify-between backface-hidden rotate-y-180 shadow-xl">
+            <div className="w-full h-12 bg-black mt-4 shadow-inner"></div>
 
-            <div className="w-full h-12 bg-black mt-4 relative z-10 shadow-inner"></div>
-
-            <div className="flex justify-end items-center space-x-4 relative z-10">
+            <div className="flex justify-end items-center space-x-4">
               <div className="text-right">
-                <div className="text-xs opacity-70 uppercase text-slate-200 font-medium">
+                <div className="text-xs opacity-70 uppercase font-medium">
                   {currentValue.cvvLabel}
                 </div>
-                <div className="bg-white text-black px-3 py-1 rounded text-center font-mono font-bold shadow-md">
+                <div className="bg-white text-black px-3 py-1 rounded text-center font-mono font-bold">
                   {currentValue.cvv || '•••'}
                 </div>
               </div>
-              <Lock className="w-6 h-6 opacity-60 text-slate-200" />
+              <Lock className="w-6 h-6 opacity-60" />
             </div>
 
-            <div className="text-xs opacity-60 text-center text-slate-200 relative z-10 font-medium">
+            <div className="text-xs opacity-60 text-center font-medium">
               This card is protected by advanced security features
             </div>
           </Card>
@@ -386,15 +354,9 @@ function CreditCard({
             className={cn(
               'transition-all duration-200',
               focusedField === 'cardholderName' && 'ring-2 ring-blue-500',
-              errors.cardholderName && 'border-red-500 ring-red-500',
             )}
           />
-          {errors.cardholderName && (
-            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              {errors.cardholderName}
-            </p>
-          )}
+
         </div>
 
         <div>
@@ -410,16 +372,10 @@ function CreditCard({
             className={cn(
               'font-mono transition-all duration-200',
               focusedField === 'cardNumber' && 'ring-2 ring-blue-500',
-              errors.cardNumber && 'border-red-500 ring-red-500',
             )}
             maxLength={19}
           />
-          {errors.cardNumber && (
-            <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-              <AlertCircle className="w-3 h-3" />
-              {errors.cardNumber}
-            </p>
-          )}
+
         </div>
 
         <div className="grid grid-cols-3 gap-4">
@@ -433,7 +389,6 @@ function CreditCard({
                 className={cn(
                   'transition-all duration-200',
                   focusedField === 'expiryMonth' && 'ring-2 ring-blue-500',
-                  errors.expiryMonth && 'border-red-500 ring-red-500',
                 )}
               >
                 <SelectValue placeholder="MM" />
@@ -446,12 +401,7 @@ function CreditCard({
                 ))}
               </SelectContent>
             </Select>
-            {errors.expiryMonth && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors.expiryMonth}
-              </p>
-            )}
+
           </div>
 
           <div>
@@ -464,8 +414,6 @@ function CreditCard({
                 className={cn(
                   'transition-all duration-200',
                   focusedField === 'expiryYear' && 'ring-2 ring-blue-500',
-                  (errors.expiryYear || errors.expiryMonth) &&
-                    'border-red-500 ring-red-500',
                 )}
               >
                 <SelectValue placeholder="YYYY" />
@@ -478,12 +426,7 @@ function CreditCard({
                 ))}
               </SelectContent>
             </Select>
-            {errors.expiryYear && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors.expiryYear}
-              </p>
-            )}
+
           </div>
 
           <div>
@@ -519,16 +462,10 @@ function CreditCard({
               className={cn(
                 'font-mono text-center transition-all duration-200',
                 focusedField === 'cvv' && 'ring-2 ring-blue-500',
-                errors.cvv && 'border-red-500 ring-red-500',
               )}
               maxLength={cardType === 'amex' ? 4 : 3}
             />
-            {errors.cvv && (
-              <p className="text-red-500 text-xs mt-1 flex items-center gap-1">
-                <AlertCircle className="w-3 h-3" />
-                {errors.cvv}
-              </p>
-            )}
+
           </div>
         </div>
       </div>
