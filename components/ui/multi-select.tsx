@@ -35,7 +35,7 @@ interface MultiSelectContextProps {
   setInputValue: React.Dispatch<React.SetStateAction<string>>
   activeIndex: number
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>
-  ref: React.RefObject<HTMLInputElement>
+  ref: React.RefObject<HTMLInputElement | null>
   handleSelect: (e: React.SyntheticEvent<HTMLInputElement>) => void
 }
 
@@ -67,7 +67,7 @@ const MultiSelector = ({
   const [inputValue, setInputValue] = useState('')
   const [open, setOpen] = useState<boolean>(false)
   const [activeIndex, setActiveIndex] = useState<number>(-1)
-  const inputRef = React.useRef<HTMLInputElement>(null)
+  const inputRef = React.useRef<HTMLInputElement | null>(null)
   const [isValueSelected, setIsValueSelected] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState('')
 
@@ -278,14 +278,23 @@ const MultiSelectorInput = forwardRef<
     activeIndex,
     setActiveIndex,
     handleSelect,
-    ref: inputRef,
+    ref: contextInputRef,
   } = useMultiSelect()
 
   return (
     <CommandPrimitive.Input
       {...props}
       tabIndex={0}
-      ref={inputRef}
+      ref={(node) => {
+        if (contextInputRef) {
+          ;(contextInputRef as React.MutableRefObject<HTMLInputElement | null>).current = node
+        }
+        if (typeof ref === 'function') {
+          ref(node)
+        } else if (ref) {
+          ref.current = node
+        }
+      }}
       value={inputValue}
       onValueChange={activeIndex === -1 ? setInputValue : undefined}
       onSelect={handleSelect}

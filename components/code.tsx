@@ -29,13 +29,17 @@ export default function Code({ code, customStyle }: CodeProps) {
             className={`${customStyle} w-full p-4 text-sm bg-gray-100 rounded-lg overflow-auto ${className}`}
             style={style}
           >
-            {tokens.map((line: any, i: number) => (
-              <div key={i} {...getLineProps({ line, key: i })}>
-                {line.map((token: any, key: any) => (
-                  <span key={key} {...getTokenProps({ token, key })} />
-                ))}
-              </div>
-            ))}
+            {tokens.map((line: any, i: number) => {
+              const lineProps = getLineProps({ line })
+              return (
+                <div key={i} {...lineProps}>
+                  {line.map((token: any, tokenIndex: number) => {
+                    const tokenProps = getTokenProps({ token })
+                    return <span key={tokenIndex} {...tokenProps} />
+                  })}
+                </div>
+              )
+            })}
           </pre>
         )}
       </Highlight>

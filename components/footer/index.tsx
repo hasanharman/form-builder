@@ -1,3 +1,4 @@
+import React from 'react'
 import { Link } from 'next-view-transitions'
 
 import { LuGithub, LuMail } from 'react-icons/lu'
@@ -6,7 +7,7 @@ import { FaXTwitter } from 'react-icons/fa6'
 import Logo from '@/assets/logo.svg'
 
 interface Icon {
-  icon: JSX.Element
+  icon: React.ReactElement
   url: string
 }
 

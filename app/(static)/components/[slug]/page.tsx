@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { use } from 'react'
 
 import {
   Breadcrumb,
@@ -12,8 +13,9 @@ import {
 } from '@/components/ui/breadcrumb'
 import { useSidebar } from '@/components/ui/sidebar' // Check this import
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const pathname = params.slug
+export default function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params)
+  const pathname = slug
 
   const { toggleSidebar } = useSidebar()
 
