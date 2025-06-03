@@ -81,6 +81,25 @@ export const generateZodSchema = (
           required_error: 'Rating is required',
         })
         break
+      case 'Credit Card':
+        fieldSchema = z.string().min(1, 'Credit card information is required').refine((value) => {
+          try {
+            const parsed = JSON.parse(value)
+            const isValid = !!(
+              parsed.cardholderName?.trim() && 
+              parsed.cardNumber?.trim() && 
+              parsed.expiryMonth?.trim() && 
+              parsed.expiryYear?.trim() && 
+              parsed.cvv?.trim()
+            )
+            return isValid
+          } catch {
+            return false
+          }
+        }, {
+          message: 'Please fill in all credit card fields',
+        })
+        break
       default:
         fieldSchema = z.string()
     }
@@ -282,6 +301,11 @@ export const generateImports = (
           'import { PhoneInput } from "@/components/ui/phone-input";',
         )
         break
+      case 'Credit Card':
+        importSet.add(
+          'import { CreditCard } from "@/components/ui/credit-card"',
+        )
+        break
       default:
         importSet.add(
           `import { ${field.variant} } from "@/components/ui/${field.variant.toLowerCase()}"`,
@@ -329,6 +353,15 @@ export const generateConstants = (
         `)
     } else if (field.variant === 'Signature Input') {
       constantSet.add(`const canvasRef = useRef<HTMLCanvasElement>(null)`)
+    } else if (field.variant === 'Credit Card') {
+      constantSet.add(`const [creditCard, setCreditCard] = useState({
+        cardholderName: '',
+        cardNumber: '',
+        expiryMonth: '',
+        expiryYear: '',
+        cvv: '',
+        cvvLabel: 'CVC' as const
+      })`)
     }
   })
 
@@ -367,6 +400,16 @@ export const generateDefaultValues = (
         break
       case 'Slider':
         defaultValues[field.name] = 5
+        break
+      case 'Credit Card':
+        defaultValues[field.name] = JSON.stringify({
+          cardholderName: '',
+          cardNumber: '',
+          expiryMonth: '',
+          expiryYear: '',
+          cvv: '',
+          cvvLabel: 'CVC'
+        })
         break
     }
   })

@@ -24,7 +24,12 @@ export const components: Components[] = [
       {
         title: 'Signature Input',
         path: '/components/signature-input',
-        description: 'Location Input',
+        description: 'Signature Input',
+      },
+      {
+        title: 'Credit Card',
+        path: '/components/credit-card',
+        description: 'Credit Card Input',
       },
     ],
   },

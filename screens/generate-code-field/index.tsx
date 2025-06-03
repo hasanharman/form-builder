@@ -597,6 +597,32 @@ export const generateCodeSnippet = (field: FormFieldType) => {
             )}
           />
         `
+    case 'Credit Card':
+      return `
+          <FormField
+            control={form.control}
+            name="${field.name}"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>${field.label}</FormLabel>
+                <FormControl>
+                  <CreditCard
+                    value={creditCard}
+                    onChange={(value) => {
+                      setCreditCard(value)
+                      field.onChange(JSON.stringify(value))
+                    }}
+                  />
+                </FormControl>
+                ${
+                  field.description &&
+                  `<FormDescription>${field.description}</FormDescription>`
+                }
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        `
     default:
       return null
   }
