@@ -671,23 +671,27 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       )
     case 'Credit Card':
       return (
-        <FormItem>
-          <FormLabel>{field.label}</FormLabel>
-          <FormControl>
-            <CreditCard
-              value={creditCard}
-              onChange={(value) => {
-                setCreditCard(value)
-                form.setValue(field.name, JSON.stringify(value), {
-                  shouldValidate: true,
-                  shouldDirty: true,
-                })
-              }}
-            />
-          </FormControl>
-          <FormDescription>{field.description}</FormDescription>
-          <FormMessage />
-        </FormItem>
+        <FormField
+          control={form.control}
+          name={field.name}
+          render={({ field: formField }) => (
+            <FormItem>
+              <FormLabel>{field.label}</FormLabel>
+              <FormControl>
+                <CreditCard
+                  value={creditCard}
+                  onChange={(value) => {
+                    setCreditCard(value)
+                    const jsonValue = JSON.stringify(value)
+                    formField.onChange(jsonValue)
+                  }}
+                />
+              </FormControl>
+              <FormDescription>{field.description}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       )
     default:
       return null
