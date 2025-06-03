@@ -35,4 +35,8 @@ export const SPECIAL_COMPONENTS = [
     variant: 'Signature Input',
     url: 'https://www.shadcn-form.com/components/signature-input',
   },
+  {
+    variant: 'Credit Card',
+    url: 'https://www.shadcn-form.com/components/credit-card',
+  },
 ] as const
