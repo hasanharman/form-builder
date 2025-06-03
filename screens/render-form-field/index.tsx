@@ -71,6 +71,7 @@ import LocationSelector from '@/components/ui/location-input'
 import SignatureInput from '@/components/ui/signature-input'
 import { Rating } from '@/components/ui/rating'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { CreditCard } from '@/components/ui/credit-card'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -127,6 +128,21 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [stateName, setStateName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [rating, setRating] = useState<number>(0)
+  const [creditCard, setCreditCard] = useState<{
+    cardholderName: string
+    cardNumber: string
+    expiryMonth: string
+    expiryYear: string
+    cvv: string
+    cvvLabel: 'CCV' | 'CVC'
+  }>({
+    cardholderName: '',
+    cardNumber: '',
+    expiryMonth: '',
+    expiryYear: '',
+    cvv: '',
+    cvvLabel: 'CVC'
+  })
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   const dropZoneConfig = {
@@ -648,6 +664,28 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 })
               }
             </RadioGroup>
+          </FormControl>
+          <FormDescription>{field.description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Credit Card':
+      return (
+        <FormItem>
+          <FormLabel>{field.label}</FormLabel>
+          <FormControl>
+            <CreditCard
+              value={creditCard}
+              onChange={(value) => {
+                if (value) {
+                  setCreditCard(value)
+                  form.setValue(field.name, JSON.stringify(value), {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
+                }
+              }}
+            />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
           <FormMessage />

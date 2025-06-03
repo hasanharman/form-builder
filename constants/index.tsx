@@ -21,6 +21,7 @@ export const fieldTypes: FieldType[] = [
   { name: 'Textarea', isNew: false },
   { name: 'Rating', isNew: true },
   { name: 'RadioGroup', isNew: true },
+  { name: 'Credit Card', isNew: true },
 ]
 
 export const defaultFieldConfig: Record<
@@ -107,5 +108,9 @@ export const defaultFieldConfig: Record<
   RadioGroup: {
     label: 'Gender',
     description: 'Select your gender',
-  }
+  },
+  'Credit Card': {
+    label: 'Credit Card Information',
+    description: 'Enter your credit card details for payment.',
+  },
 }
