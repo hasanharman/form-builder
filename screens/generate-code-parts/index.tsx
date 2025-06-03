@@ -85,7 +85,11 @@ export const generateZodSchema = (
         fieldSchema = z.string().refine((value) => {
           try {
             const parsed = JSON.parse(value)
-            return parsed.cardholderName && parsed.cardNumber && parsed.expiryMonth && parsed.expiryYear && parsed.cvv
+            return parsed.cardholderName?.trim() && 
+                   parsed.cardNumber?.trim() && 
+                   parsed.expiryMonth?.trim() && 
+                   parsed.expiryYear?.trim() && 
+                   parsed.cvv?.trim()
           } catch {
             return false
           }

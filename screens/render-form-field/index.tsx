@@ -677,13 +677,11 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <CreditCard
               value={creditCard}
               onChange={(value) => {
-                if (value) {
-                  setCreditCard(value)
-                  form.setValue(field.name, JSON.stringify(value), {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  })
-                }
+                setCreditCard(value)
+                form.setValue(field.name, JSON.stringify(value), {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
               }}
             />
           </FormControl>

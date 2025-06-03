@@ -13,4 +13,10 @@ export const ui: Registry = [
     registryDependencies: ['button'],
     files: ['ui/signature-input.tsx'],
   },
+  {
+    name: 'credit-card',
+    type: 'registry:ui',
+    registryDependencies: ['card', 'input', 'select'],
+    files: ['ui/credit-card.tsx'],
+  },
 ]
