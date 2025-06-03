@@ -1,21 +1,26 @@
 import { ReactNode } from 'react'
 
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/templates/templates-sidebar'
 
 interface LayoutProps {
   children: ReactNode
-  params: Promise<{
-    category: string
-  }>
 }
 
-export default async function TemplateLayout({ children, params }: LayoutProps) {
-  const { category } = await params;
+export default async function TemplateLayout({ children }: LayoutProps) {
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      style={
+        {
+          '--sidebar-width': '20rem',
+          '--sidebar-width-mobile': '20rem',
+        } as React.CSSProperties
+      }
+    >
       <AppSidebar />
-      <main className="w-full lg:pl-3">{children}</main>
+      <SidebarInset>
+        <main className="flex-1 p-4">{children}</main>
+      </SidebarInset>{' '}
     </SidebarProvider>
   )
 }
