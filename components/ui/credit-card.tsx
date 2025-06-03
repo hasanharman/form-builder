@@ -267,10 +267,8 @@ function CreditCard({
   return (
     <div
       ref={containerRef}
-      className={cn('w-full max-w-md mx-auto', className)}
+      className={cn('w-full max-w-sm  py-2', className)}
     >
-
-
       <div className="relative h-56 mb-6 perspective-1000">
         <motion.div
           className="relative w-full h-full"
@@ -279,7 +277,6 @@ function CreditCard({
           style={{ transformStyle: 'preserve-3d' }}
         >
           <Card className="absolute inset-0 w-full h-full bg-slate-800 border-slate-700 text-white p-6 flex flex-col justify-between backface-hidden shadow-xl">
-
             <div className="flex justify-between items-start">
               <div className="w-12 h-8 bg-yellow-400 rounded shadow-md"></div>
               <CreditCardIcon className="w-8 h-8 opacity-80" />
@@ -356,7 +353,6 @@ function CreditCard({
               focusedField === 'cardholderName' && 'ring-2 ring-blue-500',
             )}
           />
-
         </div>
 
         <div>
@@ -375,7 +371,6 @@ function CreditCard({
             )}
             maxLength={19}
           />
-
         </div>
 
         <div className="grid grid-cols-3 gap-4">
@@ -401,7 +396,6 @@ function CreditCard({
                 ))}
               </SelectContent>
             </Select>
-
           </div>
 
           <div>
@@ -426,7 +420,6 @@ function CreditCard({
                 ))}
               </SelectContent>
             </Select>
-
           </div>
 
           <div>
@@ -465,7 +458,6 @@ function CreditCard({
               )}
               maxLength={cardType === 'amex' ? 4 : 3}
             />
-
           </div>
         </div>
       </div>
