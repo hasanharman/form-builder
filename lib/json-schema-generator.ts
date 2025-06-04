@@ -13,9 +13,12 @@ export const generateJsonSchema = (
 ) => {
   const jsonSchema = zodToJsonSchema(zodSchema, {
     name: options.title,
-    description: options.description,
     definitions: options.definitions
   })
+  
+  if (options.description && typeof jsonSchema === 'object' && jsonSchema !== null) {
+    (jsonSchema as any).description = options.description
+  }
   
   return jsonSchema
 }
