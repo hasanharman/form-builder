@@ -1,12 +1,12 @@
 // components/editor/schema.ts
-import { z } from 'zod'
+import { z } from 'zod/v4'
 
 export const editorFormSchema = z.object({
   title: z.string().min(2, {
-    message: 'Title must be at least 2 characters.',
+    error: 'Title must be at least 2 characters.',
   }),
   content: z.array(z.any()).min(1, {
-    message: 'Content cannot be empty.',
+    error: 'Content cannot be empty.',
   }),
   description: z.string().optional(),
 })
