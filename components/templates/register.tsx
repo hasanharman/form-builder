@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod/v4'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -26,28 +26,13 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 import { PhoneInput } from '@/components/ui/phone-input'
 
-// Define validation schema using Zod
-const formSchema = z
-  .object({
-    name: z
-      .string()
-      .min(2, { message: 'Name must be at least 2 characters long' }),
-    email: z.string().email({ message: 'Invalid email address' }),
-    phone: z.string().min(10, { message: 'Phone number must be valid' }),
-    password: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters long' })
-      .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
-  })
+import { registerFormSchema } from '@/lib/validation-schemas'
+
+const formSchema = registerFormSchema
 
 export default function RegisterPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       name: '',
       email: '',

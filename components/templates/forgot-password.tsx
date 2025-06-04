@@ -1,7 +1,7 @@
 'use client'
 
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod/v4'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -23,14 +23,16 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
+import { emailSchema } from '@/lib/validation-schemas'
+
 // Schema for email validation
 const formSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  email: emailSchema,
 })
 
 export default function ForgetPasswordPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
     },

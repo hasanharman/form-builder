@@ -1,7 +1,7 @@
 'use client'
 
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod/v4'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -24,20 +24,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-// Schema for contact form validation
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: 'Name must be at least 2 characters long' }),
-  email: z.string().email({ message: 'Invalid email address' }),
-  message: z
-    .string()
-    .min(10, { message: 'Message must be at least 10 characters long' }),
-})
+import { contactFormSchema } from '@/lib/validation-schemas'
+
+const formSchema = contactFormSchema
 
 export default function ContactFormPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       name: '',
       email: '',

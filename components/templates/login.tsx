@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod/v4'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -25,18 +25,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 
-// Improved schema with additional validation rules
-const formSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
-  password: z
-    .string()
-    .min(6, { message: 'Password must be at least 6 characters long' })
-    .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
-})
+import { loginFormSchema } from '@/lib/validation-schemas'
+
+const formSchema = loginFormSchema
 
 export default function LoginPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: {
       email: '',
       password: '',
