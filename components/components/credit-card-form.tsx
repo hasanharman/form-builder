@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -19,7 +19,7 @@ import {
 import { CreditCard } from '@/components/ui/credit-card'
 
 const FormSchema = z.object({
-  creditCard: z.string().min(1, { message: 'Credit card information is required' }).refine((value: string) => {
+  creditCard: z.string().min(1, { error: 'Credit card information is required' }).refine((value: string) => {
     try {
       const parsed = JSON.parse(value)
       const isValid = !!(
@@ -34,7 +34,7 @@ const FormSchema = z.object({
       return false
     }
   }, {
-    message: 'Please fill in all credit card fields',
+    error: 'Please fill in all credit card fields',
   })
 })
 
@@ -51,7 +51,7 @@ export function CreditCardForm() {
   })
 
   const form = useForm<CreditCardFormData>({
-    resolver: zodResolver(FormSchema),
+    resolver: standardSchemaResolver(FormSchema),
     defaultValues: {
       creditCard: JSON.stringify(creditCard)
     }

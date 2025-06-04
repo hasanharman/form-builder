@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toast } from 'sonner'
 
 import { renderFormField } from '@/screens/render-form-field'
@@ -96,7 +96,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   const defaultVals = generateDefaultValues(formFields)
 
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+    resolver: standardSchemaResolver(formSchema),
     defaultValues: defaultVals,
   })
 

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -19,9 +19,7 @@ import LocationSelector from '@/components/ui/location-input'
 
 const FormSchema = z.object({
   location: z.tuple([
-    z.string({
-      required_error: 'Country is required',
-    }),
+    z.string().min(1, { error: 'Country is required' }),
     z.string().optional(), // State name, optional
   ]),
 })
@@ -31,7 +29,7 @@ export function LocationForm() {
   const [stateName, setStateName] = useState<string>('')
 
   const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+    resolver: standardSchemaResolver(FormSchema),
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {

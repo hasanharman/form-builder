@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod/v4'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 export interface JsonSchemaOptions {
@@ -11,7 +11,7 @@ export const generateJsonSchema = (
   zodSchema: z.ZodTypeAny,
   options: JsonSchemaOptions = {}
 ) => {
-  const jsonSchema = zodToJsonSchema(zodSchema, {
+  const jsonSchema = zodToJsonSchema(zodSchema as any, {
     name: options.title,
     definitions: options.definitions
   })
