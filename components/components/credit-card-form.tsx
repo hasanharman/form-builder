@@ -19,7 +19,7 @@ import {
 import { CreditCard } from '@/components/ui/credit-card'
 
 const FormSchema = z.object({
-  creditCard: z.string().min(1, 'Credit card information is required').refine((value) => {
+  creditCard: z.string().min(1, { message: 'Credit card information is required' }).refine((value: string) => {
     try {
       const parsed = JSON.parse(value)
       const isValid = !!(

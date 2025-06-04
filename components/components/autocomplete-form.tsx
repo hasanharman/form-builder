@@ -17,7 +17,7 @@ import {
 import Autocomplete from '@/components/ui/autocomplete'
 
 const FormSchema = z.object({
-  framework: z.string().min(1, 'Please select a framework'),
+  framework: z.string().min(1, { message: 'Please select a framework' }),
 })
 
 type AutocompleteFormData = z.infer<typeof FormSchema>

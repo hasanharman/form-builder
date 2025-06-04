@@ -1,5 +1,7 @@
 import { z, ZodTypeAny } from 'zod'
 import { FormFieldType } from '@/types'
+import { generateFormJsonSchema } from '@/lib/json-schema-generator'
+
 import { generateCodeSnippet } from '@/screens/generate-code-field'
 
 type FormFieldOrGroup = FormFieldType | FormFieldType[]
@@ -38,7 +40,7 @@ export const generateZodSchema = (
           fieldSchema = z.coerce.number()
           break
         } else {
-          fieldSchema = z.string().min(1, 'Required')
+          fieldSchema = z.string().min(1, { message: 'Required' })
           break
         }
       case 'Location Input':
@@ -69,12 +71,12 @@ export const generateZodSchema = (
       case 'Tags Input':
         fieldSchema = z
           .array(z.string())
-          .nonempty('Please enter at least one item')
+          .min(1, { message: 'Please enter at least one item' })
         break
       case 'Multi Select':
         fieldSchema = z
           .array(z.string())
-          .nonempty('Please select at least one item')
+          .min(1, { message: 'Please select at least one item' })
           break
       case 'Rating':
         fieldSchema = z.coerce.number({
@@ -82,7 +84,7 @@ export const generateZodSchema = (
         })
         break
       case 'Credit Card':
-        fieldSchema = z.string().min(1, 'Credit card information is required').refine((value) => {
+        fieldSchema = z.string().min(1, { message: 'Credit card information is required' }).refine((value: string) => {
           try {
             const parsed = JSON.parse(value)
             const isValid = !!(
@@ -107,13 +109,13 @@ export const generateZodSchema = (
     if (field.min !== undefined && 'min' in fieldSchema) {
       fieldSchema = (fieldSchema as any).min(
         field.min,
-        `Must be at least ${field.min}`,
+        { message: `Must be at least ${field.min}` },
       )
     }
     if (field.max !== undefined && 'max' in fieldSchema) {
       fieldSchema = (fieldSchema as any).max(
         field.max,
-        `Must be at most ${field.max}`,
+        { message: `Must be at most ${field.max}` },
       )
     }
 
@@ -175,7 +177,7 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   }
 
   if (schema instanceof z.ZodArray) {
-    return `z.array(${zodSchemaToString(schema.element)}).nonempty("Please at least one item")`
+    return `z.array(${zodSchemaToString(schema.element)}).min(1, { message: "Please select at least one item" })`
   }
 
   if (schema instanceof z.ZodTuple) {
@@ -219,7 +221,7 @@ export const generateImports = (
     'import {toast} from "sonner"',
     'import { useForm } from "react-hook-form"',
     'import { zodResolver } from "@hookform/resolvers/zod"',
-    'import * as z from "zod"',
+    'import { z } from "zod"',
     'import { cn } from "@/lib/utils"',
     'import { Button } from "@/components/ui/button"',
     'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
@@ -523,4 +525,12 @@ export default function MyForm() {
 }
   `
   return imports + '\n\n' + schema + '\n' + component
+}
+
+export const generateJsonSchemaCode = (formFields: FormFieldOrGroup[]): string => {
+  const jsonSchema = generateFormJsonSchema(formFields.flat(), {
+    title: 'Generated Form Schema',
+    description: 'JSON Schema generated from form builder'
+  })
+  return JSON.stringify(jsonSchema, null, 2)
 }

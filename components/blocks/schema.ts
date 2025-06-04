@@ -1,5 +1,5 @@
 // components/editor/schema.ts
-import * as z from 'zod'
+import { z } from 'zod'
 
 export const editorFormSchema = z.object({
   title: z.string().min(2, {
