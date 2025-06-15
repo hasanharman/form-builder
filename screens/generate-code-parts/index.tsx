@@ -1,5 +1,5 @@
 import { z, ZodTypeAny } from 'zod'
-import { FormFieldType } from '@/types'
+import { FormFieldType, FormStep } from '@/types'
 import { generateCodeSnippet } from '@/screens/generate-code-field'
 
 type FormFieldOrGroup = FormFieldType | FormFieldType[]
@@ -523,4 +523,60 @@ export default function MyForm() {
 }
   `
   return imports + '\n\n' + schema + '\n' + component
+}
+
+export const generateMultiStepFormCode = (steps: FormStep[]): string => {
+  const imports = new Set([
+    '"use client"',
+    'import { useState } from "react"',
+    'import { useForm } from "react-hook-form"',
+    'import { zodResolver } from "@hookform/resolvers/zod"',
+    'import * as z from "zod"',
+    'import { Button } from "@/components/ui/button"',
+    'import { Progress } from "@/components/ui/progress"',
+    'import { Form } from "@/components/ui/form"',
+    'import { MultiStepForm } from "@/components/ui/multi-step-form"',
+    'import { toast } from "sonner"'
+  ])
+
+  steps.forEach(step => {
+    const stepImports = generateImports(step.fields)
+    stepImports.forEach(imp => imports.add(imp))
+  })
+
+  const stepsConfig = steps.map(step => ({
+    id: step.id,
+    title: step.title,
+    description: step.description,
+    fields: step.fields,
+    validation: step.validation
+  }))
+
+  const component = `
+export default function MultiStepFormComponent() {
+  const config = {
+    steps: ${JSON.stringify(stepsConfig, null, 2)},
+    currentStep: 0,
+    allowStepSkipping: false,
+    showProgress: true,
+    saveProgress: true,
+    onComplete: (data) => {
+      console.log('Form completed:', data);
+      toast(
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      );
+    }
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto py-8">
+      <MultiStepForm config={config} />
+    </div>
+  )
+}
+  `
+
+  return Array.from(imports).join('\n') + '\n\n' + component
 }

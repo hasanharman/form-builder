@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, useRef, useState } from 'react'
+import React, { ChangeEvent, useRef, useState } from 'react'
 
 import { FormFieldType } from '@/types'
 import { cn } from '@/lib/utils'
@@ -115,8 +115,8 @@ const FileSvgDraw = () => {
 }
 
 export const renderFormField = (field: FormFieldType, form: any) => {
-  const [checked, setChecked] = useState<boolean>(field.checked)
-  const [value, setValue] = useState<any>(field.value)
+  const [checked, setChecked] = useState<boolean>(field.checked || false)
+  const [value, setValue] = useState<any>(field.value || '')
   const [selectedValues, setSelectedValues] = useState<string[]>(['React'])
   const [tagsValue, setTagsValue] = useState<string[]>([])
   const [files, setFiles] = useState<File[] | null>(null) // Initialize to null or use [] for an empty array
@@ -138,6 +138,16 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   })
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
+  React.useEffect(() => {
+    if (field.variant === 'Checkbox') {
+      form.setValue(field.name, checked, { shouldValidate: false })
+    } else if (field.variant === 'Date Picker') {
+      form.setValue(field.name, date, { shouldValidate: false })
+    } else if (field.variant === 'Input') {
+      form.setValue(field.name, value, { shouldValidate: false })
+    }
+  }, [field.name, field.variant, checked, date, value, form])
+
   const dropZoneConfig = {
     maxFiles: 5,
     maxSize: 1024 * 1024 * 4,
@@ -157,8 +167,12 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <FormControl>
               <Checkbox
                 checked={checked} // Ensure this is handled as boolean
-                onCheckedChange={() => {
-                  setChecked(!checked)
+                onCheckedChange={(newChecked) => {
+                  setChecked(newChecked as boolean)
+                  form.setValue(field.name, newChecked, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  })
                 }}
                 disabled={field.disabled}
               />
@@ -341,6 +355,14 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               placeholder={field.placeholder}
               disabled={field.disabled}
               type={field?.type}
+              value={value || ''}
+              onChange={(e) => {
+                setValue(e.target.value)
+                form.setValue(field.name, e.target.value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              }}
             />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>

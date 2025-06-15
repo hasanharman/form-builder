@@ -10,20 +10,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import If from '@/components/ui/if'
-import { FormFieldType } from '@/types'
+import { FormFieldType, FormStep, FormFieldOrGroup } from '@/types'
+import { MultiStepForm } from '@/components/ui/multi-step-form'
 
 import { Files } from 'lucide-react'
 import {
   generateZodSchema,
   generateFormCode,
   generateDefaultValues,
+  generateMultiStepFormCode,
 } from '@/screens/generate-code-parts'
 import { formatJSXCode } from '@/lib/utils'
 
-export type FormFieldOrGroup = FormFieldType | FormFieldType[]
-
 export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
+  isMultiStep?: boolean
+  steps?: FormStep[]
 }
 
 const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
@@ -90,7 +92,7 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
   })
 }
 
-export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
+export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, isMultiStep = false, steps }) => {
   const formSchema = generateZodSchema(formFields)
 
   const defaultVals = generateDefaultValues(formFields)
@@ -113,7 +115,9 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
     }
   }
 
-  const generatedCode = generateFormCode(formFields)
+  const generatedCode = isMultiStep && steps 
+    ? generateMultiStepFormCode(steps)
+    : generateFormCode(formFields)
   const formattedCode = formatJSXCode(generatedCode)
 
   return (
@@ -129,17 +133,38 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
           className="space-y-4 h-full md:max-h-[70vh] overflow-auto"
         >
           <If
-            condition={formFields.length > 0}
+            condition={isMultiStep ? (steps && steps.length > 0) : formFields.length > 0}
             render={() => (
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4 py-5 max-w-lg mx-auto"
-                >
-                  {renderFormFields(formFields, form)}
-                  <Button type="submit">Submit</Button>
-                </form>
-              </Form>
+              isMultiStep && steps ? (
+                <div className="py-5 max-w-2xl mx-auto">
+                  <MultiStepForm 
+                    config={{
+                      steps,
+                      currentStep: 0,
+                      allowStepSkipping: false,
+                      showProgress: true,
+                      saveProgress: false,
+                      onComplete: (data) => {
+                        toast(
+                          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+                            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+                          </pre>,
+                        )
+                      }
+                    }}
+                  />
+                </div>
+              ) : (
+                <Form {...form}>
+                  <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="space-y-4 py-5 max-w-lg mx-auto"
+                  >
+                    {renderFormFields(formFields, form)}
+                    <Button type="submit">Submit</Button>
+                  </form>
+                </Form>
+              )
             )}
             otherwise={() => (
               <div className="h-[50vh] flex justify-center items-center">
