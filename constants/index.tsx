@@ -114,3 +114,18 @@ export const defaultFieldConfig: Record<
     description: 'Enter your credit card details for payment.',
   },
 }
+
+export const multiStepDefaults = {
+  stepTitle: 'New Step',
+  stepDescription: '',
+  allowStepSkipping: false,
+  showProgress: true,
+  saveProgress: true,
+  validationMode: 'onNext' as const
+}
+
+export const stepValidationModes = [
+  { value: 'onSubmit', label: 'Validate on Submit' },
+  { value: 'onNext', label: 'Validate on Next' },
+  { value: 'disabled', label: 'No Validation' }
+] as const
