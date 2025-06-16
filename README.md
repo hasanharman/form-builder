@@ -92,7 +92,7 @@ Form Builder consists of various reusable components:
 Form Builder utilizes [Zod](https://zod.dev/) for input validation. You can define schemas for your forms as follows:
 
 ```javascript
-import { z } from 'zod/v4';
+import { z } from 'zod';
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),

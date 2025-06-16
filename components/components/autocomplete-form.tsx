@@ -1,8 +1,8 @@
 'use client'
 
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -17,14 +17,14 @@ import {
 import Autocomplete from '@/components/ui/autocomplete'
 
 const FormSchema = z.object({
-  framework: z.string().min(1, { error: 'Please select a framework' }),
+  framework: z.string().min(1, { message: 'Please select a framework' }),
 })
 
 type AutocompleteFormData = z.infer<typeof FormSchema>
 
 export function AutocompleteForm() {
   const form = useForm<AutocompleteFormData>({
-    resolver: standardSchemaResolver(FormSchema),
+    resolver: zodResolver(FormSchema),
   })
 
   const onSubmit = (data: AutocompleteFormData) => {

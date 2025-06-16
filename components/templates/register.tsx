@@ -1,8 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import { z } from 'zod/v4'
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -32,7 +32,7 @@ const formSchema = registerFormSchema
 
 export default function RegisterPreview() {
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: standardSchemaResolver(formSchema),
+    resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
       email: '',

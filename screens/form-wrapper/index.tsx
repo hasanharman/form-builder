@@ -6,8 +6,8 @@ import {
   DefaultValues,
   Path,
 } from 'react-hook-form'
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { z } from 'zod/v4'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import {
   Form,
   FormField,
@@ -33,7 +33,7 @@ export function FormWrapper<TFieldValues extends FieldValues>({
   children,
 }: FormWrapperProps<TFieldValues>) {
   const form = useForm<TFieldValues>({
-    resolver: standardSchemaResolver(schema),
+    resolver: zodResolver(schema),
     defaultValues,
   })
 

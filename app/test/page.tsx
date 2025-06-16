@@ -2,8 +2,8 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
-import { z } from 'zod/v4'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,13 +19,13 @@ import { useRef } from 'react'
 import SignatureInput from '@/components/ui/signature-input'
 
 const formSchema = z.object({
-  name_0589855761: z.string().min(1, { error: 'Signature is required' }),
+  name_0589855761: z.string().min(1, { message: 'Signature is required' }),
 })
 
 export default function MyForm() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: standardSchemaResolver(formSchema),
+    resolver: zodResolver(formSchema),
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {

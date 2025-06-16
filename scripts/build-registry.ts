@@ -1,7 +1,7 @@
 import { get } from 'http'
 import { registryComponents } from '../registry'
 import { promises as fs } from 'fs'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { registryItemFileSchema } from '@/registry/schema'
 import path from 'path'
 import React from 'react'

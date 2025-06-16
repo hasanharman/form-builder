@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 
 export const createFormSchema = (fields: Record<string, z.ZodTypeAny>) => {
   return z.object(fields)
@@ -13,7 +13,7 @@ export const addDefaultValue = (schema: z.ZodTypeAny, defaultValue: any) => {
 }
 
 export const createArraySchema = (elementSchema: z.ZodTypeAny, minItems: number = 1) => {
-  return z.array(elementSchema).min(minItems, { error: `Please select at least ${minItems} item${minItems > 1 ? 's' : ''}` })
+  return z.array(elementSchema).min(minItems, { message: `Please select at least ${minItems} item${minItems > 1 ? 's' : ''}` })
 }
 
 export const createUnionSchema = (schemas: z.ZodTypeAny[]) => {
@@ -25,5 +25,5 @@ export const createRefineSchema = (
   refineFn: (data: any) => boolean,
   errorMessage: string
 ) => {
-  return schema.refine(refineFn, { error: errorMessage })
+  return schema.refine(refineFn, { message: errorMessage })
 }

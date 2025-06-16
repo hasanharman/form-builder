@@ -1,9 +1,9 @@
 'use client'
 
 import { useRef } from 'react'
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,7 @@ import {
 import SignatureInput from '@/components/ui/signature-input'
 
 const FormSchema = z.object({
-  signature: z.string().min(1, { error: 'Please sign the form' }),
+  signature: z.string().min(1, { message: 'Please sign the form' }),
 })
 
 type SignatureFormData = z.infer<typeof FormSchema>
@@ -26,7 +26,7 @@ type SignatureFormData = z.infer<typeof FormSchema>
 export function SignatureForm() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const form = useForm<SignatureFormData>({
-    resolver: standardSchemaResolver(FormSchema),
+    resolver: zodResolver(FormSchema),
   })
 
   const onSubmit = (data: SignatureFormData) => {

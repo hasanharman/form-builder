@@ -1,4 +1,4 @@
-import { z } from 'zod/v4'
+import { z } from 'zod'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 export interface JsonSchemaOptions {
