@@ -50,12 +50,7 @@ server.registerTool(
   async ({ input_rows }) => {
     const formCode = generateFormCode(input_rows as FormFieldOrGroup[])
     const formattedCode = formatJSXCode(formCode)
-    await import('fs/promises').then((fs) =>
-      fs.appendFile(
-        '/tmp/test.log',
-        `${JSON.stringify(input_rows, null, 2)}\n--------------------\n${formattedCode}\n`,
-      ),
-    )
+
     return {
       content: [{ type: 'text', text: formattedCode }],
     }
