@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && npm run build:mcp",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "build:mcp": "esbuild mcp/main.ts --bundle --platform=node --format=esm --outfile=build/mcp.js"
   },
   "dependencies": {
     "@blocknote/core": "^0.20.0",
@@ -17,6 +18,7 @@
     "@blocknote/shadcn": "^0.20.0",
     "@blocknote/xl-multi-column": "^0.20.0",
     "@hookform/resolvers": "^3.9.0",
+    "@modelcontextprotocol/sdk": "^1.13.0",
     "@next/third-parties": "^14.2.13",
     "@openpanel/nextjs": "^1.0.3",
     "@radix-ui/react-accordion": "^1.2.1",
@@ -98,6 +100,7 @@
     "raw-loader": "^4.0.2",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.7.3",
-    "vitest": "^2.1.1"
+    "vitest": "^2.1.1",
+    "esbuild": "^0.19.0"
   }
 }
