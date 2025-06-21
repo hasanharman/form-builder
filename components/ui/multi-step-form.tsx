@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { StepNavigation } from '@/components/ui/step-navigation'
+import { ProgressIndicator } from '@/components/ui/progress-indicator'
 import { generateZodSchema, generateDefaultValues } from '@/screens/generate-code-parts'
 import { renderFormField } from '@/screens/render-form-field'
 import { FormStep, MultiStepFormConfig, FormFieldOrGroup } from '@/types'
@@ -157,16 +158,9 @@ export const MultiStepForm = React.forwardRef<
         Object.entries(currentValues).filter(([key]) => stepFieldNames.includes(key))
       )
       
-      console.log('Debug validation:')
-      console.log('Step field names:', stepFieldNames)
-      console.log('Current values:', currentValues)
-      console.log('Step values:', stepValues)
-      console.log('Current step fields:', currentStepFields)
-      
       await currentStepSchema.parseAsync(stepValues)
       return true
     } catch (error) {
-      console.error('Validation error:', error)
       return false
     }
   }
@@ -230,7 +224,15 @@ export const MultiStepForm = React.forwardRef<
         )}
       </div>
 
-      {/* This is where the TOP progress bar should be */}
+      {config.progressConfig?.position === 'top' && (
+        <ProgressIndicator
+          currentStep={currentStep}
+          totalSteps={config.steps.length}
+          onStepClick={handleStepClick}
+          showProgress={config.showProgress}
+          progressConfig={config.progressConfig}
+        />
+      )}
 
       <Form {...form}>
         <form className="space-y-6">
