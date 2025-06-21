@@ -98,33 +98,8 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
           <DialogTitle>Multistep Form Settings</DialogTitle>
         </DialogHeader>
         <div className="py-4 space-y-6">
-          {/* Enable Multistep */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 border p-3 rounded">
-              <Checkbox
-                checked={settings.isMultiStep}
-                onCheckedChange={(checked) =>
-                  setSettings(prev => ({ ...prev, isMultiStep: checked as boolean }))
-                }
-              />
-              <Label className="flex items-center gap-2">
-                Enable Multistep Form
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Convert your form into multiple steps for better user experience</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </Label>
-            </div>
-          </div>
-
           {/* Multistep Options */}
-          {settings.isMultiStep && (
+          {isMultiStep && (
             <>
               <div className="space-y-4">
                 <h3 className="text-lg font-medium flex items-center gap-2">
@@ -147,7 +122,10 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                             <MousePointer className="w-4 h-4 text-muted-foreground cursor-help" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Users can navigate to any step without completing previous ones</p>
+                            <div className="space-y-1">
+                              <p className="font-medium">Allow Step Skipping</p>
+                              <p>When enabled, users can click on any step to navigate directly to it without completing previous steps. This provides more flexibility but may result in incomplete data collection.</p>
+                            </div>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -168,7 +146,10 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                             <Info className="w-4 h-4 text-muted-foreground cursor-help" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Form progress is saved locally and restored on page reload</p>
+                            <div className="space-y-1">
+                              <p className="font-medium">Save Progress</p>
+                              <p>Automatically saves form data to browser's local storage as users fill out the form. If they close the browser or navigate away, their progress will be restored when they return within 24 hours.</p>
+                            </div>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>

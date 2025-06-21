@@ -227,8 +227,8 @@ export const StepNavigation = React.forwardRef<
   return (
     <div ref={ref} className={cn("flex flex-col space-y-4", className)}>
       {config.position === 'top' && renderProgressIndicator()}
-      {navigationButtons}
       {config.position === 'bottom' && renderProgressIndicator()}
+      {navigationButtons}
     </div>
   )
 })

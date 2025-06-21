@@ -9,6 +9,8 @@ import { defaultFieldConfig } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 import { Settings } from 'lucide-react'
 import If from '@/components/ui/if'
 import SpecialComponentsNotice from '@/components/playground/special-component-notice'
@@ -44,7 +46,7 @@ export default function FormBuilder() {
       title: 'Step 1',
       description: '',
       fields: [],
-      validation: 'onNext'
+      validation: 'onNext' // First step starts with validation since it's the only/last step initially
     }
   ])
   const [currentEditingStep, setCurrentEditingStep] = useState(0)
@@ -165,9 +167,19 @@ export default function FormBuilder() {
       title: `Step ${steps.length + 1}`,
       description: '',
       fields: [],
-      validation: 'onNext'
+      validation: 'onNext' // New step becomes the last step, so it gets validation
     }
-    setSteps(prevSteps => [...prevSteps, newStep])
+    setSteps(prevSteps => {
+      // Update previous last step to have no validation
+      const newSteps = [...prevSteps]
+      if (newSteps.length > 0) {
+        newSteps[newSteps.length - 1] = {
+          ...newSteps[newSteps.length - 1],
+          validation: 'disabled'
+        }
+      }
+      return [...newSteps, newStep]
+    })
   }
 
   const handleStepDelete = (index: number) => {
@@ -199,7 +211,7 @@ export default function FormBuilder() {
         title: 'Step 1',
         description: '',
         fields: formFields,
-        validation: 'onNext'
+        validation: 'onNext' // Single step gets validation
       }])
       setFormFields([])
     } else if (!enabled && steps.length > 0) {
@@ -210,7 +222,7 @@ export default function FormBuilder() {
         title: 'Step 1',
         description: '',
         fields: [],
-        validation: 'onNext'
+        validation: 'onNext' // Reset to single step with validation
       }])
     }
   }
@@ -266,15 +278,16 @@ export default function FormBuilder() {
         <div className="col-span-1 lg:col-span-2 space-y-3">
           <SpecialComponentsNotice formFields={isMultiStep ? steps[currentEditingStep]?.fields || [] : formFields} />
           
-          <div className="flex items-center justify-between p-3 border rounded-lg">
-            <div className="flex flex-col">
-              <span className="text-sm font-medium">
-                {isMultiStep ? 'Multi-step Form' : 'Single Form'}
-              </span>
-              <span className="text-xs text-muted-foreground">
-                {isMultiStep ? `${steps.length} steps configured` : 'Standard form layout'}
-              </span>
-            </div>
+          <div className="flex items-center space-x-2 p-3 border rounded-lg">
+            <Switch
+              id="multistep-mode"
+              checked={isMultiStep}
+              onCheckedChange={handleMultiStepToggle}
+            />
+            <Label htmlFor="multistep-mode" className="text-sm font-medium">
+              Multi-step Form
+            </Label>
+            <div className="flex-1" />
             <Button
               variant="outline"
               size="sm"
