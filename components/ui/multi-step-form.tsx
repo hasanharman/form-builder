@@ -239,6 +239,7 @@ export const MultiStepForm = React.forwardRef<
         onNext={handleNext}
         onPrev={handlePrev}
         showProgress={config.showProgress}
+        progressConfig={config.progressConfig}
       />
     </div>
   )

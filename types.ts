@@ -62,12 +62,24 @@ export interface FormStep {
   }
 }
 
+export type ProgressBarStyle = 'linear' | 'circular' | 'numbered' | 'simple'
+export type ProgressBarPosition = 'top' | 'bottom'
+export type ProgressBarVariant = 'rounded' | 'square'
+
+export interface ProgressBarConfig {
+  style: ProgressBarStyle
+  position: ProgressBarPosition
+  variant: ProgressBarVariant
+  showPercentage: boolean
+}
+
 export interface MultiStepFormConfig {
   steps: FormStep[]
   currentStep: number
   allowStepSkipping: boolean
   showProgress: boolean
   saveProgress: boolean
+  progressConfig?: ProgressBarConfig
   onStepChange?: (step: number, direction: 'next' | 'prev') => void
   onComplete?: (data: Record<string, any>) => void
 }

@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import If from '@/components/ui/if'
-import { FormFieldType, FormStep, FormFieldOrGroup } from '@/types'
+import { FormFieldType, FormStep, FormFieldOrGroup, ProgressBarConfig } from '@/types'
 import { MultiStepForm } from '@/components/ui/multi-step-form'
 
 import { Files } from 'lucide-react'
@@ -26,6 +26,10 @@ export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
   isMultiStep?: boolean
   steps?: FormStep[]
+  progressConfig?: ProgressBarConfig
+  allowStepSkipping?: boolean
+  showProgress?: boolean
+  saveProgress?: boolean
 }
 
 const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
@@ -92,7 +96,15 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
   })
 }
 
-export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, isMultiStep = false, steps }) => {
+export const FormPreview: React.FC<FormPreviewProps> = ({ 
+  formFields, 
+  isMultiStep = false, 
+  steps,
+  progressConfig,
+  allowStepSkipping = false,
+  showProgress = true,
+  saveProgress = false
+}) => {
   const formSchema = generateZodSchema(formFields)
 
   const defaultVals = generateDefaultValues(formFields)
@@ -141,9 +153,10 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, isMultiSte
                     config={{
                       steps,
                       currentStep: 0,
-                      allowStepSkipping: false,
-                      showProgress: true,
-                      saveProgress: false,
+                      allowStepSkipping,
+                      showProgress,
+                      saveProgress,
+                      progressConfig,
                       onComplete: (data) => {
                         toast(
                           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
