@@ -201,6 +201,13 @@ export const MultiStepForm = React.forwardRef<
     }
   }
 
+  const handleStepClick = (stepIndex: number) => {
+    if (stepIndex <= currentStep && stepIndex >= 0) {
+      setCurrentStep(stepIndex)
+      config.onStepChange?.(stepIndex, stepIndex < currentStep ? 'prev' : 'next')
+    }
+  }
+
   const canGoNext = currentStep < config.steps.length
   const canGoPrev = currentStep > 0
 
@@ -238,6 +245,7 @@ export const MultiStepForm = React.forwardRef<
         canGoPrev={canGoPrev}
         onNext={handleNext}
         onPrev={handlePrev}
+        onStepClick={handleStepClick}
         showProgress={config.showProgress}
         progressConfig={config.progressConfig}
       />

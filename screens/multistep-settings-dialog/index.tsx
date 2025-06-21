@@ -11,6 +11,13 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
+import { HelpCircle, Info, Settings2, BarChart3, MousePointer, Palette } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import {
   Select,
   SelectTrigger,
@@ -100,7 +107,19 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                   setSettings(prev => ({ ...prev, isMultiStep: checked as boolean }))
                 }
               />
-              <Label>Enable Multistep Form</Label>
+              <Label className="flex items-center gap-2">
+                Enable Multistep Form
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Convert your form into multiple steps for better user experience</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Label>
             </div>
           </div>
 
@@ -108,7 +127,10 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
           {settings.isMultiStep && (
             <>
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Form Behavior</h3>
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Settings2 className="w-5 h-5" />
+                  Form Behavior
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-center gap-2 border p-3 rounded">
                     <Checkbox
@@ -117,7 +139,19 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                         setSettings(prev => ({ ...prev, allowStepSkipping: checked as boolean }))
                       }
                     />
-                    <Label>Allow Step Skipping</Label>
+                    <Label className="flex items-center gap-2">
+                      Allow Step Skipping
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <MousePointer className="w-4 h-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Users can navigate to any step without completing previous ones</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Label>
                   </div>
                   <div className="flex items-center gap-2 border p-3 rounded">
                     <Checkbox
@@ -126,7 +160,19 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                         setSettings(prev => ({ ...prev, saveProgress: checked as boolean }))
                       }
                     />
-                    <Label>Save Progress</Label>
+                    <Label className="flex items-center gap-2">
+                      Save Progress
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Form progress is saved locally and restored on page reload</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Label>
                   </div>
                 </div>
               </div>
@@ -140,14 +186,40 @@ export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = (
                       setSettings(prev => ({ ...prev, showProgress: checked as boolean }))
                     }
                   />
-                  <Label className="text-lg font-medium">Show Progress Bar</Label>
+                  <Label className="text-lg font-medium flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Show Progress Bar
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Display visual progress indicator to show completion status</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Label>
                 </div>
 
                 {settings.showProgress && (
                   <div className="ml-6 space-y-4 border-l-2 border-muted pl-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="progress-style">Progress Style</Label>
+                        <Label htmlFor="progress-style" className="flex items-center gap-2">
+                          <Palette className="w-4 h-4" />
+                          Progress Style
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Choose how progress is visually displayed</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </Label>
                         <Select
                           value={settings.progressConfig.style}
                           onValueChange={(value: ProgressBarStyle) =>

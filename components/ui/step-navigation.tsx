@@ -14,6 +14,7 @@ interface StepNavigationProps {
   canGoPrev: boolean
   onNext: () => void
   onPrev: () => void
+  onStepClick?: (stepIndex: number) => void
   showProgress?: boolean
   progressConfig?: ProgressBarConfig
   className?: string
@@ -63,30 +64,44 @@ const NumberedSteps: React.FC<{
   currentStep: number
   totalSteps: number
   variant: 'rounded' | 'square'
-}> = ({ currentStep, totalSteps, variant }) => {
+  onStepClick?: (stepIndex: number) => void
+}> = ({ currentStep, totalSteps, variant, onStepClick }) => {
   return (
-    <div className="flex items-center justify-center space-x-2">
+    <div className="flex items-center justify-center">
       {Array.from({ length: totalSteps }, (_, index) => {
         const isActive = index === currentStep
         const isCompleted = index < currentStep
+        const isClickable = isCompleted && onStepClick
         
         return (
-          <div
-            key={index}
-            className={cn(
-              "flex items-center justify-center w-8 h-8 text-sm font-medium transition-all",
-              variant === 'rounded' ? 'rounded-full' : 'rounded-md',
-              isActive && "bg-primary text-primary-foreground",
-              isCompleted && "bg-primary/20 text-primary",
-              !isActive && !isCompleted && "bg-muted text-muted-foreground"
+          <React.Fragment key={index}>
+            <div
+              className={cn(
+                "flex items-center justify-center w-10 h-10 text-sm font-medium transition-all relative",
+                variant === 'rounded' ? 'rounded-full' : 'rounded-md',
+                isActive && "bg-primary text-primary-foreground ring-2 ring-primary ring-offset-2",
+                isCompleted && "bg-primary text-primary-foreground",
+                !isActive && !isCompleted && "bg-muted text-muted-foreground border-2 border-muted",
+                isClickable && "cursor-pointer hover:scale-105 hover:shadow-md",
+                !isClickable && !isActive && "cursor-default"
+              )}
+              onClick={() => isClickable && onStepClick(index)}
+            >
+              {isCompleted ? (
+                <CheckCircle className="w-5 h-5" />
+              ) : (
+                <span className="font-semibold">{index + 1}</span>
+              )}
+            </div>
+            {index < totalSteps - 1 && (
+              <div 
+                className={cn(
+                  "h-0.5 w-12 mx-2 transition-all",
+                  index < currentStep ? "bg-primary" : "bg-muted"
+                )}
+              />
             )}
-          >
-            {isCompleted ? (
-              <CheckCircle className="w-4 h-4" />
-            ) : (
-              index + 1
-            )}
-          </div>
+          </React.Fragment>
         )
       })}
     </div>
@@ -128,6 +143,7 @@ export const StepNavigation = React.forwardRef<
   canGoPrev, 
   onNext, 
   onPrev, 
+  onStepClick,
   showProgress = true, 
   progressConfig,
   className 
@@ -151,7 +167,7 @@ export const StepNavigation = React.forwardRef<
         case 'circular':
           return <CircularProgress progress={progress} />
         case 'numbered':
-          return <NumberedSteps currentStep={currentStep} totalSteps={totalSteps} variant={config.variant} />
+          return <NumberedSteps currentStep={currentStep} totalSteps={totalSteps} variant={config.variant} onStepClick={onStepClick} />
         case 'simple':
           return <SimpleIndicator currentStep={currentStep} totalSteps={totalSteps} variant={config.variant} />
         case 'linear':
