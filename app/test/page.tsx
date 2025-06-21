@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
+import { z } from 'zod'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,7 +19,7 @@ import { useRef } from 'react'
 import SignatureInput from '@/components/ui/signature-input'
 
 const formSchema = z.object({
-  name_0589855761: z.string(),
+  name_0589855761: z.string().min(1, { message: 'Signature is required' }),
 })
 
 export default function MyForm() {

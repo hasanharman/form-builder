@@ -19,9 +19,7 @@ import LocationSelector from '@/components/ui/location-input'
 
 const FormSchema = z.object({
   location: z.tuple([
-    z.string({
-      required_error: 'Country is required',
-    }),
+    z.string().min(1, { message: 'Country is required' }),
     z.string().optional(), // State name, optional
   ]),
 })

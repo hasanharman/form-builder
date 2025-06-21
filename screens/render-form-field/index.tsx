@@ -70,8 +70,8 @@ import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
 import LocationSelector from '@/components/ui/location-input'
 import SignatureInput from '@/components/ui/signature-input'
 import { Rating } from '@/components/ui/rating'
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { CreditCard } from '@/components/ui/credit-card'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { CreditCard, CreditCardValue } from '@/components/ui/credit-card'
 
 const languages = [
   { label: 'English', value: 'en' },
@@ -128,13 +128,12 @@ export const renderFormField = (field: FormFieldType, form: any) => {
   const [stateName, setStateName] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [rating, setRating] = useState<number>(0)
-  const [creditCard, setCreditCard] = useState({
+  const [creditCard, setCreditCard] = useState<CreditCardValue>({
     cardholderName: '',
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
     cvv: '',
-    cvvLabel: 'CVC' as 'CCV' | 'CVC'
   })
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -638,24 +637,20 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               onValueChange={field.onChange}
               className="flex flex-col space-y-1"
             >
-              {
-                [ 
-                  ["Male", "male"], 
-                  ["Female", "female"], 
-                  ["Other", "other"] 
-                ].map((option, index)=>{
-                  return(
-                    <FormItem className="flex items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value={option[1]} />
-                      </FormControl>
-                      <FormLabel className="font-normal">
-                        {option[0]}
-                      </FormLabel>
-                    </FormItem>
-                  )
-                })
-              }
+              {[
+                ['Male', 'male'],
+                ['Female', 'female'],
+                ['Other', 'other'],
+              ].map((option, index) => {
+                return (
+                  <FormItem className="flex items-center space-x-3 space-y-0">
+                    <FormControl>
+                      <RadioGroupItem value={option[1]} />
+                    </FormControl>
+                    <FormLabel className="font-normal">{option[0]}</FormLabel>
+                  </FormItem>
+                )
+              })}
             </RadioGroup>
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
@@ -675,9 +670,9 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                   value={creditCard}
                   onChange={(value) => {
                     setCreditCard(value)
-                    const jsonValue = JSON.stringify(value)
-                    formField.onChange(jsonValue)
-                    form.setValue(field.name, jsonValue, {
+                    // Update form with the credit card object directly
+                    formField.onChange(value)
+                    form.setValue(field.name, value, {
                       shouldValidate: true,
                       shouldDirty: true,
                     })

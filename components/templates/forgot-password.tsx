@@ -23,9 +23,11 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 
+import { emailSchema } from '@/lib/validation-schemas'
+
 // Schema for email validation
 const formSchema = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  email: emailSchema,
 })
 
 export default function ForgetPasswordPreview() {

@@ -18,7 +18,7 @@ import {
 import SignatureInput from '@/components/ui/signature-input'
 
 const FormSchema = z.object({
-  signature: z.string().min(1, 'Please sign the form'),
+  signature: z.string().min(1, { message: 'Please sign the form' }),
 })
 
 type SignatureFormData = z.infer<typeof FormSchema>
