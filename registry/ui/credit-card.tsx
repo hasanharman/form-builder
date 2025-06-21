@@ -95,7 +95,7 @@ const CreditCard = React.forwardRef<HTMLDivElement, CreditCardProps>(
     })
 
     return (
-      <div ref={ref} className={cn('w-full max-w-md mx-auto', className)}>
+      <div ref={ref} className={cn('w-full max-w-sm mx-auto', className)}>
         <div className="relative h-56 mb-6 perspective-1000">
           <motion.div
             className="relative w-full h-full"

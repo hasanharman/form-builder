@@ -155,7 +155,7 @@ export function CreditCardForm() {
                     onChange={handleCreditCardChange}
                     onValidationChange={handleValidationChange}
                     cvvLabel="CVC"
-                    cardStyle="base"
+                    cardStyle="shiny-silver"
                     showVendor={true}
                     className="w-full"
                   />
