@@ -224,6 +224,7 @@ export const MultiStepForm = React.forwardRef<
         )}
       </div>
 
+      {/* This is where the TOP progress bar should be */}
       {config.progressConfig?.position === 'top' && (
         <ProgressIndicator
           currentStep={currentStep}
