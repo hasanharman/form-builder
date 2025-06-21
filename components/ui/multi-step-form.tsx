@@ -230,6 +230,8 @@ export const MultiStepForm = React.forwardRef<
         )}
       </div>
 
+      {/* This is where the TOP progress bar should be */}
+
       <Form {...form}>
         <form className="space-y-6">
           <div className="space-y-4">

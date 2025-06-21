@@ -70,7 +70,7 @@ export const StepManager: React.FC<StepManagerProps> = ({
         {steps.map((step, index) => (
           <div
             key={step.id}
-            className={`flex items-center gap-2 p-3 border rounded-lg cursor-pointer transition-colors ${
+            className={`flex items-center gap-2 p-1 border rounded-lg cursor-pointer transition-colors ${
               currentStep === index 
                 ? 'border-primary bg-primary/5' 
                 : 'border-border hover:bg-muted/50'

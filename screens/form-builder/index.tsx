@@ -4,7 +4,12 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
-import { FormFieldType, FormStep, FormFieldOrGroup, ProgressBarConfig } from '@/types'
+import {
+  FormFieldType,
+  FormStep,
+  FormFieldOrGroup,
+  ProgressBarConfig,
+} from '@/types'
 import { defaultFieldConfig } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
@@ -13,7 +18,6 @@ import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Settings } from 'lucide-react'
 import If from '@/components/ui/if'
-import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
 import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
@@ -35,7 +39,7 @@ export default function FormBuilder() {
     style: 'linear',
     position: 'bottom',
     variant: 'rounded',
-    showPercentage: true
+    showPercentage: true,
   })
   const [allowStepSkipping, setAllowStepSkipping] = useState(false)
   const [showProgress, setShowProgress] = useState(true)
@@ -46,8 +50,8 @@ export default function FormBuilder() {
       title: 'Step 1',
       description: '',
       fields: [],
-      validation: 'onNext' // First step starts with validation since it's the only/last step initially
-    }
+      validation: 'onNext', // First step starts with validation since it's the only/last step initially
+    },
   ])
   const [currentEditingStep, setCurrentEditingStep] = useState(0)
 
@@ -77,11 +81,11 @@ export default function FormBuilder() {
       variant,
     }
     if (isMultiStep) {
-      setSteps(prevSteps => {
+      setSteps((prevSteps) => {
         const newSteps = [...prevSteps]
         newSteps[currentEditingStep] = {
           ...newSteps[currentEditingStep],
-          fields: [...newSteps[currentEditingStep].fields, newField]
+          fields: [...newSteps[currentEditingStep].fields, newField],
         }
         return newSteps
       })
@@ -114,9 +118,11 @@ export default function FormBuilder() {
 
   const updateFormField = (path: number[], updates: Partial<FormFieldType>) => {
     if (isMultiStep) {
-      setSteps(prevSteps => {
+      setSteps((prevSteps) => {
         const newSteps = [...prevSteps]
-        const stepFields = JSON.parse(JSON.stringify(newSteps[currentEditingStep].fields))
+        const stepFields = JSON.parse(
+          JSON.stringify(newSteps[currentEditingStep].fields),
+        )
         let current: any = stepFields
         for (let i = 0; i < path.length - 1; i++) {
           current = current[path[i]]
@@ -127,7 +133,7 @@ export default function FormBuilder() {
         }
         newSteps[currentEditingStep] = {
           ...newSteps[currentEditingStep],
-          fields: stepFields
+          fields: stepFields,
         }
         return newSteps
       })
@@ -152,7 +158,9 @@ export default function FormBuilder() {
 
   const handleSaveField = (updatedField: FormFieldType) => {
     if (selectedField) {
-      const currentFields = isMultiStep ? steps[currentEditingStep].fields : formFields
+      const currentFields = isMultiStep
+        ? steps[currentEditingStep].fields
+        : formFields
       const path = findFieldPath(currentFields, selectedField.name)
       if (path) {
         updateFormField(path, updatedField)
@@ -167,15 +175,15 @@ export default function FormBuilder() {
       title: `Step ${steps.length + 1}`,
       description: '',
       fields: [],
-      validation: 'onNext' // New step becomes the last step, so it gets validation
+      validation: 'onNext', // New step becomes the last step, so it gets validation
     }
-    setSteps(prevSteps => {
+    setSteps((prevSteps) => {
       // Update previous last step to have no validation
       const newSteps = [...prevSteps]
       if (newSteps.length > 0) {
         newSteps[newSteps.length - 1] = {
           ...newSteps[newSteps.length - 1],
-          validation: 'disabled'
+          validation: 'disabled',
         }
       }
       return [...newSteps, newStep]
@@ -184,7 +192,7 @@ export default function FormBuilder() {
 
   const handleStepDelete = (index: number) => {
     if (steps.length > 1) {
-      setSteps(prevSteps => prevSteps.filter((_, i) => i !== index))
+      setSteps((prevSteps) => prevSteps.filter((_, i) => i !== index))
       if (currentEditingStep >= steps.length - 1) {
         setCurrentEditingStep(Math.max(0, steps.length - 2))
       }
@@ -192,7 +200,7 @@ export default function FormBuilder() {
   }
 
   const handleStepUpdate = (index: number, updates: Partial<FormStep>) => {
-    setSteps(prevSteps => {
+    setSteps((prevSteps) => {
       const newSteps = [...prevSteps]
       newSteps[index] = { ...newSteps[index], ...updates }
       return newSteps
@@ -206,24 +214,28 @@ export default function FormBuilder() {
   const handleMultiStepToggle = (enabled: boolean) => {
     setIsMultiStep(enabled)
     if (enabled && formFields.length > 0) {
-      setSteps([{
-        id: 'step-1',
-        title: 'Step 1',
-        description: '',
-        fields: formFields,
-        validation: 'onNext' // Single step gets validation
-      }])
+      setSteps([
+        {
+          id: 'step-1',
+          title: 'Step 1',
+          description: '',
+          fields: formFields,
+          validation: 'onNext', // Single step gets validation
+        },
+      ])
       setFormFields([])
     } else if (!enabled && steps.length > 0) {
-      const allFields = steps.flatMap(step => step.fields)
+      const allFields = steps.flatMap((step) => step.fields)
       setFormFields(allFields)
-      setSteps([{
-        id: 'step-1',
-        title: 'Step 1',
-        description: '',
-        fields: [],
-        validation: 'onNext' // Reset to single step with validation
-      }])
+      setSteps([
+        {
+          id: 'step-1',
+          title: 'Step 1',
+          description: '',
+          fields: [],
+          validation: 'onNext', // Reset to single step with validation
+        },
+      ])
     }
   }
 
@@ -240,7 +252,7 @@ export default function FormBuilder() {
     setAllowStepSkipping(settings.allowStepSkipping)
     setShowProgress(settings.showProgress)
     setSaveProgress(settings.saveProgress)
-    
+
     if (settings.isMultiStep !== wasMultiStep) {
       handleMultiStepToggle(settings.isMultiStep)
     }
@@ -266,7 +278,10 @@ export default function FormBuilder() {
           the generated form components to get started. Some components may have
           additional dependencies, so make sure to review their documentation in
           the{' '}
-          <Link href="/readme" className="underline text-slate-800  dark:text-white dark:font-semibold">
+          <Link
+            href="/readme"
+            className="underline text-slate-800  dark:text-white dark:font-semibold"
+          >
             README
           </Link>{' '}
           for further instructions.
@@ -275,19 +290,18 @@ export default function FormBuilder() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-9 gap-6 h-full">
-        <div className="col-span-1 lg:col-span-2 space-y-3">
-          <SpecialComponentsNotice formFields={isMultiStep ? steps[currentEditingStep]?.fields || [] : formFields} />
-          
-          <div className="flex items-center space-x-2 p-3 border rounded-lg">
-            <Switch
-              id="multistep-mode"
-              checked={isMultiStep}
-              onCheckedChange={handleMultiStepToggle}
-            />
-            <Label htmlFor="multistep-mode" className="text-sm font-medium">
-              Multi-step Form
-            </Label>
-            <div className="flex-1" />
+        <div className="col-span-1 lg:col-span-2 space-y-3 ">
+          <div className="flex justify-between items-center space-x-2 p-2 border rounded-lg">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="multistep-mode"
+                checked={isMultiStep}
+                onCheckedChange={handleMultiStepToggle}
+              />
+              <Label htmlFor="multistep-mode" className="text-sm font-medium">
+                Multi-step
+              </Label>
+            </div>
             <Button
               variant="outline"
               size="sm"
@@ -295,7 +309,6 @@ export default function FormBuilder() {
               className="flex items-center gap-2"
             >
               <Settings className="w-4 h-4" />
-              Settings
             </Button>
           </div>
 
@@ -309,13 +322,17 @@ export default function FormBuilder() {
               onStepUpdate={handleStepUpdate}
             />
           )}
-          
+
           <FieldSelector addFormField={addFormField} />
         </div>
 
         <div className="col-span-1 lg:col-span-3 space-y-3">
           <If
-            condition={isMultiStep ? steps[currentEditingStep]?.fields.length > 0 : formFields.length > 0}
+            condition={
+              isMultiStep
+                ? steps[currentEditingStep]?.fields.length > 0
+                : formFields.length > 0
+            }
             render={() => (
               <div className="space-y-3">
                 {isMultiStep && (
@@ -331,19 +348,29 @@ export default function FormBuilder() {
                   </div>
                 )}
                 <FormFieldList
-                  formFields={isMultiStep ? steps[currentEditingStep]?.fields || [] : formFields}
-                  setFormFields={isMultiStep ? 
-                    (newFields) => {
-                      setSteps(prevSteps => {
-                        const newSteps = [...prevSteps]
-                        newSteps[currentEditingStep] = {
-                          ...newSteps[currentEditingStep],
-                          fields: typeof newFields === 'function' ? newFields(newSteps[currentEditingStep].fields) : newFields
+                  formFields={
+                    isMultiStep
+                      ? steps[currentEditingStep]?.fields || []
+                      : formFields
+                  }
+                  setFormFields={
+                    isMultiStep
+                      ? (newFields) => {
+                          setSteps((prevSteps) => {
+                            const newSteps = [...prevSteps]
+                            newSteps[currentEditingStep] = {
+                              ...newSteps[currentEditingStep],
+                              fields:
+                                typeof newFields === 'function'
+                                  ? newFields(
+                                      newSteps[currentEditingStep].fields,
+                                    )
+                                  : newFields,
+                            }
+                            return newSteps
+                          })
                         }
-                        return newSteps
-                      })
-                    } : 
-                    setFormFields
+                      : setFormFields
                   }
                   updateFormField={updateFormField}
                   openEditDialog={openEditDialog}
@@ -352,18 +379,11 @@ export default function FormBuilder() {
             )}
             otherwise={() => (
               <div className="flex flex-col items-center justify-center h-[50vh] text-center">
-                <Image
-                  src={EmptyListSvg}
-                  alt="No fields"
-                  width={200}
-                  height={200}
-                  className="mb-4 opacity-50"
-                />
+                <EmptyListSvg className="mb-4 opacity-50" />
                 <p className="text-muted-foreground">
-                  {isMultiStep 
+                  {isMultiStep
                     ? `No fields in ${steps[currentEditingStep]?.title || 'this step'} yet. Select a field type to get started.`
-                    : 'No form fields added yet. Select a field type to get started.'
-                  }
+                    : 'No form fields added yet. Select a field type to get started.'}
                 </p>
               </div>
             )}
@@ -371,8 +391,10 @@ export default function FormBuilder() {
         </div>
 
         <div className="col-span-1 lg:col-span-4">
-          <FormPreview 
-            formFields={isMultiStep ? steps[currentEditingStep]?.fields || [] : formFields} 
+          <FormPreview
+            formFields={
+              isMultiStep ? steps[currentEditingStep]?.fields || [] : formFields
+            }
             isMultiStep={isMultiStep}
             steps={isMultiStep ? steps : undefined}
             progressConfig={progressConfig}

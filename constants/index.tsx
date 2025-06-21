@@ -2,26 +2,26 @@ import { FieldType } from '@/types'
 
 export const fieldTypes: FieldType[] = [
   { name: 'Checkbox', isNew: false },
+  { name: 'Credit Card', isNew: true },
   { name: 'Combobox', isNew: false },
   { name: 'Date Picker', isNew: false },
-  { name: 'Datetime Picker', isNew: true },
+  { name: 'Datetime Picker', isNew: false },
   { name: 'File Input', isNew: false },
   { name: 'Input', isNew: false },
   { name: 'Input OTP', isNew: false },
-  { name: 'Location Input', isNew: true },
+  { name: 'Location Input', isNew: false },
   { name: 'Multi Select', isNew: false },
   { name: 'Password', isNew: false },
   { name: 'Phone', isNew: false },
   { name: 'Select', isNew: false },
-  { name: 'Signature Input', isNew: true },
+  { name: 'Signature Input', isNew: false },
   { name: 'Slider', isNew: false },
-  { name: 'Smart Datetime Input', isNew: true },
+  { name: 'Smart Datetime Input', isNew: false },
   { name: 'Switch', isNew: false },
   { name: 'Tags Input', isNew: false },
   { name: 'Textarea', isNew: false },
-  { name: 'Rating', isNew: true },
-  { name: 'RadioGroup', isNew: true },
-  { name: 'Credit Card', isNew: true },
+  { name: 'Rating', isNew: false },
+  { name: 'RadioGroup', isNew: false },
 ]
 
 export const defaultFieldConfig: Record<
@@ -121,11 +121,11 @@ export const multiStepDefaults = {
   allowStepSkipping: false,
   showProgress: true,
   saveProgress: true,
-  validationMode: 'onNext' as const
+  validationMode: 'onNext' as const,
 }
 
 export const stepValidationModes = [
   { value: 'onSubmit', label: 'Validate on Submit' },
   { value: 'onNext', label: 'Validate on Next' },
-  { value: 'disabled', label: 'No Validation' }
+  { value: 'disabled', label: 'No Validation' },
 ] as const
