@@ -1,5 +1,6 @@
 import { z, ZodTypeAny } from 'zod'
 import { FormFieldType, FormStep } from '@/types'
+import { generateFormJsonSchema } from '@/lib/json-schema-generator'
 import { generateCodeSnippet } from '@/screens/generate-code-field'
 
 type FormFieldOrGroup = FormFieldType | FormFieldType[]
@@ -38,24 +39,20 @@ export const generateZodSchema = (
           fieldSchema = z.coerce.number()
           break
         } else {
-          fieldSchema = z.string().min(1, 'Required')
+          fieldSchema = z.string().min(1, { message: 'Required' })
           break
         }
       case 'Location Input':
         fieldSchema = z.tuple([
-          z.string({
-            required_error: 'Country is required',
-          }),
-          z.string().optional(), // State name, optional
+          z.string().min(1, { message: 'Country is required' }),
+          z.string().optional(),
         ])
         break
       case 'Slider':
         fieldSchema = z.coerce.number()
         break
       case 'Signature Input':
-        fieldSchema = z.string({
-          required_error: 'Signature is required',
-        })
+        fieldSchema = z.string().min(1, { message: 'Signature is required' })
         break
       case 'Smart Datetime Input':
         fieldSchema = z.union([z.string(), z.date()])
@@ -69,20 +66,18 @@ export const generateZodSchema = (
       case 'Tags Input':
         fieldSchema = z
           .array(z.string())
-          .nonempty('Please enter at least one item')
+          .min(1, { message: 'Please enter at least one item' })
         break
       case 'Multi Select':
         fieldSchema = z
           .array(z.string())
-          .nonempty('Please select at least one item')
+          .min(1, { message: 'Please select at least one item' })
           break
       case 'Rating':
-        fieldSchema = z.coerce.number({
-          required_error: 'Rating is required',
-        })
+        fieldSchema = z.coerce.number().min(1, { message: 'Rating is required' })
         break
       case 'Credit Card':
-        fieldSchema = z.string().min(1, 'Credit card information is required').refine((value) => {
+        fieldSchema = z.string().min(1, { message: 'Credit card information is required' }).refine((value: string) => {
           try {
             const parsed = JSON.parse(value)
             const isValid = !!(
@@ -107,13 +102,13 @@ export const generateZodSchema = (
     if (field.min !== undefined && 'min' in fieldSchema) {
       fieldSchema = (fieldSchema as any).min(
         field.min,
-        `Must be at least ${field.min}`,
+        { message: `Must be at least ${field.min}` },
       )
     }
     if (field.max !== undefined && 'max' in fieldSchema) {
       fieldSchema = (fieldSchema as any).max(
         field.max,
-        `Must be at most ${field.max}`,
+        { message: `Must be at most ${field.max}` },
       )
     }
 
@@ -135,7 +130,8 @@ export const generateZodSchema = (
 
 export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   if (schema instanceof z.ZodDefault) {
-    return `${zodSchemaToString(schema._def.innerType)}.default(${JSON.stringify(schema._def.defaultValue())})`
+    const defaultValue = (schema._def as any).defaultValue
+    return `${zodSchemaToString(schema._def.innerType as z.ZodTypeAny)}.default(${JSON.stringify(typeof defaultValue === 'function' ? defaultValue() : defaultValue)})`
   }
 
   if (schema instanceof z.ZodBoolean) {
@@ -144,7 +140,7 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
 
   if (schema instanceof z.ZodNumber) {
     let result = 'z.number()'
-    if ('checks' in schema._def) {
+    if ('checks' in schema._def && schema._def.checks) {
       schema._def.checks.forEach((check: any) => {
         if (check.kind === 'min') {
           result += `.min(${check.value})`
@@ -158,7 +154,7 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
 
   if (schema instanceof z.ZodString) {
     let result = 'z.string()'
-    if ('checks' in schema._def) {
+    if ('checks' in schema._def && schema._def.checks) {
       schema._def.checks.forEach((check: any) => {
         if (check.kind === 'min') {
           result += `.min(${check.value})`
@@ -175,11 +171,11 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   }
 
   if (schema instanceof z.ZodArray) {
-    return `z.array(${zodSchemaToString(schema.element)}).nonempty("Please at least one item")`
+    return `z.array(${zodSchemaToString(schema.element as z.ZodTypeAny)}).min(1, { error: "Please select at least one item" })`
   }
 
   if (schema instanceof z.ZodTuple) {
-    return `z.tuple([${schema.items.map((item: z.ZodTypeAny) => zodSchemaToString(item)).join(', ')}])`
+    return `z.tuple([${(schema._def.items as z.ZodTypeAny[]).map((item: z.ZodTypeAny) => zodSchemaToString(item)).join(', ')}])`
   }
 
   if (schema instanceof z.ZodObject) {
@@ -193,7 +189,7 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
   }
 
   if (schema instanceof z.ZodOptional) {
-    return `${zodSchemaToString(schema.unwrap())}.optional()`
+    return `${zodSchemaToString(schema.unwrap() as z.ZodTypeAny)}.optional()`
   }
 
   return 'z.unknown()'
@@ -219,7 +215,7 @@ export const generateImports = (
     'import {toast} from "sonner"',
     'import { useForm } from "react-hook-form"',
     'import { zodResolver } from "@hookform/resolvers/zod"',
-    'import * as z from "zod"',
+    'import { z } from "zod"',
     'import { cn } from "@/lib/utils"',
     'import { Button } from "@/components/ui/button"',
     'import {\n  Form,\n  FormControl,\n  FormDescription,\n  FormField,\n  FormItem,\n  FormLabel,\n  FormMessage,\n} from "@/components/ui/form"',
@@ -579,4 +575,12 @@ export default function MultiStepFormComponent() {
   `
 
   return Array.from(imports).join('\n') + '\n\n' + component
+}
+
+export const generateJsonSchemaCode = (formFields: FormFieldOrGroup[]): string => {
+  const jsonSchema = generateFormJsonSchema(formFields.flat(), {
+    title: 'Generated Form Schema',
+    description: 'JSON Schema generated from form builder'
+  })
+  return JSON.stringify(jsonSchema, null, 2)
 }

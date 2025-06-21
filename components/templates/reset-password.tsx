@@ -24,19 +24,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/ui/password-input'
 
-// Schema for password validation
-const formSchema = z
-  .object({
-    password: z
-      .string()
-      .min(6, { message: 'Password must be at least 6 characters long' })
-      .regex(/[a-zA-Z0-9]/, { message: 'Password must be alphanumeric' }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Passwords do not match',
-  })
+import { resetPasswordFormSchema } from '@/lib/validation-schemas'
+
+const formSchema = resetPasswordFormSchema
 
 export default function ResetPasswordPreview() {
   const form = useForm<z.infer<typeof formSchema>>({

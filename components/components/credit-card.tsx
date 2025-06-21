@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card } from '@/components/ui/card'
 import Code from '@/components/code'
 
-import { CreditCard } from '@/components/ui/credit-card'
+import { CreditCard, CreditCardValue } from '@/registry/ui/credit-card'
 import { CreditCardForm } from '@/components/components/credit-card-form'
 
 import installationManual from '@/components/ui/credit-card?raw'
@@ -37,13 +37,13 @@ const usageCode2 = `const [creditCard, setCreditCard] = useState({
 />`
 
 export default function Component() {
-  const [creditCard, setCreditCard] = useState({
+  const [creditCard, setCreditCard] = useState<CreditCardValue>({
     cardholderName: '',
     cardNumber: '',
     expiryMonth: '',
     expiryYear: '',
     cvv: '',
-    cvvLabel: 'CVC' as 'CVC' | 'CCV'
+    cvvLabel: 'CVC'
   })
 
   return (
