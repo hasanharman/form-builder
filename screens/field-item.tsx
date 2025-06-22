@@ -13,9 +13,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import If from '@/components/ui/if'
 
-import { LuColumns2, LuPencil, LuTrash2 } from 'react-icons/lu'
+import { LuTriangleAlert, LuColumns2, LuPencil, LuTrash2 } from 'react-icons/lu'
+import { SPECIAL_COMPONENTS } from '@/constants/special-components'
+import Link from 'next/link'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -45,6 +52,9 @@ export const FieldItem = ({
   const path = subIndex !== undefined ? [index, subIndex] : [index]
   const [columnCount, setColumnCount] = useState(() =>
     Array.isArray(formFields[index]) ? formFields[index].length : 1,
+  )
+  const specialComponent = SPECIAL_COMPONENTS.find(
+    (component) => field.variant === component.variant,
   )
 
   const addNewColumn = (variant: string, index: number) => {
@@ -174,7 +184,29 @@ export const FieldItem = ({
             render={() => <LuColumns2 className="cursor-grab w-4 h-4" />}
           />
           <div className="flex items-center w-full">
-            <div className="w-full text-sm">{field.variant}</div>
+            <div className="w-full text-sm flex items-center gap-2">
+              {specialComponent && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <LuTriangleAlert className="w-4 h-4 text-yellow-500" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      This form includes special components, add the component
+                      in your directory. <br />
+                      <Link
+                        href={specialComponent.url}
+                        target="_blank"
+                        className="hover:underline"
+                      >
+                        {specialComponent.url}
+                      </Link>
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              {field.variant}
+            </div>
             <Button
               variant="ghost"
               size="icon"

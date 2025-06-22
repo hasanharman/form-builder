@@ -5,17 +5,19 @@ import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig } from '@/constants'
+import { defaultFieldConfig, fieldTypes } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
-import If from '@/components/ui/if'
-import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
 import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
 import { EditFieldDialog } from '@/screens/edit-field-dialog'
-import EmptyListSvg from '@/assets/oc-thinking.svg'
-import Editor from '@/components/editor/editor'
+
+import { Header } from '@/screens/form-builder/components/header'
+import { AppSidebar } from '@/screens/form-builder/components/sidebar'
+
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { Badge } from '@/components/ui/badge'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -27,13 +29,13 @@ export default function FormBuilder() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const addFormField = (variant: string, index: number) => {
-    const newFieldName = `name_${Math.random().toString().slice(-10)}`
-
     const { label, description, placeholder } = defaultFieldConfig[variant] || {
       label: '',
       description: '',
       placeholder: '',
     }
+
+    const newFieldName = `${label}_${Date.now().toString().slice(-10)}`
 
     const newField: FormFieldType = {
       checked: true,
@@ -116,60 +118,62 @@ export default function FormBuilder() {
   )
 
   return (
-    <section className="md:max-h-screen space-y-8">
-      <div className="max-w-5xl mx-auto space-y-4">
-        <h1 className="text-2xl font-semibold">Playground</h1>
-        <p className="text-sm text-muted-foreground">
-          After successfully installing Shadcn, you can simply copy and paste
-          the generated form components to get started. Some components may have
-          additional dependencies, so make sure to review their documentation in
-          the{' '}
-          <Link href="/readme" className="underline text-slate-800  dark:text-white dark:font-semibold">
-            README
-          </Link>{' '}
-          for further instructions.
-        </p>
-        {/* <Editor /> */}
-      </div>
-      <If
-        condition={formFields.length > 0}
-        render={() => (
-          <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5 h-full">
-            <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
-              <FieldSelectorWithSeparator
-                addFormField={(variant: string, index: number = 0) =>
-                  addFormField(variant, index)
-                }
-              />
-              <div className="overflow-y-auto flex-1 ">
-                <FormFieldList
-                  formFields={formFields}
-                  setFormFields={setFormFields}
-                  updateFormField={updateFormField}
-                  openEditDialog={openEditDialog}
-                />
+    <section className="space-y-8">
+      <div className="container">
+        <SidebarProvider
+          style={
+            {
+              '--sidebar-width': 'calc(var(--spacing) * 72)',
+              '--header-height': 'calc(var(--spacing) * 12)',
+            } as React.CSSProperties
+          }
+          className="h-[calc(100vh-225px)] min-h-0 drop-shadow-lg rounded-2xl border"
+        >
+          <AppSidebar
+            variant="inset"
+            className="relative h-[calc(100vh-225px)]"
+            items={[
+              {
+                title: 'Add Field',
+                items: fieldTypes.map((field) => ({
+                  title: (
+                    <div className="flex items-center gap-2">
+                      {field.isNew && (
+                        <Badge variant="outline" className="text-[10px]">
+                          New
+                        </Badge>
+                      )}
+                      <span>{field.name}</span>
+                    </div>
+                  ),
+                  onClick: () => addFormField(field.name, field.index || 0),
+                })),
+              },
+            ]}
+          />
+          <SidebarInset>
+            <Header />
+            <div className="flex flex-1 flex-col h-[calc(100%-50px)]">
+              <div className="@container/main flex h-full">
+                <div className="overflow-y-auto w-1/2 border-r p-4">
+                  <FormFieldList
+                    formFields={formFields}
+                    setFormFields={setFormFields}
+                    updateFormField={updateFormField}
+                    openEditDialog={openEditDialog}
+                  />
+                </div>
+                <div className="h-full w-1/2 space-y-3">
+                  <FormPreview
+                    key={JSON.stringify(formFields)}
+                    formFields={formFields}
+                  />
+                </div>
               </div>
             </div>
-            <div className="col-span-1 w-full h-full space-y-3">
-              <SpecialComponentsNotice formFields={formFields} />
-              <FormPreview
-                key={JSON.stringify(formFields)}
-                formFields={formFields}
-              />
-            </div>
-          </div>
-        )}
-        otherwise={() => (
-          <div className="flex flex-col md:flex-row items-center gap-3 md:px-5">
-            <FieldSelectorWithSeparator
-              addFormField={(variant: string, index: number = 0) =>
-                addFormField(variant, index)
-              }
-            />
-            <EmptyListSvg className="mx-auto" />
-          </div>
-        )}
-      />
+          </SidebarInset>
+        </SidebarProvider>
+      </div>
       <EditFieldDialog
         isOpen={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}

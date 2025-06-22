@@ -45,7 +45,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
         axis="y"
         onReorder={setFormFields}
         values={formFields}
-        className="flex flex-col gap-1"
+        className="flex flex-col gap-2"
       >
         {formFields.map((item, index) => (
           <Reorder.Item
