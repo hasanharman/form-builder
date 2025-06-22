@@ -29,13 +29,13 @@ export default function FormBuilder() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const addFormField = (variant: string, index: number) => {
+    const newFieldName = `name_${Math.random().toString().slice(-10)}`
+
     const { label, description, placeholder } = defaultFieldConfig[variant] || {
       label: '',
       description: '',
       placeholder: '',
     }
-
-    const newFieldName = `${label}_${Date.now().toString().slice(-10)}`
 
     const newField: FormFieldType = {
       checked: true,
