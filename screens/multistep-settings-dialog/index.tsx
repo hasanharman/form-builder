@@ -1,0 +1,287 @@
+'use client'
+
+import React, { useState, useEffect } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
+import { HelpCircle, Info, Settings2, BarChart3, MousePointer, Palette } from 'lucide-react'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select'
+import { ProgressBarConfig, ProgressBarStyle, ProgressBarPosition, ProgressBarVariant } from '@/types'
+
+interface MultiStepSettingsDialogProps {
+  isOpen: boolean
+  onClose: () => void
+  isMultiStep: boolean
+  progressConfig: ProgressBarConfig
+  allowStepSkipping: boolean
+  showProgress: boolean
+  saveProgress: boolean
+  onSave: (settings: {
+    isMultiStep: boolean
+    progressConfig: ProgressBarConfig
+    allowStepSkipping: boolean
+    showProgress: boolean
+    saveProgress: boolean
+  }) => void
+}
+
+const defaultProgressConfig: ProgressBarConfig = {
+  style: 'linear',
+  position: 'bottom',
+  variant: 'rounded',
+  showPercentage: true
+}
+
+export const MultiStepSettingsDialog: React.FC<MultiStepSettingsDialogProps> = ({
+  isOpen,
+  onClose,
+  isMultiStep,
+  progressConfig,
+  allowStepSkipping,
+  showProgress,
+  saveProgress,
+  onSave,
+}) => {
+  const [settings, setSettings] = useState({
+    isMultiStep,
+    progressConfig: progressConfig || defaultProgressConfig,
+    allowStepSkipping,
+    showProgress,
+    saveProgress,
+  })
+
+  useEffect(() => {
+    setSettings({
+      isMultiStep,
+      progressConfig: progressConfig || defaultProgressConfig,
+      allowStepSkipping,
+      showProgress,
+      saveProgress,
+    })
+  }, [isMultiStep, progressConfig, allowStepSkipping, showProgress, saveProgress])
+
+  const handleSave = () => {
+    onSave(settings)
+    onClose()
+  }
+
+  const updateProgressConfig = (updates: Partial<ProgressBarConfig>) => {
+    setSettings(prev => ({
+      ...prev,
+      progressConfig: { ...prev.progressConfig, ...updates }
+    }))
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Multistep Form Settings</DialogTitle>
+        </DialogHeader>
+        <div className="py-4 space-y-6">
+          {/* Multistep Options */}
+          {isMultiStep && (
+            <>
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium flex items-center gap-2">
+                  <Settings2 className="w-5 h-5" />
+                  Form Behavior
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-2 border p-3 rounded">
+                    <Checkbox
+                      checked={settings.allowStepSkipping}
+                      onCheckedChange={(checked) =>
+                        setSettings(prev => ({ ...prev, allowStepSkipping: checked as boolean }))
+                      }
+                    />
+                    <Label className="flex items-center gap-2">
+                      Allow Step Skipping
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <MousePointer className="w-4 h-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <div className="space-y-1">
+                              <p className="font-medium">Allow Step Skipping</p>
+                              <p>When enabled, users can click on any step to navigate directly to it without completing previous steps. This provides more flexibility but may result in incomplete data collection.</p>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-2 border p-3 rounded">
+                    <Checkbox
+                      checked={settings.saveProgress}
+                      onCheckedChange={(checked) =>
+                        setSettings(prev => ({ ...prev, saveProgress: checked as boolean }))
+                      }
+                    />
+                    <Label className="flex items-center gap-2">
+                      Save Progress
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="w-4 h-4 text-muted-foreground cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <div className="space-y-1">
+                              <p className="font-medium">Save Progress</p>
+                              <p>Automatically saves form data to browser's local storage as users fill out the form. If they close the browser or navigate away, their progress will be restored when they return within 24 hours.</p>
+                            </div>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress Bar Settings */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    checked={settings.showProgress}
+                    onCheckedChange={(checked) =>
+                      setSettings(prev => ({ ...prev, showProgress: checked as boolean }))
+                    }
+                  />
+                  <Label className="text-lg font-medium flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Show Progress Bar
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Display visual progress indicator to show completion status</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </Label>
+                </div>
+
+                {settings.showProgress && (
+                  <div className="ml-6 space-y-4 border-l-2 border-muted pl-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="progress-style" className="flex items-center gap-2">
+                          <Palette className="w-4 h-4" />
+                          Progress Style
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-3 h-3 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Choose how progress is visually displayed</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </Label>
+                        <Select
+                          value={settings.progressConfig.style}
+                          onValueChange={(value: ProgressBarStyle) =>
+                            updateProgressConfig({ style: value })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select style" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="linear">Linear Progress Bar</SelectItem>
+                            <SelectItem value="circular">Circular Progress</SelectItem>
+                            <SelectItem value="numbered">Numbered Steps</SelectItem>
+                            <SelectItem value="simple">Simple Indicator</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div>
+                        <Label htmlFor="progress-position">Position</Label>
+                        <Select
+                          value={settings.progressConfig.position}
+                          onValueChange={(value: ProgressBarPosition) =>
+                            updateProgressConfig({ position: value })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select position" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="top">Top</SelectItem>
+                            <SelectItem value="bottom">Bottom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="progress-variant">Variant</Label>
+                        <Select
+                          value={settings.progressConfig.variant}
+                          onValueChange={(value: ProgressBarVariant) =>
+                            updateProgressConfig({ variant: value })
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select variant" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="rounded">Rounded</SelectItem>
+                            <SelectItem value="square">Square</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="flex items-end">
+                        <div className="flex items-center gap-2 border p-3 rounded">
+                          <Checkbox
+                            checked={settings.progressConfig.showPercentage}
+                            onCheckedChange={(checked) =>
+                              updateProgressConfig({ showPercentage: checked as boolean })
+                            }
+                          />
+                          <Label>Show Percentage</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleSave}>Save Settings</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
