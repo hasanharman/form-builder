@@ -20,4 +20,5 @@ module.exports = {
     'col-span-11',
     'col-span-12',
   ],
+  plugins: [require('@tailwindcss/container-queries')],
 }

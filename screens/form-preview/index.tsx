@@ -117,16 +117,16 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
   const formattedCode = formatJSXCode(generatedCode)
 
   return (
-    <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
-      <Tabs defaultValue="preview" className="w-full">
-        <TabsList className="flex justify-center w-fit mx-auto">
+    <div className="w-full h-full col-span-1 rounded-xl flex justify-center relative">
+      <Tabs defaultValue="preview" className="w-full relative">
+        <TabsList className="absolute top-2 left-1/2 -translate-x-1/2 flex justify-center w-fit mx-auto z-10">
           <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="json">JSON</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
         <TabsContent
           value="preview"
-          className="space-y-4 h-full md:max-h-[70vh] overflow-auto"
+          className="space-y-4 h-full overflow-y-auto mt-0 pt-10"
         >
           <If
             condition={formFields.length > 0}
@@ -148,11 +148,11 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
             )}
           />
         </TabsContent>
-        <TabsContent value="json">
+        <TabsContent value="json" className="mt-0 h-full">
           <If
             condition={formFields.length > 0}
             render={() => (
-              <pre className="p-4 text-sm bg-secondary rounded-lg h-full md:max-h-[70vh] overflow-auto">
+              <pre className="p-4 text-sm bg-secondary h-full rounded-br-xl overflow-auto">
                 {JSON.stringify(formFields, null, 2)}
               </pre>
             )}
@@ -163,11 +163,11 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
             )}
           />
         </TabsContent>
-        <TabsContent value="code">
+        <TabsContent value="code" className="mt-0 h-full">
           <If
             condition={formFields.length > 0}
             render={() => (
-              <div className="relative">
+              <div className="relative w-full h-full">
                 <Button
                   className="absolute right-2 top-2"
                   variant="secondary"
@@ -179,33 +179,34 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
                 >
                   <Files />
                 </Button>
-                <Highlight
-                  code={formattedCode}
-                  language="tsx"
-                  theme={themes.oneDark}
-                >
-                  {({
-                    className,
-                    style,
-                    tokens,
-                    getLineProps,
-                    getTokenProps,
-                  }: any) => (
-                    <pre
-                      className={`${className} p-4 text-sm bg-gray-100 rounded-lg 
-                      h-full md:max-h-[70vh] overflow-auto`}
-                      style={style}
-                    >
-                      {tokens.map((line: any, i: number) => (
-                        <div {...getLineProps({ line, key: i })}>
-                          {line.map((token: any, key: any) => (
-                            <span {...getTokenProps({ token, key })} />
-                          ))}
-                        </div>
-                      ))}
-                    </pre>
-                  )}
-                </Highlight>
+                <div className="w-full h-full overflow-y-auto rounded-br-xl bg-gray-100">
+                  <Highlight
+                    code={formattedCode}
+                    language="tsx"
+                    theme={themes.oneDark}
+                  >
+                    {({
+                      className,
+                      style,
+                      tokens,
+                      getLineProps,
+                      getTokenProps,
+                    }: any) => (
+                      <pre
+                        className={`${className} p-4 text-sm bg-gray-100`}
+                        style={style}
+                      >
+                        {tokens.map((line: any, i: number) => (
+                          <div {...getLineProps({ line, key: i })}>
+                            {line.map((token: any, key: any) => (
+                              <span {...getTokenProps({ token, key })} />
+                            ))}
+                          </div>
+                        ))}
+                      </pre>
+                    )}
+                  </Highlight>
+                </div>
               </div>
             )}
             otherwise={() => (
