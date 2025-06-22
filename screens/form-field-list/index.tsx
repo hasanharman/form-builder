@@ -55,7 +55,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
                 : item.name
             }
             value={item}
-            className="flex items-center gap-1"
+            className="flex items-center gap-2"
             whileDrag={{ backgroundColor: '#e5e7eb', borderRadius: '12px' }}
           >
             <LuRows2 className="cursor-grab w-4 h-4" />
@@ -67,7 +67,7 @@ export const FormFieldList: React.FC<FormFieldListProps> = ({
                   handleHorizontalReorder(index, newOrder)
                 }
                 values={rowTabs[index] || item}
-                className="w-full grid grid-cols-12 gap-1"
+                className="w-full grid grid-cols-12 gap-2"
               >
                 <AnimatePresence initial={false}>
                   {(rowTabs[index] || item).map((field, fieldIndex) => (

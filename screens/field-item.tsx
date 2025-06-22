@@ -175,10 +175,10 @@ export const FieldItem = ({
       {/* Rest of your component JSX */}
       <motion.div
         layout="position"
-        className="flex items-center gap-3"
+        className="flex items-center gap-2"
         key={`${field.name}-${columnCount}`}
       >
-        <div className="flex items-center gap-1 border rounded-xl px-3 py-1.5 w-full">
+        <div className="flex items-center gap-1 border rounded-xl pl-4 pr-1 py-1 w-full">
           <If
             condition={Array.isArray(formFields[index])}
             render={() => <LuColumns2 className="cursor-grab w-4 h-4" />}
@@ -211,10 +211,16 @@ export const FieldItem = ({
               variant="ghost"
               size="icon"
               onClick={() => openEditDialog(field)}
+              className="h-8 w-8"
             >
               <LuPencil />
             </Button>
-            <Button variant="ghost" size="icon" onClick={removeColumn}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={removeColumn}
+              className="h-8 w-8"
+            >
               <LuTrash2 />
             </Button>
           </div>
@@ -227,7 +233,7 @@ export const FieldItem = ({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="min-w-9 w-9 h-9 rounded-full"
+                  className="min-w-8 w-8 h-8 rounded-full shadow-none"
                 >
                   +
                 </Button>
