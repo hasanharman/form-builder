@@ -458,8 +458,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                   <FormLabel>${field.label}</FormLabel>
                   <FormControl>
                     <FileUploader
-                      value={files}
-                      onValueChange={setFiles}
+                      value={field.value}
+                      onValueChange={field.onChange}
                       dropzoneOptions={dropZoneConfig}
                       className="relative bg-background rounded-lg p-2"
                     >
