@@ -479,9 +479,9 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         </div>
                       </FileInput>
                       <FileUploaderContent>
-                        {files &&
-                          files.length > 0 &&
-                          files.map((file, i) => (
+                        {field.value &&
+                          field.value.length > 0 &&
+                          field.value.map((file, i) => (
                             <FileUploaderItem key={i} index={i}>
                               <Paperclip className="h-4 w-4 stroke-current" />
                               <span>{file.name}</span>
