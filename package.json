@@ -41,6 +41,8 @@
     "@radix-ui/react-tooltip": "^1.1.3",
     "@tailwindcss/postcss": "^4.1.8",
     "@tailwindcss/typography": "^0.5.15",
+    "@tanstack/react-form": "^1.23.5",
+    "@tanstack/zod-form-adapter": "^0.42.1",
     "@types/prettier": "^3.0.0",
     "@typescript-eslint/parser": "^8.7.0",
     "@vercel/analytics": "^1.3.1",
