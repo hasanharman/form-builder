@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm as useTanStackForm } from '@tanstack/react-form'
 import { z } from 'zod'
@@ -126,10 +126,17 @@ function ReactHookFormForm() {
         </Field>
 
         <Field className="flex flex-row items-start space-x-3 space-y-0">
-          <Checkbox 
-            id="rhf-terms" 
-            {...form.register('terms')}
-            aria-invalid={!!form.formState.errors.terms}
+          <Controller
+            name="terms"
+            control={form.control}
+            render={({ field }) => (
+              <Checkbox 
+                id="rhf-terms" 
+                checked={field.value}
+                onCheckedChange={field.onChange}
+                aria-invalid={!!form.formState.errors.terms}
+              />
+            )}
           />
           <div className="space-y-1 leading-none">
             <FieldLabel htmlFor="rhf-terms">Accept terms and conditions</FieldLabel>
