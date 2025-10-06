@@ -11,12 +11,14 @@ import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import If from '@/components/ui/if'
 import { FormFieldType } from '@/types'
+import { FormLibrary } from '@/constants'
 
 import { Files } from 'lucide-react'
 import {
   generateZodSchema,
   generateFormCode,
   generateDefaultValues,
+  generateFormCodeForLibrary,
 } from '@/screens/generate-code-parts'
 import { formatJSXCode } from '@/lib/utils'
 
@@ -24,6 +26,7 @@ export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
 export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
+  selectedLibrary: FormLibrary
 }
 
 const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
@@ -90,7 +93,7 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
   })
 }
 
-export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
+export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, selectedLibrary }) => {
   const formSchema = generateZodSchema(formFields)
 
   const defaultVals = generateDefaultValues(formFields)
@@ -113,7 +116,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields }) => {
     }
   }
 
-  const generatedCode = generateFormCode(formFields)
+  const generatedCode = generateFormCodeForLibrary(formFields, selectedLibrary)
   const formattedCode = formatJSXCode(generatedCode)
 
   return (

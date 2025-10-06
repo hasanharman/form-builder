@@ -1,13 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig } from '@/constants'
+import { defaultFieldConfig, FORM_LIBRARIES, FormLibrary, FORM_LIBRARY_LABELS } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import If from '@/components/ui/if'
 import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
@@ -25,6 +27,18 @@ export default function FormBuilder() {
   const [formFields, setFormFields] = useState<FormFieldOrGroup[]>([])
   const [selectedField, setSelectedField] = useState<FormFieldType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedLibrary, setSelectedLibrary] = useState<FormLibrary>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('formLibrary') as FormLibrary) || FORM_LIBRARIES.REACT_HOOK_FORM
+    }
+    return FORM_LIBRARIES.REACT_HOOK_FORM
+  })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('formLibrary', selectedLibrary)
+    }
+  }, [selectedLibrary])
 
   const addFormField = (variant: string, index: number) => {
     const newFieldName = `name_${Math.random().toString().slice(-10)}`
@@ -129,7 +143,21 @@ export default function FormBuilder() {
           </Link>{' '}
           for further instructions.
         </p>
-        {/* <Editor /> */}
+        <div className="flex items-center gap-2">
+          <Label htmlFor="library-select">Form Library:</Label>
+          <Select value={selectedLibrary} onValueChange={(value) => setSelectedLibrary(value as FormLibrary)}>
+            <SelectTrigger id="library-select" className="w-[200px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(FORM_LIBRARY_LABELS).map(([value, label]) => (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <If
         condition={formFields.length > 0}
@@ -155,6 +183,7 @@ export default function FormBuilder() {
               <FormPreview
                 key={JSON.stringify(formFields)}
                 formFields={formFields}
+                selectedLibrary={selectedLibrary}
               />
             </div>
           </div>
