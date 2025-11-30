@@ -163,7 +163,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
               />
             </FormControl>
             <div className="space-y-1 leading-none">
-              <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+              <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
               <FormDescription>{field.description}</FormDescription>
             </div>
           </div>
@@ -174,7 +174,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem className="flex flex-col">
           <div>
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+            <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           </div>{' '}
           <Popover>
             <PopoverTrigger asChild>
@@ -189,7 +189,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                 >
                   {value
                     ? languages.find((language) => language.value === value)
-                        ?.label
+                      ?.label
                     : 'Select language'}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -234,7 +234,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem className="flex flex-col">
           <div>
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+            <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           </div>
           <Popover>
             <PopoverTrigger asChild>
@@ -274,7 +274,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem className="flex flex-col">
           <div>
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+            <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           </div>
           <DatetimePicker
             {...field}
@@ -299,7 +299,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'File Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <FileUploader
               value={files}
@@ -334,7 +334,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <Input
               placeholder={field.placeholder}
@@ -349,7 +349,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Input OTP':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <InputOTP maxLength={6}>
               <InputOTPGroup>
@@ -373,7 +373,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem className="flex flex-col">
           <div>
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+            <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           </div>
           <LocationSelector
             onCountryChange={(country) => {
@@ -395,7 +395,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Multi Select':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <MultiSelector
               values={selectedValues}
@@ -427,7 +427,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Select':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <Select onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger>
@@ -452,7 +452,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
 
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <Slider
               min={min}
@@ -474,7 +474,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Signature Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <SignatureInput
               canvasRef={canvasRef}
@@ -492,7 +492,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Smart Datetime Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <SmartDatetimeInput
               locale={field.locale as any}
@@ -518,7 +518,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
       return (
         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
           <div className="space-y-0.5">
-            <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+            <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
             <FormDescription>{field.description}</FormDescription>
           </div>
           <FormControl>
@@ -535,7 +535,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Tags Input':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <TagsInput
               value={tagsValue}
@@ -556,12 +556,12 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Textarea':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <Textarea
               placeholder={field.placeholder}
               className="resize-none"
-              // {...field}
+            // {...field}
             />
           </FormControl>
           <FormDescription>{field.description}</FormDescription>
@@ -571,7 +571,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Password':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <PasswordInput
               value={password}
@@ -592,7 +592,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Phone':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <PhoneInput
               defaultCountry="TR"
@@ -611,7 +611,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
     case 'Rating':
       return (
         <FormItem>
-          <FormLabel>{field.label}</FormLabel> {field.required && '*'}
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
           <FormControl>
             <Rating
               value={rating}

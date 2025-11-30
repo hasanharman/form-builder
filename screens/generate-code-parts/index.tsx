@@ -1,8 +1,13 @@
 import { z, ZodTypeAny } from 'zod'
 import { FormFieldType } from '@/types'
+import { FormLibrary, FORM_LIBRARIES } from '@/constants'
 import { generateFormJsonSchema } from '@/lib/json-schema-generator'
 
 import { generateCodeSnippet } from '@/screens/generate-code-field'
+import { generateServerActionsCode } from './server-actions'
+import { generateReactHookFormCode } from './react-hook-form'
+import { generateTanStackFormCode } from './tanstack-form'
+import { generateBringYourOwnCode } from './bring-your-own'
 
 type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -528,4 +533,22 @@ export const generateJsonSchemaCode = (formFields: FormFieldOrGroup[]): string =
     description: 'JSON Schema generated from form builder'
   })
   return JSON.stringify(jsonSchema, null, 2)
+}
+
+export const generateFormCodeForLibrary = (
+  formFields: FormFieldOrGroup[],
+  library: FormLibrary
+): string => {
+  switch (library) {
+    case FORM_LIBRARIES.SERVER_ACTIONS:
+      return generateServerActionsCode(formFields)
+    case FORM_LIBRARIES.REACT_HOOK_FORM:
+      return generateReactHookFormCode(formFields)
+    case FORM_LIBRARIES.TANSTACK_FORM:
+      return generateTanStackFormCode(formFields)
+    case FORM_LIBRARIES.BRING_YOUR_OWN:
+      return generateBringYourOwnCode(formFields)
+    default:
+      return generateFormCode(formFields)
+  }
 }

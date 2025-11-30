@@ -1,13 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig } from '@/constants'
+import { defaultFieldConfig, FORM_LIBRARIES, FormLibrary } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
+
 import If from '@/components/ui/if'
 import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
@@ -25,6 +26,18 @@ export default function FormBuilder() {
   const [formFields, setFormFields] = useState<FormFieldOrGroup[]>([])
   const [selectedField, setSelectedField] = useState<FormFieldType | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedLibrary, setSelectedLibrary] = useState<FormLibrary>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('formLibrary') as FormLibrary) || FORM_LIBRARIES.REACT_HOOK_FORM
+    }
+    return FORM_LIBRARIES.REACT_HOOK_FORM
+  })
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('formLibrary', selectedLibrary)
+    }
+  }, [selectedLibrary])
 
   const addFormField = (variant: string, index: number) => {
     const newFieldName = `name_${Math.random().toString().slice(-10)}`
@@ -41,12 +54,12 @@ export default function FormBuilder() {
       disabled: false,
       label: label || newFieldName,
       name: newFieldName,
-      onChange: () => {},
-      onSelect: () => {},
+      onChange: () => { },
+      onSelect: () => { },
       placeholder: placeholder || 'Placeholder',
       required: true,
       rowIndex: index,
-      setValue: () => {},
+      setValue: () => { },
       type: '',
       value: '',
       variant,
@@ -129,7 +142,7 @@ export default function FormBuilder() {
           </Link>{' '}
           for further instructions.
         </p>
-        {/* <Editor /> */}
+
       </div>
       <If
         condition={formFields.length > 0}
@@ -155,6 +168,8 @@ export default function FormBuilder() {
               <FormPreview
                 key={JSON.stringify(formFields)}
                 formFields={formFields}
+                selectedLibrary={selectedLibrary}
+                onLibraryChange={setSelectedLibrary}
               />
             </div>
           </div>
