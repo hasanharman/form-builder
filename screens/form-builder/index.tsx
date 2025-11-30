@@ -5,11 +5,10 @@ import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig, FORM_LIBRARIES, FormLibrary, FORM_LIBRARY_LABELS } from '@/constants'
+import { defaultFieldConfig, FORM_LIBRARIES, FormLibrary } from '@/constants'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
-import { Label } from '@/components/ui/label'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
 import If from '@/components/ui/if'
 import SpecialComponentsNotice from '@/components/playground/special-component-notice'
 import { FieldSelector } from '@/screens/field-selector'
@@ -55,12 +54,12 @@ export default function FormBuilder() {
       disabled: false,
       label: label || newFieldName,
       name: newFieldName,
-      onChange: () => {},
-      onSelect: () => {},
+      onChange: () => { },
+      onSelect: () => { },
       placeholder: placeholder || 'Placeholder',
       required: true,
       rowIndex: index,
-      setValue: () => {},
+      setValue: () => { },
       type: '',
       value: '',
       variant,
@@ -143,21 +142,7 @@ export default function FormBuilder() {
           </Link>{' '}
           for further instructions.
         </p>
-        <div className="flex items-center gap-2">
-          <Label htmlFor="library-select">Form Library:</Label>
-          <Select value={selectedLibrary} onValueChange={(value) => setSelectedLibrary(value as FormLibrary)}>
-            <SelectTrigger id="library-select" className="w-[200px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(FORM_LIBRARY_LABELS).map(([value, label]) => (
-                <SelectItem key={value} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+
       </div>
       <If
         condition={formFields.length > 0}
@@ -184,6 +169,7 @@ export default function FormBuilder() {
                 key={JSON.stringify(formFields)}
                 formFields={formFields}
                 selectedLibrary={selectedLibrary}
+                onLibraryChange={setSelectedLibrary}
               />
             </div>
           </div>

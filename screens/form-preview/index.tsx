@@ -9,11 +9,20 @@ import { renderFormField } from '@/screens/render-form-field'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import If from '@/components/ui/if'
 import { FormFieldType } from '@/types'
 import { FormLibrary } from '@/constants'
 
-import { Files } from 'lucide-react'
+import { Code, Eye, Files } from 'lucide-react'
 import {
   generateZodSchema,
   generateFormCode,
@@ -21,12 +30,16 @@ import {
   generateFormCodeForLibrary,
 } from '@/screens/generate-code-parts'
 import { formatJSXCode } from '@/lib/utils'
+import { VscJson } from 'react-icons/vsc'
+import { SiReacthookform, SiReactquery } from 'react-icons/si'
+import { FaReact } from 'react-icons/fa'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
 export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
   selectedLibrary: FormLibrary
+  onLibraryChange: (library: FormLibrary) => void
 }
 
 const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
@@ -93,7 +106,11 @@ const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
   })
 }
 
-export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, selectedLibrary }) => {
+export const FormPreview: React.FC<FormPreviewProps> = ({
+  formFields,
+  selectedLibrary,
+  onLibraryChange,
+}) => {
   const formSchema = generateZodSchema(formFields)
 
   const defaultVals = generateDefaultValues(formFields)
@@ -122,11 +139,69 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, selectedLi
   return (
     <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
       <Tabs defaultValue="preview" className="w-full">
-        <TabsList className="flex justify-center w-fit mx-auto">
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="json">JSON</TabsTrigger>
-          <TabsTrigger value="code">Code</TabsTrigger>
-        </TabsList>
+        <div className='flex items-center justify-between'>
+          <TabsList >
+            <TabsTrigger value="preview">
+              <div className="flex items-center gap-1">
+                <Eye className='size-4' /> <span className='text-sm'>Preview</span>
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="json">
+              <div className="flex items-center gap-1">
+                <VscJson />
+                <span className='text-sm'>JSON</span>
+              </div>
+            </TabsTrigger>
+            <TabsTrigger value="code">
+              <div className="flex items-center gap-1">
+                <Code className='size-4' />
+                <span className='text-sm'>Code</span>
+              </div>
+            </TabsTrigger>
+          </TabsList>
+
+          <Select
+            value={selectedLibrary}
+            onValueChange={(value) => onLibraryChange(value as FormLibrary)}
+          >
+            <SelectTrigger className="w-auto px-2 gap-2">
+              <SelectValue placeholder="Select library">
+                {selectedLibrary === 'react-hook-form' && (
+                  <SiReacthookform className="size-5 text-[#EC5990]" />
+                )}
+                {selectedLibrary === 'tanstack-form' && (
+                  <SiReactquery className="size-5" />
+                )}
+                {selectedLibrary === 'server-actions' && (
+                  <FaReact className="size-5 text-blue-500" />
+                )}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Form Libraries</SelectLabel>
+                <SelectItem value="react-hook-form">
+                  <div className="flex items-center gap-2">
+                    <SiReacthookform className="size-4 text-[#EC5990]" />
+                    <span>React Hook Form</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="tanstack-form">
+                  <div className="flex items-center gap-2">
+                    <SiReactquery className="size-4" />
+                    <span>TanStack Form</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="server-actions" disabled>
+                  <div className="flex items-center gap-2">
+                    <FaReact className="size-4 text-blue-500" />
+                    <span>Server Actions (Coming Soon)</span>
+                  </div>
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <TabsContent
           value="preview"
           className="space-y-4 h-full md:max-h-[70vh] overflow-auto"
@@ -200,9 +275,9 @@ export const FormPreview: React.FC<FormPreviewProps> = ({ formFields, selectedLi
                       style={style}
                     >
                       {tokens.map((line: any, i: number) => (
-                        <div {...getLineProps({ line, key: i })}>
+                        <div key={i} {...getLineProps({ line, key: i })}>
                           {line.map((token: any, key: any) => (
-                            <span {...getTokenProps({ token, key })} />
+                            <span key={key} {...getTokenProps({ token, key })} />
                           ))}
                         </div>
                       ))}
