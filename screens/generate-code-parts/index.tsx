@@ -60,6 +60,9 @@ export const generateZodSchema = (
       case 'Signature Input':
         fieldSchema = z.string().min(1, { message: 'Signature is required' })
         break
+      case 'Signature Pad':
+        fieldSchema = z.string().min(1, { message: 'Signature is required' })
+        break
       case 'Smart Datetime Input':
         fieldSchema = z.union([z.string(), z.date()])
         break
@@ -285,6 +288,12 @@ export const generateImports = (
           "import SignatureInput from '@/components/ui/signature-input'",
         )
         break
+      case 'Signature Pad':
+        importSet.add('import { useState } from "react"')
+        importSet.add(
+          "import SignaturePad from '@/components/ui/signature-pad'",
+        )
+        break
       case 'Tags Input':
         importSet.add('import { TagsInput } from "@/components/ui/tags-input"')
         break
@@ -355,6 +364,8 @@ export const generateConstants = (
         `)
     } else if (field.variant === 'Signature Input') {
       constantSet.add(`const canvasRef = useRef<HTMLCanvasElement>(null)`)
+    } else if (field.variant === 'Signature Pad') {
+      constantSet.add(`const [signature, setSignature] = useState<string | null>(null)`)
     } else if (field.variant === 'Credit Card') {
       constantSet.add(`const [creditCard, setCreditCard] = useState({
         cardholderName: '',

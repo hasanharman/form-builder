@@ -25,14 +25,12 @@ const disableTouchScroll = (canvas: HTMLCanvasElement) => {
   }
 }
 
-const SCALE = 10
-
 export default function SignatureInput({
   canvasRef: externalCanvasRef,
   onSignatureChange,
 }: SignatureInputProps) {
   const internalCanvasRef = useRef<HTMLCanvasElement>(null)
-  const canvasRef = externalCanvasRef || internalCanvasRef
+  const canvasRef = externalCanvasRef ?? internalCanvasRef
   const [isDrawing, setIsDrawing] = useState(false)
   const [lastPosition, setLastPosition] = useState<{
     x: number
@@ -42,6 +40,14 @@ export default function SignatureInput({
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+
+    // Setup canvas context
+    const ctx = canvas.getContext('2d')
+    if (ctx) {
+      ctx.lineWidth = 2
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+    }
 
     const updateStrokeColor = () => {
       const ctx = canvas.getContext('2d')
@@ -61,6 +67,9 @@ export default function SignatureInput({
 
     updateStrokeColor()
 
+    // Disable touch scrolling while drawing
+    const cleanupTouchScroll = disableTouchScroll(canvas)
+
     const observer = new MutationObserver(updateStrokeColor)
     observer.observe(document.documentElement, {
       attributes: true,
@@ -71,6 +80,7 @@ export default function SignatureInput({
     mediaQuery.addEventListener('change', updateStrokeColor)
 
     return () => {
+      cleanupTouchScroll()
       observer.disconnect()
       mediaQuery.removeEventListener('change', updateStrokeColor)
     }
@@ -142,13 +152,27 @@ export default function SignatureInput({
     }
   }
 
+  // Callback ref to sync both internal and external refs
+  const setCanvasRef = (element: HTMLCanvasElement | null) => {
+    // Update internal ref
+    ;(
+      internalCanvasRef as React.MutableRefObject<HTMLCanvasElement | null>
+    ).current = element
+    // Update external ref if provided
+    if (externalCanvasRef) {
+      ;(
+        externalCanvasRef as React.MutableRefObject<HTMLCanvasElement | null>
+      ).current = element
+    }
+  }
+
   return (
     <div className="border border-gray-300 rounded-md overflow-hidden relative w-[400px] h-[200px]">
       <canvas
-        ref={internalCanvasRef}
+        ref={setCanvasRef}
         width={400}
         height={200}
-        className="w-full"
+        className="w-full h-full"
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseOut={stopDrawing}

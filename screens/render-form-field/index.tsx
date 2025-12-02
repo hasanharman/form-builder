@@ -69,6 +69,7 @@ import { DatetimePicker } from '@/components/ui/datetime-picker'
 import { SmartDatetimeInput } from '@/components/ui/smart-datetime-input'
 import LocationSelector from '@/components/ui/location-input'
 import SignatureInput from '@/components/ui/signature-input'
+import SignaturePad from '@/components/ui/signature-pad'
 import { Rating } from '@/components/ui/rating'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { CreditCard, CreditCardValue } from '@/components/ui/credit-card'
@@ -479,6 +480,25 @@ export const renderFormField = (field: FormFieldType, form: any) => {
             <SignatureInput
               canvasRef={canvasRef}
               onSignatureChange={(signature) => {
+                form.setValue(field.name, signature || undefined)
+              }}
+            />
+          </FormControl>
+          <FormDescription className="py-3">
+            {field.description}
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )
+    case 'Signature Pad':
+      return (
+        <FormItem>
+          <FormLabel className="flex items-center gap-1 flex-nowrap">{field.label} {field.required && '*'}</FormLabel>
+          <FormControl>
+            <SignaturePad
+              value={value as string | null}
+              onChange={(signature) => {
+                setValue(signature)
                 form.setValue(field.name, signature || undefined)
               }}
             />

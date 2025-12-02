@@ -22,11 +22,11 @@ export function AppSidebar() {
   return (
     <Sidebar className="sticky">
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarMenu>
+        <SidebarGroup className="py-4">
+          <SidebarMenu className="gap-2">
             {components.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
+              <SidebarMenuItem key={item.title} className="mb-2">
+                <SidebarMenuButton asChild className="py-2">
                   <Link
                     href={item.path}
                     className="font-semibold pointer-events-none"
@@ -38,12 +38,13 @@ export function AppSidebar() {
                   {item.sub.length}
                 </SidebarMenuBadge>
                 {item.sub?.length ? (
-                  <SidebarMenuSub>
+                  <SidebarMenuSub className="gap-1 py-2">
                     {item.sub.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton
                           asChild
                           isActive={pathname === subItem.path}
+                          className="py-2"
                         >
                           <Link href={subItem.path} className="capitalize">
                             {subItem.title}

@@ -27,6 +27,11 @@ export const components: Components[] = [
         description: 'Signature Input',
       },
       {
+        title: 'Signature Pad',
+        path: '/components/signature-pad',
+        description: 'Signature Pad with Dialog',
+      },
+      {
         title: 'Credit Card',
         path: '/components/credit-card',
         description: 'Credit Card Input',

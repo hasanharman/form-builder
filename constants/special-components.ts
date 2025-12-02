@@ -36,6 +36,10 @@ export const SPECIAL_COMPONENTS = [
     url: 'https://www.shadcn-form.com/components/signature-input',
   },
   {
+    variant: 'Signature Pad',
+    url: 'https://www.shadcn-form.com/components/signature-pad',
+  },
+  {
     variant: 'Credit Card',
     url: 'https://www.shadcn-form.com/components/credit-card',
   },

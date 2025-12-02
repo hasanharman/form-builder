@@ -212,7 +212,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4 py-5 max-w-lg mx-auto"
+                  className="space-y-4 py-5 max-w-lg"
                 >
                   {renderFormFields(formFields, form)}
                   <Button type="submit">Submit</Button>
