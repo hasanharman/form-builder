@@ -11,7 +11,6 @@ import HeroVideoDialog from '@/components/sections/hero/hero-video'
 import { NumberTicker } from '@/components/number-ticker'
 import StarIcon from '@/components/star-icon'
 import HeartIcon from '@/components/hearth-icon'
-import { AnimatedTooltip } from '@/components/animated-tooltip'
 
 import { LuStar, LuHeart } from 'react-icons/lu'
 import { VscSourceControl } from 'react-icons/vsc'
@@ -62,34 +61,28 @@ function HeroPill() {
         )
         const repoData = await repoResponse.json()
 
-        const lastUpdateDate = new Date(repoData.pushed_at)
+
+        // Handle case where API returns null or invalid data
+        const starsCount = repoData.stargazers_count || 0
+        const pushedAt = repoData.pushed_at || new Date().toISOString()
+        const lastUpdateDate = new Date(pushedAt)
 
         setStats({
-          stars: repoData.stargazers_count,
+          stars: starsCount,
           lastUpdate: getRelativeTime(lastUpdateDate),
         })
       } catch (error) {
         console.error('Error fetching GitHub data:', error)
+        // Set fallback values
+        setStats({
+          stars: 0,
+          lastUpdate: 'recently',
+        })
       }
     }
 
     fetchGitHubData()
   }, [])
-
-  const sponsors = [
-    {
-      id: 1,
-      name: 'Maxim Ciebiera',
-      designation: 'Founder - datatino.de',
-      image: 'https://avatars.githubusercontent.com/u/47557243?v=4',
-    },
-    {
-      id: 2,
-      name: 'Radu Ciocan',
-      designation: 'React Native Developer',
-      image: 'https://avatars.githubusercontent.com/u/4984377?v=4',
-    },
-  ]
 
   return (
     <motion.div
@@ -100,12 +93,9 @@ function HeroPill() {
     >
       <div className="w-full space-y-3">
         <p className="text-center text-xs text-muted-foreground">
-          Last Update {stats.lastUpdate}
+          Last Update {stats.lastUpdate || 'recently'}
         </p>
         <div className="flex flex-wrap justify-center gap-5 w-full">
-          <div className="flex flex-row items-center justify-center">
-            <AnimatedTooltip items={sponsors} />
-          </div>
           <div className={cn('z-10 flex -space-x-12 rtl:space-x-reverse')}>
             <Link
               href="https://github.com/sponsors/hasanharman"
@@ -127,7 +117,7 @@ function HeroPill() {
               </p>
               <div className="flex items-center rounded-full px-2 py-1 text-center font-medium text-sm ">
                 <StarIcon />
-                <NumberTicker className="ml-1" value={stats.stars} />
+                <NumberTicker className="ml-1" value={stats.stars || 0} />
               </div>
             </Link>
           </div>

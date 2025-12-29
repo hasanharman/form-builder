@@ -11,6 +11,8 @@ import {
 
 export const AnimatedTooltip = ({
   items,
+  size = 40,
+  spacingClass = '-mr-4',
 }: {
   items: {
     id: number
@@ -18,6 +20,8 @@ export const AnimatedTooltip = ({
     designation: string
     image: string
   }[]
+  size?: number
+  spacingClass?: string
 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const springConfig = { stiffness: 100, damping: 5 }
@@ -41,7 +45,7 @@ export const AnimatedTooltip = ({
     <>
       {items.map((item, idx) => (
         <div
-          className="-mr-4 relative group"
+          className={`${spacingClass} relative group`}
           key={item.name}
           onMouseEnter={() => setHoveredIndex(item.id)}
           onMouseLeave={() => setHoveredIndex(null)}
@@ -83,7 +87,8 @@ export const AnimatedTooltip = ({
             width={100}
             src={item.image}
             alt={item.name}
-            className="object-cover !m-0 !p-0 object-top rounded-full h-10 w-10 border-2 group-hover:scale-105 group-hover:z-30 border-white  relative transition duration-500"
+            style={{ width: size, height: size }}
+            className="object-cover !m-0 !p-0 object-top rounded-full border-2 group-hover:scale-105 group-hover:z-30 border-white bg-white dark:bg-white relative transition duration-500"
           />
         </div>
       ))}

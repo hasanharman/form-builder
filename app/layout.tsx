@@ -3,6 +3,7 @@ import { ViewTransitions } from 'next-view-transitions'
 import { Toaster } from 'sonner'
 import localFont from 'next/font/local'
 import NextTopLoader from 'nextjs-toploader'
+import { GoogleAnalytics } from '@next/third-parties/google'
 import './globals.css'
 
 import AllProviders from '@/providers'
@@ -76,6 +77,7 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
           <div>
             <NextTopLoader color="#FF9432" showSpinner={false} />
             <Toaster />

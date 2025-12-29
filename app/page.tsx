@@ -6,6 +6,7 @@ import Solution from '@/components/sections/solution'
 import HowItWorks from '@/components/sections/how-it-works'
 import FAQ from '@/components/sections/faq'
 import Testimonials from '@/components/sections/testimonials'
+import SponsorsRadar from '@/components/sponsors-radar'
 import { Footer } from '@/components/footer'
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Solution />
       <HowItWorks />
       <Testimonials />
+      <SponsorsRadar />
       <FAQ />
       <Footer />
     </main>

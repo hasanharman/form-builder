@@ -3,8 +3,6 @@
 import { ReactNode } from 'react'
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
-import { GoogleAnalytics } from '@next/third-parties/google'
-import { OpenPanelComponent } from '@openpanel/nextjs'
 import { Analytics } from '@vercel/analytics/react'
 import { ThemeProvider } from './theme-provider'
 const AllProviders = ({ children }: { children: ReactNode }) => {
@@ -25,13 +23,6 @@ const AllProviders = ({ children }: { children: ReactNode }) => {
         {children}
       </ThemeProvider>
       <Analytics />
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
-      <OpenPanelComponent
-        clientId={process.env.NEXT_PUBLIC_OPEN_PANEL_CLIENT_ID || ''}
-        trackScreenViews={true}
-        trackAttributes={true}
-        trackOutgoingLinks={true}
-      />
     </PostHogProvider>
   )
 }

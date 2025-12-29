@@ -20,6 +20,10 @@ import { SiBuymeacoffee } from 'react-icons/si'
 import Logo from '@/assets/logo.svg'
 import { usePathname } from 'next/navigation'
 import { ThemeSwitch } from '../ui/theme-switch'
+import { Play } from 'lucide-react'
+import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
+import { getSponsorsByTier } from '@/data/sponsors'
+import { ShinyButton } from '../shiny-button'
 
 type Tabs = {
   name: string
@@ -43,19 +47,21 @@ type Tabs = {
 
 const tabs: Tabs[] = [
   { name: 'Hi', href: '/readme', variant: 'smile' },
-  {
-    name: 'Roadmap',
-    href: 'https://shadcnform.featurebase.app/',
-    variant: 'arrow',
-    isNewTab: true,
-  },
+  // {
+  //   name: 'Roadmap',
+  //   href: 'https://shadcnform.featurebase.app/',
+  //   variant: 'arrow',
+  //   isNewTab: true,
+  // },
   { name: 'Components', href: '/components', variant: 'linkHover2' },
   { name: 'Templates', href: '/templates', variant: 'linkHover2' },
+  { name: 'Sponsors', href: '/sponsors', variant: 'linkHover2' },
 ]
 
 export default function Header() {
   const pathname = usePathname()
   const currentBasePath = '/' + pathname.split('/')[1]
+  const headerSponsors = getSponsorsByTier('header')
 
   return (
     <header className="max-w-5xl mx-auto flex justify-between items-center my-5 px-5 lg:px-0">
@@ -101,9 +107,61 @@ export default function Header() {
       </nav>
 
       <div className="hidden md:flex items-center gap-3">
+        {headerSponsors.map((sponsor) => (
+          <>
+            {/*
+            <Link
+              key={sponsor.id}
+              href={sponsor.url || `https://github.com/${sponsor.name}`}
+              className="flex items-center gap-2 rounded-full pl-1 pr-3 border h-9 hover:bg-accent transition-colors"
+              target="_blank"
+            >
+              <Image
+                src={sponsor.image}
+                alt={sponsor.name}
+                width={28}
+                height={28}
+                className="rounded-full bg-white dark:bg-white object-cover"
+              />
+              <div className="flex flex-col">
+                <span className="text-xs font-medium leading-none">
+                  {sponsor.name}
+                </span>
+                {sponsor.description && (
+                  <span className="text-[10px] font-light text-muted-foreground leading-none mt-0.5">
+                    {sponsor.description}
+                  </span>
+                )}
+              </div>
+            </Link>
+            */}
+            <ShinyButton
+              key={sponsor.id}
+              size="sm"
+              // className="shrink-0 min-w-0 px-3"
+              onClick={() =>
+                window.open(
+                  sponsor.url || `https://github.com/${sponsor.name}`,
+                  '_blank',
+                )
+              }
+            >
+              {/* Inline avatar + title inside shiny button; no description */}
+              <Avatar className="size-6">
+                <AvatarImage src={sponsor.image} alt={sponsor.name} />
+                <AvatarFallback className="text-[10px] font-medium">
+                  {sponsor.name?.[0] ?? ''}
+                </AvatarFallback>
+              </Avatar>
+              <span className="text-xs font-medium leading-none truncate">
+                {sponsor.name}
+              </span>
+            </ShinyButton>
+          </>
+        ))}
         <Link href="/playground">
-          <Button variant="gooeyLeft" className="g-primary rounded-full px-4">
-            Playground
+          <Button size="icon" className="rounded-full p-2">
+            <Play />
           </Button>
         </Link>
         <Link
@@ -119,11 +177,11 @@ export default function Header() {
             <FaXTwitter className="text-lg" />
           </Button>
         </Link>
-        <Link href="https://buymeacoffee.com/hasanharman" target="_blank">
-        <Button className="bg-yellow-400 text-black hover:text-white hover:dark:text-black  rounded-full p-2">
-        <SiBuymeacoffee className="text-lg" />
+        {/* <Link href="https://buymeacoffee.com/hasanharman" target="_blank">
+          <Button className="bg-yellow-400 text-black hover:text-white hover:dark:text-black  rounded-full p-2">
+            <SiBuymeacoffee className="text-lg" />
           </Button>
-        </Link>
+        </Link> */}
         <ThemeSwitch />
       </div>
 
