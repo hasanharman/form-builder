@@ -1,26 +1,24 @@
+import path from 'node:path'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   webpack(config) {
-    // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),
     )
 
     config.module.rules.push(
-      // Reapply the existing rule, but only for svg imports ending in ?url
       {
         ...fileLoaderRule,
         test: /\.svg$/i,
-        resourceQuery: /url/, // *.svg?url
+        resourceQuery: /url/,
       },
-      // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
         issuer: fileLoaderRule.issuer,
-        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] }, // exclude if *.svg?url
+        resourceQuery: { not: [...fileLoaderRule.resourceQuery.not, /url/] },
         use: ['@svgr/webpack'],
       },
-      // Import the component's source code as a string using syntax like 'import Comp from '@/components/comp?raw'
       {
         test: /\.tsx$/i,
         resourceQuery: /raw/,
@@ -28,18 +26,35 @@ const nextConfig = {
       },
     )
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i
 
     return config
   },
+  // Configure Turbopack explicitly to avoid root inference issues
+  turbopack: {
+    // Force the workspace root to this project
+    root: path.join(path.dirname(new URL(import.meta.url).pathname)),
+    // Port Webpack loaders to Turbopack rules
+    rules: {
+      // Convert all .svg imports to React components via SVGR
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+      // Allow importing component source with ?raw to display code samples
+      '*?raw': {
+        loaders: ['raw-loader'],
+      },
+    },
+  },
+  // Update image configuration for Next 16 security model
   images: {
-    domains: [
-      'img.youtube.com',
-      'randomuser.me',
-      'avatars.githubusercontent.com',
-      'pbs.twimg.com',
-      'images.unsplash.com',
+    remotePatterns: [
+      { protocol: 'https', hostname: 'img.youtube.com' },
+      { protocol: 'https', hostname: 'randomuser.me' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+      { protocol: 'https', hostname: 'pbs.twimg.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },
 }
