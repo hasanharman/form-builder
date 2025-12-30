@@ -31,7 +31,7 @@ export const featuredSponsors: Sponsor[] = [
     designation: 'Header Sponsor',
     image: 'https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg',
     tier: 'header',
-    url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_campaign=header',
+    url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor',
     isActive: true,
     description: 'shadcn blocks & templates',
   },
