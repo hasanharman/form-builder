@@ -3,7 +3,7 @@ import Logo from '@/assets/logo.svg'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { getSponsorsByTier, pastSponsors, type Sponsor } from '@/data/sponsors'
+import { getSponsorsByTier, pastSponsors, type Sponsor, getSponsorUrl } from '@/data/sponsors'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
   Popover,
@@ -30,15 +30,15 @@ export default function IntegrationsSection() {
           <div className="aspect-16/10 group relative mx-auto flex max-w-[22rem] items-center justify-between sm:max-w-sm">
             <div
               role="presentation"
-              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-0 z-10 aspect-square animate-spin items-center justify-center rounded-full border-t from-lime-500/15 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100 dark:from-white/5"
+              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-0 z-10 aspect-square animate-spin items-center justify-center rounded-full border-t from-orange-500/15 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100 dark:from-orange-400/10"
             ></div>
             <div
               role="presentation"
-              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-16 z-10 aspect-square scale-90 animate-spin items-center justify-center rounded-full border-t from-blue-500/15 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100"
+              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-16 z-10 aspect-square scale-90 animate-spin items-center justify-center rounded-full border-t from-orange-600/15 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100"
             ></div>
             <div
               role="presentation"
-              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-28 z-10 aspect-square scale-75 animate-spin items-center justify-center rounded-full border-t from-foreground/10 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100"
+              className="pointer-events-none bg-linear-to-b border-foreground/5 absolute inset-28 z-10 aspect-square scale-75 animate-spin items-center justify-center rounded-full border-t from-orange-400/10 to-transparent to-25% opacity-0 duration-[3.5s] group-hover:opacity-100"
             ></div>
             <div className="bg-linear-to-b from-muted-foreground/15 absolute inset-0 flex aspect-square items-center justify-center rounded-full border-t to-transparent to-25%">
               {outerRing[0] && (
@@ -197,6 +197,15 @@ function SponsorAvatarPopover({
     .slice(0, 2)
     .join('')
 
+  const avatarContent = (
+    <Avatar className={sizeClass}>
+      <AvatarImage src={sponsor.image} alt={sponsor.name} />
+      <AvatarFallback className="text-[10px] font-medium">
+        {initials}
+      </AvatarFallback>
+    </Avatar>
+  )
+
   return (
     <Popover open={open}>
       <PopoverTrigger asChild>
@@ -205,12 +214,13 @@ function SponsorAvatarPopover({
           onMouseLeave={() => setOpen(false)}
           className="inline-flex"
         >
-          <Avatar className={sizeClass}>
-            <AvatarImage src={sponsor.image} alt={sponsor.name} />
-            <AvatarFallback className="text-[10px] font-medium">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          {sponsor.url ? (
+            <Link href={getSponsorUrl(sponsor, 'landing')} target="_blank" rel="noopener noreferrer">
+              {avatarContent}
+            </Link>
+          ) : (
+            avatarContent
+          )}
         </div>
       </PopoverTrigger>
       <PopoverContent side="top" className="px-2 py-1 text-xs">
