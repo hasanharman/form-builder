@@ -8,41 +8,42 @@ import { ChevronRight } from 'lucide-react'
 import { IoIosArrowRoundForward } from 'react-icons/io'
 import {
   getSponsorsByTier,
+  getSponsorUrl,
   pastSponsors,
   sponsorTiers,
   type Sponsor,
 } from '@/data/sponsors'
 
-const ease = [0.16, 1, 0.3, 1]
-
 function SponsorCard({
   sponsor,
-  tierName,
   showButton = false,
   showBorder = false,
 }: {
   sponsor: Sponsor
-  tierName: string
   showButton?: boolean
   showBorder?: boolean
 }) {
-  const sponsorUrl = sponsor.url || `https://github.com/${sponsor.name}`
+  const sponsorUrl = getSponsorUrl(sponsor, 'sponsor_page')
 
   return (
     <Card className="p-6 rounded-3xl">
-      <div className="*:size-10">
-        <img
-          src={sponsor.image}
-          alt={sponsor.name}
-          className="rounded-full bg-white dark:bg-white object-cover"
-        />
-      </div>
-      <div
-        className={`space-y-2 ${showBorder ? 'pb-3 border-b border-dashed' : ''}`}
-      >
-        <h3 className="font-semibold">{sponsor.name}</h3>
-        <p className="text-sm text-muted-foreground">{tierName}</p>
-      </div>
+      <Link href={sponsorUrl} target="_blank" className="block">
+        <div className="*:size-16 mb-4">
+          <img
+            src={sponsor.image}
+            alt={sponsor.name}
+            className="rounded-full bg-white dark:bg-white object-cover border"
+          />
+        </div>
+        <div
+          className={`space-y-2 ${showBorder ? 'pb-3 border-b border-dashed' : ''}`}
+        >
+          <h3 className="font-semibold hover:underline">{sponsor.name}</h3>
+          {sponsor.description && (
+            <p className="text-sm text-muted-foreground">{sponsor.description}</p>
+          )}
+        </div>
+      </Link>
       {showButton && (
         <div className="flex justify-end mt-3">
           <Button
@@ -84,7 +85,6 @@ function TierSection({
           <SponsorCard
             key={sponsor.id}
             sponsor={sponsor}
-            tierName={tierName}
             showButton={showButton}
             showBorder={showBorder}
           />
@@ -110,7 +110,6 @@ function PastSponsorsSection({ sponsors }: { sponsors: Sponsor[] }) {
           <SponsorCard
             key={sponsor.id}
             sponsor={sponsor}
-            tierName="Former Sponsor"
           />
         ))}
       </div>

@@ -15,56 +15,66 @@ export interface Sponsor {
 // Two dummy active sponsors for each tier
 export const featuredSponsors: Sponsor[] = [
   // Header (100$) — 2 dummy
-//   {
-//     id: 101,
-//     name: 'Header Sponsor A',
-//     designation: 'Header Sponsor',
-//     image: 'https://avatars.githubusercontent.com/u/1?v=4',
-//     tier: 'header',
-//     url: 'https://github.com/mojombo',
-//     isActive: true,
-//     description: 'Premium Sponsor',
-//   },
+  //   {
+  //     id: 101,
+  //     name: 'Header Sponsor A',
+  //     designation: 'Header Sponsor',
+  //     image: 'https://avatars.githubusercontent.com/u/1?v=4',
+  //     tier: 'header',
+  //     url: 'https://github.com/mojombo',
+  //     isActive: true,
+  //     description: 'Premium Sponsor',
+  //   },
+  {
+    id: 101,
+    name: 'shadcnstudio.com',
+    designation: 'Header Sponsor',
+    image: 'https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg',
+    tier: 'header',
+    url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_campaign=header',
+    isActive: true,
+    description: 'shadcn blocks & templates',
+  },
 
   // Project (50$) — 2 dummy
-//   {
-//     id: 201,
-//     name: 'Project Supporter A',
-//     designation: 'Project Supporter',
-//     image: 'https://avatars.githubusercontent.com/u/3?v=4',
-//     tier: 'project',
-//     url: 'https://github.com/pjhyett',
-//     isActive: true,
-//   },
-//   {
-//     id: 202,
-//     name: 'Project Supporter B',
-//     designation: 'Project Supporter',
-//     image: 'https://avatars.githubusercontent.com/u/4?v=4',
-//     tier: 'project',
-//     url: 'https://github.com/wycats',
-//     isActive: true,
-//   },
+  //   {
+  //     id: 201,
+  //     name: 'Project Supporter A',
+  //     designation: 'Project Supporter',
+  //     image: 'https://avatars.githubusercontent.com/u/3?v=4',
+  //     tier: 'project',
+  //     url: 'https://github.com/pjhyett',
+  //     isActive: true,
+  //   },
+  //   {
+  //     id: 202,
+  //     name: 'Project Supporter B',
+  //     designation: 'Project Supporter',
+  //     image: 'https://avatars.githubusercontent.com/u/4?v=4',
+  //     tier: 'project',
+  //     url: 'https://github.com/wycats',
+  //     isActive: true,
+  //   },
 
   // Community (10$) — 2 dummy
-//   {
-//     id: 301,
-//     name: 'Community Supporter A',
-//     designation: 'Community Supporter',
-//     image: 'https://avatars.githubusercontent.com/u/5?v=4',
-//     tier: 'community',
-//     url: 'https://github.com/ezmobius',
-//     isActive: true,
-//   },
-//   {
-//     id: 302,
-//     name: 'Community Supporter B',
-//     designation: 'Community Supporter',
-//     image: 'https://avatars.githubusercontent.com/u/6?v=4',
-//     tier: 'community',
-//     url: 'https://github.com/ivey',
-//     isActive: true,
-//   },
+  //   {
+  //     id: 301,
+  //     name: 'Community Supporter A',
+  //     designation: 'Community Supporter',
+  //     image: 'https://avatars.githubusercontent.com/u/5?v=4',
+  //     tier: 'community',
+  //     url: 'https://github.com/ezmobius',
+  //     isActive: true,
+  //   },
+  //   {
+  //     id: 302,
+  //     name: 'Community Supporter B',
+  //     designation: 'Community Supporter',
+  //     image: 'https://avatars.githubusercontent.com/u/6?v=4',
+  //     tier: 'community',
+  //     url: 'https://github.com/ivey',
+  //     isActive: true,
+  //   },
 ]
 
 // Past sponsors - People who previously supported the project
@@ -132,6 +142,19 @@ export const getSponsorsByTier = (tier: SponsorTier): Sponsor[] => {
 // Get all sponsors (active + past)
 export const getAllSponsors = (): Sponsor[] => {
   return [...featuredSponsors, ...pastSponsors]
+}
+
+// Get sponsor URL with appropriate utm_medium based on context
+export const getSponsorUrl = (
+  sponsor: Sponsor,
+  medium: 'landing' | 'header' | 'sponsor_page' | 'github'
+): string => {
+  if (!sponsor.url) return '#'
+  
+  const url = new URL(sponsor.url)
+  url.searchParams.set('utm_medium', medium)
+  
+  return url.toString()
 }
 
 // Sponsor tier information
