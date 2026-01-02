@@ -155,38 +155,44 @@ This project is licensed under the MIT License.
 
 A huge thank you to everyone who has supported this project! Your generosity keeps this project alive and growing. I truly appreciate every single one of you.
 
-### Header Sponsors ($100/month)
+### ⭐ Header Sponsors ($100/month)
 
-These amazing people get their logo button in the website header:
+Premium sponsors featured prominently throughout the project:
 
-- [Header Sponsor A](https://github.com/mojombo)
-- [Header Sponsor B](https://github.com/defunkt)
+<div align="center">
+  <a href="https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor">
+    <img src="https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg" alt="shadcnstudio.com" width="200" height="100" style="margin: 20px; border-radius: 8px;" />
+  </a>
+</div>
+
+**[shadcnstudio.com](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor)** - Explore beautiful shadcn blocks & templates to accelerate your development.
 
 ### Project Supporters ($50/month)
 
 These wonderful folks help drive the project forward:
 
-- [Project Supporter A](https://github.com/pjhyett)
-- [Project Supporter B](https://github.com/wycats)
+- Come be the first! [Become a Project Supporter](https://github.com/sponsors/hasanharman)
 
 ### Community Supporters ($10/month)
 
 Thank you for being part of this journey:
 
-- [Community Supporter A](https://github.com/ezmobius)
-- [Community Supporter B](https://github.com/ivey)
+- Come be the first! [Become a Community Supporter](https://github.com/sponsors/hasanharman)
 
 ### Past Sponsors
 
 A heartfelt thanks to those who previously supported the project:
 
-- [tino-technology](https://github.com/tino-technology)
-- [feliperails](https://github.com/feliperails)
-- [Radu Ciocan](https://github.com/raduciocan)
-- [rutsatz](https://github.com/rutsatz)
-- [Maxim Ciebiera](https://github.com/maxciebiera)
+| | | | | |
+|:---:|:---:|:---:|:---:|:---:|
+| [![tino-technology](https://avatars.githubusercontent.com/u/150597157?s=100&v=4)](https://github.com/tino-technology) | [![feliperails](https://avatars.githubusercontent.com/u/1680000?s=100&v=4)](https://github.com/feliperails) | [![Radu Ciocan](https://avatars.githubusercontent.com/u/4984377?s=100&v=4)](https://github.com/raduciocan) | [![rutsatz](https://avatars.githubusercontent.com/u/14064725?s=100&v=4)](https://github.com/rutsatz) | [![Maxim Ciebiera](https://avatars.githubusercontent.com/u/47557243?s=100&v=4)](https://github.com/maxciebiera) |
+| [tino-technology](https://github.com/tino-technology) | [feliperails](https://github.com/feliperails) | [Radu Ciocan](https://github.com/raduciocan) | [rutsatz](https://github.com/rutsatz) | [Maxim Ciebiera](https://github.com/maxciebiera) |
 
-Interested in becoming a sponsor? Check out our [GitHub Sponsors page](https://github.com/sponsors/hasanharman)!
+---
+
+### Interested in Sponsoring?
+
+Your support helps keep this project alive and thriving! [Become a sponsor on GitHub](https://github.com/sponsors/hasanharman) and help shape the future of form building.
 
 ## Acknowledgements
 
