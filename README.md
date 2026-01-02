@@ -23,6 +23,12 @@ A dynamic form-building tool that allows users to create, customize, and validat
     - [Form Submission](#form-submission)
   - [Contributing](#contributing)
   - [License](#license)
+  - [Sponsors](#sponsors)
+    - [⭐ Header Sponsors ($100/month)](#-header-sponsors-100month)
+    - [Project Supporters ($50/month)](#project-supporters-50month)
+    - [Community Supporters ($10/month)](#community-supporters-10month)
+    - [Past Sponsors](#past-sponsors)
+    - [Interested in Sponsoring?](#interested-in-sponsoring)
   - [Acknowledgements](#acknowledgements)
 
 ## Features
@@ -160,12 +166,12 @@ A huge thank you to everyone who has supported this project! Your generosity kee
 Premium sponsors featured prominently throughout the project:
 
 <div align="center">
-  <a href="https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor">
+  <a href="https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor">
     <img src="https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg" alt="shadcnstudio.com" width="200" height="100" style="margin: 20px; border-radius: 8px;" />
   </a>
 </div>
 
-**[shadcnstudio.com](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor)** - Explore beautiful shadcn blocks & templates to accelerate your development.
+**[shadcnstudio.com](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor)** - Explore beautiful shadcn blocks & templates to accelerate your development.
 
 ### Project Supporters ($50/month)
 
