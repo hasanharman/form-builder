@@ -13,6 +13,7 @@ import {
   sponsorTiers,
   type Sponsor,
 } from '@/data/sponsors'
+import ShadcnSpaceLogo from '@/assets/sponsors/shadcnspace.webp'
 
 function SponsorCard({
   sponsor,
@@ -30,7 +31,11 @@ function SponsorCard({
       <Link href={sponsorUrl} target="_blank" className="block">
         <div className="*:size-16 mb-4">
           <img
-            src={sponsor.image}
+            src={
+              sponsor.name === 'shadcnspace.com'
+                ? (ShadcnSpaceLogo as any).src
+                : sponsor.image
+            }
             alt={sponsor.name}
             className="rounded-full bg-white dark:bg-white object-cover border"
           />

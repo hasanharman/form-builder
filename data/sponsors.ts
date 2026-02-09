@@ -26,7 +26,7 @@ export const featuredSponsors: Sponsor[] = [
   //     description: 'Premium Sponsor',
   //   },
   {
-    id: 101,
+    id: 1,
     name: 'shadcnstudio.com',
     designation: 'Header Sponsor',
     image: 'https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg',
@@ -34,6 +34,16 @@ export const featuredSponsors: Sponsor[] = [
     url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor',
     isActive: true,
     description: 'shadcn blocks & templates',
+  },
+  {
+    id: 2,
+    name: 'shadcnspace.com',
+    designation: 'Community Supporter',
+    image: 'https://shadcnspace.com/images/logo/shadcnspace-white.svg',
+    tier: 'community',
+    url: 'https://shadcnspace.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor',
+    isActive: true,
+    description: 'Extraordinary Shadcn UI blocks, components, and templates',
   },
 
   // Project (50$) — 2 dummy
@@ -147,13 +157,13 @@ export const getAllSponsors = (): Sponsor[] => {
 // Get sponsor URL with appropriate utm_medium based on context
 export const getSponsorUrl = (
   sponsor: Sponsor,
-  medium: 'landing' | 'header' | 'sponsor_page' | 'github'
+  medium: 'landing' | 'header' | 'sponsor_page' | 'github',
 ): string => {
   if (!sponsor.url) return '#'
-  
+
   const url = new URL(sponsor.url)
   url.searchParams.set('utm_medium', medium)
-  
+
   return url.toString()
 }
 

@@ -1,9 +1,15 @@
-'use client'
+"use client"
 import Logo from '@/assets/logo.svg'
+import ShadcnSpaceLogo from '@/assets/sponsors/shadcnspace.webp'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { getSponsorsByTier, pastSponsors, type Sponsor, getSponsorUrl } from '@/data/sponsors'
+import {
+  getSponsorsByTier,
+  pastSponsors,
+  type Sponsor,
+  getSponsorUrl,
+} from '@/data/sponsors'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import {
   Popover,
@@ -199,7 +205,14 @@ function SponsorAvatarPopover({
 
   const avatarContent = (
     <Avatar className={sizeClass}>
-      <AvatarImage src={sponsor.image} alt={sponsor.name} />
+      <AvatarImage
+        src={
+          sponsor.name === 'shadcnspace.com'
+            ? (ShadcnSpaceLogo as any).src
+            : sponsor.image
+        }
+        alt={sponsor.name}
+      />
       <AvatarFallback className="text-[10px] font-medium">
         {initials}
       </AvatarFallback>

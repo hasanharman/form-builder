@@ -24,6 +24,7 @@ import { Play } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar'
 import { getSponsorsByTier } from '@/data/sponsors'
 import { ShinyButton } from '../shiny-button'
+import ShadcnSpaceLogo from '@/assets/sponsors/shadcnspace.webp'
 
 type Tabs = {
   name: string
@@ -148,7 +149,14 @@ export default function Header() {
             >
               {/* Inline avatar + title inside shiny button; no description */}
               <Avatar className="size-6">
-                <AvatarImage src={sponsor.image} alt={sponsor.name} />
+                <AvatarImage
+                  src={
+                    sponsor.name === 'shadcnspace.com'
+                      ? (ShadcnSpaceLogo as any).src
+                      : sponsor.image
+                  }
+                  alt={sponsor.name}
+                />
                 <AvatarFallback className="text-[10px] font-medium">
                   {sponsor.name?.[0] ?? ''}
                 </AvatarFallback>
