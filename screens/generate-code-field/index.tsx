@@ -479,8 +479,8 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                   <FormLabel>${field.label}</FormLabel>
                   <FormControl>
                     <FileUploader
-                      value={files}
-                      onValueChange={setFiles}
+                      value={field.value}
+                      onValueChange={field.onChange}
                       dropzoneOptions={dropZoneConfig}
                       className="relative bg-background rounded-lg p-2"
                     >
@@ -500,9 +500,9 @@ export const generateCodeSnippet = (field: FormFieldType) => {
                         </div>
                       </FileInput>
                       <FileUploaderContent>
-                        {files &&
-                          files.length > 0 &&
-                          files.map((file, i) => (
+                        {field.value &&
+                          field.value.length > 0 &&
+                          field.value.map((file, i) => (
                             <FileUploaderItem key={i} index={i}>
                               <Paperclip className="h-4 w-4 stroke-current" />
                               <span>{file.name}</span>

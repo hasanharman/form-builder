@@ -48,6 +48,9 @@ export const generateZodSchema = (
           fieldSchema = z.string().min(1, { message: 'Required' })
           break
         }
+      case 'File Input':
+        fieldSchema = z.array(z.instanceof(File))
+        break
       case 'Location Input':
         fieldSchema = z.tuple([
           z.string().min(1, { message: 'Country is required' }),
@@ -81,7 +84,7 @@ export const generateZodSchema = (
         fieldSchema = z
           .array(z.string())
           .min(1, { message: 'Please select at least one item' })
-          break
+        break
       case 'Rating':
         fieldSchema = z.coerce.number().min(1, { message: 'Rating is required' })
         break
@@ -199,6 +202,11 @@ export const zodSchemaToString = (schema: z.ZodTypeAny): string => {
 
   if (schema instanceof z.ZodOptional) {
     return `${zodSchemaToString(schema.unwrap() as z.ZodTypeAny)}.optional()`
+  }
+
+  // @ts-ignore
+  if (schema instanceof z.ZodType<InstanceType<File>>) {
+    return `z.instanceof(File)`
   }
 
   return 'z.unknown()'
@@ -350,7 +358,6 @@ export const generateConstants = (
       ] as const;`)
     } else if (field.variant === 'File Input') {
       constantSet.add(`
-        const [files, setFiles] = useState<File[] | null>(null); 
 
         const dropZoneConfig = {
           maxFiles: 5,
