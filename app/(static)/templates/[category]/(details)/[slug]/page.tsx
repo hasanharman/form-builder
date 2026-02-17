@@ -1,8 +1,13 @@
-'use client'
-import dynamic from 'next/dynamic'
-import { use } from 'react'
+import { notFound } from 'next/navigation'
 import { Link } from 'next-view-transitions'
 
+import { templates } from '@/constants/templates'
+import Contact from '@/components/templates/contact'
+import ForgotPassword from '@/components/templates/forgot-password'
+import Login from '@/components/templates/login'
+import Newsletter from '@/components/templates/newsletter'
+import Register from '@/components/templates/register'
+import ResetPassword from '@/components/templates/reset-password'
 import { CodeViewer } from '@/components/templates/code-viewer'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
@@ -14,27 +19,34 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import If from '@/components/ui/if'
-import { useSidebar } from '@/components/ui/sidebar' // Check this import
 
-export default function Page({
-  params,
-}: {
+const templatePages = {
+  login: Login,
+  register: Register,
+  'forgot-password': ForgotPassword,
+  'reset-password': ResetPassword,
+  contact: Contact,
+  newsletter: Newsletter,
+}
+
+interface TemplateDetailsPageProps {
   params: Promise<{ slug: string; category: string }>
-}) {
-  const { slug, category } = use(params)
-  const pathname = slug
+}
 
-  const { toggleSidebar } = useSidebar()
+export default async function Page({ params }: TemplateDetailsPageProps) {
+  const { slug, category } = await params
+  const PreviewComponent = templatePages[slug as keyof typeof templatePages]
 
-  // Dynamically import the preview component
-  const PreviewComponent = dynamic(
-    () => import(`@/components/templates/${pathname}`),
-    {
-      loading: () => <p>Loading preview...</p>,
-      // Handle import errors gracefully
-      ssr: true,
-    },
+  const categoryConfig = templates.find((template) =>
+    template.path.endsWith(`/${category}`),
   )
+  const isValidTemplateForCategory = categoryConfig?.sub.some(
+    (entry) => entry.path === `/templates/${category}/${slug}`,
+  )
+
+  if (!PreviewComponent || !isValidTemplateForCategory) {
+    notFound()
+  }
 
   return (
     <div className="space-y-6">
@@ -42,18 +54,13 @@ export default function Page({
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                onClick={() => toggleSidebar()}
-                className="cursor-pointer"
-              >
-                Templates
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/templates">Templates</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink
-                onClick={() => toggleSidebar()}
-                className="capitalize cursor-pointer"
+                href={categoryConfig?.path ?? `/templates/${category}`}
+                className="capitalize"
               >
                 {category}
               </BreadcrumbLink>
@@ -61,26 +68,26 @@ export default function Page({
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="capitalize">
-                {pathname.replace(/-/g, ' ')} Form
+                {slug.replace(/-/g, ' ')} Form
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
         <h1 className="text-xl font-semibold capitalize">
-          {pathname.replace(/-/g, ' ')} Form
+          {slug.replace(/-/g, ' ')} Form
         </h1>
         <p className="text-sm text-muted-foreground">
           This form includes special component, add the component in your
-          directory. {''}
+          directory.
         </p>
         <ul className="list-disc text-sm text-muted-foreground pl-3">
           <If
             condition={
-              pathname === 'login' ||
-              pathname === 'register' ||
-              pathname === 'forgot-password' ||
-              pathname === 'reset-password'
+              slug === 'login' ||
+              slug === 'register' ||
+              slug === 'forgot-password' ||
+              slug === 'reset-password'
             }
             render={() => (
               <li>
@@ -95,7 +102,7 @@ export default function Page({
             )}
           />
           <If
-            condition={pathname === 'register' || pathname === 'contact'}
+            condition={slug === 'register' || slug === 'contact'}
             render={() => (
               <li>
                 <Link
@@ -110,7 +117,7 @@ export default function Page({
           />
         </ul>
       </div>
-      <Tabs defaultValue="preview" className="">
+      <Tabs defaultValue="preview">
         <TabsList className="flex justify-center w-fit mx-auto">
           <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="code">Code</TabsTrigger>
@@ -119,7 +126,7 @@ export default function Page({
           <PreviewComponent />
         </TabsContent>
         <TabsContent value="code">
-          <CodeViewer filename={pathname} />
+          <CodeViewer filename={slug} />
         </TabsContent>
       </Tabs>
     </div>

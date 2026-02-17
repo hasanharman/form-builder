@@ -2,6 +2,13 @@ import { Registry } from './schema'
 
 export const ui: Registry = [
   {
+    name: 'autocomplete',
+    type: 'registry:ui',
+    dependencies: ['use-debounce'],
+    registryDependencies: ['input', 'button'],
+    files: ['ui/autocomplete.tsx'],
+  },
+  {
     name: 'location-input',
     type: 'registry:ui',
     registryDependencies: ['button', 'popover', 'scroll-area', 'command'],

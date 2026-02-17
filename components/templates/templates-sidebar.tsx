@@ -28,10 +28,7 @@ export function AppSidebar() {
             {templates.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <Link
-                    href={item.path}
-                    className="font-semibold pointer-events-none"
-                  >
+                  <Link href={item.path} className="font-semibold">
                     {item.title}
                   </Link>
                 </SidebarMenuButton>

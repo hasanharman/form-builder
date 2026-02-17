@@ -27,10 +27,7 @@ export function AppSidebar() {
             {components.map((item) => (
               <SidebarMenuItem key={item.title} className="mb-2">
                 <SidebarMenuButton asChild className="py-2">
-                  <Link
-                    href={item.path}
-                    className="font-semibold pointer-events-none"
-                  >
+                  <Link href={item.path} className="font-semibold">
                     {item.title}
                   </Link>
                 </SidebarMenuButton>

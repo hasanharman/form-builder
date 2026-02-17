@@ -1,8 +1,10 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { notFound } from 'next/navigation'
 import { use } from 'react'
 
+import { components } from '@/constants/components'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -11,23 +13,29 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { useSidebar } from '@/components/ui/sidebar' // Check this import
+
+const componentPages = {
+  autocomplete: dynamic(() => import('@/components/components/autocomplete')),
+  'location-input': dynamic(
+    () => import('@/components/components/location-input'),
+  ),
+  'signature-input': dynamic(
+    () => import('@/components/components/signature-input'),
+  ),
+  'signature-pad': dynamic(() => import('@/components/components/signature-pad')),
+  'credit-card': dynamic(() => import('@/components/components/credit-card')),
+}
 
 export default function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
-  const pathname = slug
-
-  const { toggleSidebar } = useSidebar()
-
-  // Dynamically import the preview component
-  const PreviewComponent = dynamic(
-    () => import(`@/components/components/${pathname}`),
-    {
-      loading: () => <p>Loading preview...</p>,
-      // Handle import errors gracefully
-      ssr: true,
-    },
+  const PreviewComponent = componentPages[slug as keyof typeof componentPages]
+  const isKnownSlug = components.some((group) =>
+    group.sub.some((entry) => entry.path === `/components/${slug}`),
   )
+
+  if (!PreviewComponent || !isKnownSlug) {
+    notFound()
+  }
 
   return (
     <div className="space-y-6">
@@ -35,17 +43,12 @@ export default function Page({ params }: { params: Promise<{ slug: string }> }) 
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink
-                onClick={() => toggleSidebar()}
-                className="cursor-pointer"
-              >
-                Components
-              </BreadcrumbLink>
+              <BreadcrumbLink href="/components">Components</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbPage className="capitalize">
-                {pathname.replace(/-/g, ' ')} Component
+                {slug.replace(/-/g, ' ')} Component
               </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>

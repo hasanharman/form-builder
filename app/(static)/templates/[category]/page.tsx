@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 
+import { templates } from '@/constants/templates'
+
 interface CategoryPageProps {
   params: Promise<{
     category: string
@@ -7,8 +9,12 @@ interface CategoryPageProps {
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
-  const { category } = await params;
-  // You could add logic here to handle different categories
-  // For now, we'll redirect all category roots to login
-  redirect('/templates/authentication/login')
+  const { category } = await params
+
+  const matchingTemplate = templates.find((template) =>
+    template.path.endsWith(`/${category}`),
+  )
+
+  const defaultTemplatePath = matchingTemplate?.sub?.[0]?.path
+  redirect(defaultTemplatePath ?? '/templates')
 }
