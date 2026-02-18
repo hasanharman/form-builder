@@ -12,8 +12,8 @@ export default async function TemplateLayout({ children }: LayoutProps) {
     <SidebarProvider
       style={
         {
-          '--sidebar-width': '26rem',
-          '--sidebar-width-mobile': '22rem',
+          '--sidebar-width': '18rem',
+          '--sidebar-width-mobile': '15rem',
         } as React.CSSProperties
       }
     >

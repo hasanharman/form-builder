@@ -51,9 +51,9 @@ export function AppSidebar() {
   ]
 
   return (
-    <Sidebar className="sticky">
-      <SidebarContent>
-        <SidebarGroup>
+    <Sidebar className="sticky top-4 h-[calc(100svh-6.5rem)]">
+      <SidebarContent className="h-full">
+        <SidebarGroup className="h-full">
           <SidebarMenu>
             {(isShadcnAuthPage
               ? [
