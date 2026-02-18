@@ -1,102 +1,82 @@
+export interface TemplateEntry {
+  title: string
+  path: string
+  description: string
+  icon: 'shield' | 'key' | 'database' | 'flame' | 'sparkles' | 'mail' | 'message'
+  logoLabel: string
+}
+
 export interface Templates {
   title: string
   description: string
   path: string
-  sub: any[]
+  sub: TemplateEntry[]
 }
 
 export const templates: Templates[] = [
   {
     title: 'Authentication',
     description:
-      'Contains forms for login, registration, password recovery, and related authentication processes.',
+      'Production-ready authentication patterns from base shadcn to provider-integrated variants.',
     path: '/templates/authentication',
     sub: [
       {
-        title: 'Login',
-        path: '/templates/authentication/login',
-        description: 'Login template',
+        title: 'Shadcn',
+        path: '/templates/authentication/shadcn-auth',
+        description: 'Authentication starter with login, signup, and recovery flows.',
+        icon: 'shield',
+        logoLabel: 'shadcn/ui',
       },
       {
-        title: 'Register',
-        path: '/templates/authentication/register',
-        description: 'Register template',
+        title: 'Clerk Elements Auth',
+        path: '/templates/authentication/clerk-auth',
+        description: 'Sign-in form layout adapted for Clerk Elements flows.',
+        icon: 'key',
+        logoLabel: 'Clerk',
       },
       {
-        title: 'Forgot Password',
-        path: '/templates/authentication/forgot-password',
-        description: 'Login template',
+        title: 'Supabase Ready Auth',
+        path: '/templates/authentication/supabase-auth',
+        description: 'Email/password auth UI prepared for Supabase actions.',
+        icon: 'database',
+        logoLabel: 'Supabase',
       },
       {
-        title: 'Reset Password',
-        path: '/templates/authentication/reset-password',
-        description: 'Login template',
+        title: 'Firebase Ready Auth',
+        path: '/templates/authentication/firebase-auth',
+        description: 'Firebase-focused sign-in design with provider actions.',
+        icon: 'flame',
+        logoLabel: 'Firebase',
+      },
+      {
+        title: 'Better Auth Ready',
+        path: '/templates/authentication/better-auth',
+        description: 'Composable auth screen structure for Better Auth stacks.',
+        icon: 'sparkles',
+        logoLabel: 'Better Auth',
       },
     ],
   },
   {
-    title: 'Contact',
+    title: 'Contact & Growth',
     description:
-      'Includes contact forms for user inquiries, feedback, and general communication.',
+      'High-conversion forms for inbound contact, newsletter signup, and lead capture.',
     path: '/templates/contact',
     sub: [
       {
-        title: 'Contact',
+        title: 'Contact Form',
         path: '/templates/contact/contact',
-        description: 'Contact form template',
+        description: 'General inquiry form for support and sales conversations.',
+        icon: 'message',
+        logoLabel: 'Contact',
       },
       {
-        title: 'Newsletter',
+        title: 'Newsletter Form',
         path: '/templates/contact/newsletter',
-        description: 'Newsletter form template',
+        description: 'Minimal email capture form for product updates.',
+        icon: 'mail',
+        logoLabel: 'Newsletter',
       },
-      // {
-      //   title: 'register',
-      //   path: '/templates/contact/register',
-      //   description: 'Register template',
-      // },
-      // {
-      //   title: 'forget-password',
-      //   path: '/templates/contact/forget-password',
-      //   description: 'Login template',
-      // },
-      // {
-      //   title: 'reset-password',
-      //   path: '/templates/contact/reset-password',
-      //   description: 'Login template',
-      // },
     ],
   },
-  // {
-  //   title: 'Profile Management',
-  //   description:
-  //     'Includes a variety of forms designed for user profile updates, account settings, password changes, and personal data management.',
-  //   path: '/templates/profile-management',
-  //   sub: [
-  //     {
-  //       title: 'login',
-  //       path: '/templates/profile-management/login',
-  //       description: 'Login template',
-  //       img: DemoImage,
-  //     },
-  //     {
-  //       title: 'register',
-  //       path: '/templates/profile-management/register',
-  //       description: 'Register template',
-  //       img: DemoImage,
-  //     },
-  //     {
-  //       title: 'forget-password',
-  //       path: '/templates/profile-management/forget-password',
-  //       description: 'Login template',
-  //       img: DemoImage,
-  //     },
-  //     {
-  //       title: 'reset-password',
-  //       path: '/templates/profile-management/reset-password',
-  //       description: 'Login template',
-  //       img: DemoImage,
-  //     },
-  //   ],
-  // },
 ]

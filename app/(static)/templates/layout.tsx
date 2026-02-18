@@ -45,16 +45,5 @@ export default function TemplatesLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return (
-    <div className="max-w-5xl mx-auto min-h-[calc(100vh-250.5px)]">
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold">Templates</h1>
-        <p className="text-sm text-muted-foreground">
-          Minimalist templates for building your next product. Built with React,
-          NextJS, TailwindCSS, Framer Motion and Typescript.
-        </p>
-        <div>{children}</div>
-      </div>
-    </div>
-  )
+  return <div className="w-full min-h-[calc(100vh-250.5px)]">{children}</div>
 }
