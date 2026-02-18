@@ -1,0 +1,16 @@
+{
+  "name": "inline-editable-field",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "button",
+    "input"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\nimport { Pencil } from 'lucide-react'\n\nimport { Button } from '@/components/ui/button'\nimport { Input } from '@/components/ui/input'\n\ntype InlineEditableFieldProps = {\n  value: string\n  onChange: (value: string) => void\n  placeholder?: string\n}\n\nexport function InlineEditableField({\n  value,\n  onChange,\n  placeholder = 'Click to edit',\n}: InlineEditableFieldProps) {\n  const [editing, setEditing] = React.useState(false)\n  const [draft, setDraft] = React.useState(value)\n\n  React.useEffect(() => {\n    setDraft(value)\n  }, [value])\n\n  const save = () => {\n    onChange(draft)\n    setEditing(false)\n  }\n\n  if (editing) {\n    return (\n      <Input\n        autoFocus\n        value={draft}\n        onChange={(event) => setDraft(event.target.value)}\n        onBlur={save}\n        onKeyDown={(event) => {\n          if (event.key === 'Enter') save()\n          if (event.key === 'Escape') {\n            setDraft(value)\n            setEditing(false)\n          }\n        }}\n      />\n    )\n  }\n\n  return (\n    <Button\n      type=\"button\"\n      variant=\"ghost\"\n      className=\"h-auto w-full justify-start px-2\"\n      onClick={() => setEditing(true)}\n    >\n      <span className=\"truncate text-left\">{value || placeholder}</span>\n      <Pencil className=\"ml-2 h-4 w-4\" />\n    </Button>\n  )\n}\n",
+      "path": "ui/inline-editable-field.tsx",
+      "target": "components/ui/inline-editable-field.tsx"
+    }
+  ]
+}

@@ -20,14 +20,14 @@ import { components } from '@/constants/components'
 export function AppSidebar() {
   const pathname = usePathname()
   return (
-    <Sidebar className="sticky">
+    <Sidebar collapsible="none" className="border-r bg-background">
       <SidebarContent>
         <SidebarGroup className="py-4">
           <SidebarMenu className="gap-2">
             {components.map((item) => (
               <SidebarMenuItem key={item.title} className="mb-2">
                 <SidebarMenuButton asChild className="py-2">
-                  <Link href={item.path} className="font-semibold">
+                  <Link href={item.path} className="font-semibold text-base">
                     {item.title}
                   </Link>
                 </SidebarMenuButton>
@@ -41,9 +41,9 @@ export function AppSidebar() {
                         <SidebarMenuSubButton
                           asChild
                           isActive={pathname === subItem.path}
-                          className="py-2"
+                          className="py-2 h-auto"
                         >
-                          <Link href={subItem.path} className="capitalize">
+                          <Link href={subItem.path} className="capitalize leading-snug">
                             {subItem.title}
                           </Link>
                         </SidebarMenuSubButton>

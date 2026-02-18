@@ -1,0 +1,16 @@
+{
+  "name": "sortable-list-input",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "button",
+    "input"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\nimport { GripVertical, Plus, X } from 'lucide-react'\n\nimport { Button } from '@/components/ui/button'\nimport { Input } from '@/components/ui/input'\n\ntype SortableListInputProps = {\n  value: string[]\n  onChange: (items: string[]) => void\n}\n\nfunction reorder<T>(list: T[], from: number, to: number) {\n  const next = [...list]\n  const [moved] = next.splice(from, 1)\n  next.splice(to, 0, moved)\n  return next\n}\n\nexport function SortableListInput({ value, onChange }: SortableListInputProps) {\n  const [draft, setDraft] = React.useState('')\n  const [dragIndex, setDragIndex] = React.useState<number | null>(null)\n\n  return (\n    <div className=\"space-y-2\">\n      <div className=\"flex gap-2\">\n        <Input\n          value={draft}\n          onChange={(event) => setDraft(event.target.value)}\n          placeholder=\"Add item\"\n          onKeyDown={(event) => {\n            if (event.key === 'Enter' && draft.trim()) {\n              onChange([...value, draft.trim()])\n              setDraft('')\n            }\n          }}\n        />\n        <Button\n          type=\"button\"\n          onClick={() => {\n            if (!draft.trim()) return\n            onChange([...value, draft.trim()])\n            setDraft('')\n          }}\n        >\n          <Plus className=\"h-4 w-4\" />\n        </Button>\n      </div>\n\n      <div className=\"space-y-2\">\n        {value.map((item, index) => (\n          <div\n            key={`${item}-${index}`}\n            className=\"flex items-center gap-2 rounded border p-2\"\n            draggable\n            onDragStart={() => setDragIndex(index)}\n            onDragOver={(event) => event.preventDefault()}\n            onDrop={() => {\n              if (dragIndex === null || dragIndex === index) return\n              onChange(reorder(value, dragIndex, index))\n              setDragIndex(null)\n            }}\n          >\n            <GripVertical className=\"h-4 w-4 text-muted-foreground\" />\n            <span className=\"flex-1 text-sm\">{item}</span>\n            <Button\n              type=\"button\"\n              variant=\"ghost\"\n              size=\"icon\"\n              onClick={() => onChange(value.filter((_, i) => i !== index))}\n            >\n              <X className=\"h-4 w-4\" />\n            </Button>\n          </div>\n        ))}\n      </div>\n    </div>\n  )\n}\n",
+      "path": "ui/sortable-list-input.tsx",
+      "target": "components/ui/sortable-list-input.tsx"
+    }
+  ]
+}

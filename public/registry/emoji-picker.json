@@ -1,0 +1,18 @@
+{
+  "name": "emoji-picker",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "button",
+    "input",
+    "popover",
+    "scroll-area"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\n\nimport { Button } from '@/components/ui/button'\nimport { Input } from '@/components/ui/input'\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from '@/components/ui/popover'\nimport { ScrollArea } from '@/components/ui/scroll-area'\n\nconst EMOJI_GROUPS = {\n  Smileys: ['😀', '😁', '😂', '🤣', '😍', '🥳', '🤔', '😭', '😴', '😎'],\n  Gestures: ['👍', '👎', '👏', '🙏', '🔥', '💯', '✅', '❌', '👀', '🤝'],\n  Nature: ['🌱', '🌳', '🌸', '🌞', '🌙', '⭐', '🌊', '🐶', '🐱', '🦊'],\n  Objects: ['📦', '📌', '🧩', '🎯', '🛠️', '📅', '📚', '💡', '🔒', '🔔'],\n} as const\n\ntype EmojiPickerProps = {\n  value?: string\n  onChange?: (value: string) => void\n}\n\nexport function EmojiPicker({ value = '', onChange }: EmojiPickerProps) {\n  const [open, setOpen] = React.useState(false)\n  const [query, setQuery] = React.useState('')\n\n  const allGroups = Object.entries(EMOJI_GROUPS)\n  const filteredGroups = allGroups\n    .map(([group, emojis]) => ({\n      group,\n      emojis: emojis.filter((emoji) => emoji.includes(query.trim())),\n    }))\n    .filter((entry) => entry.emojis.length > 0)\n\n  return (\n    <Popover open={open} onOpenChange={setOpen}>\n      <PopoverTrigger asChild>\n        <Button type=\"button\" variant=\"outline\" className=\"w-full justify-start\">\n          {value || 'Pick an emoji'}\n        </Button>\n      </PopoverTrigger>\n      <PopoverContent className=\"w-[320px] space-y-2 p-3\">\n        <Input\n          placeholder=\"Filter emojis\"\n          value={query}\n          onChange={(event) => setQuery(event.target.value)}\n        />\n        <ScrollArea className=\"h-64\">\n          <div className=\"space-y-3\">\n            {filteredGroups.map(({ group, emojis }) => (\n              <div key={group} className=\"space-y-1\">\n                <div className=\"text-xs font-medium text-muted-foreground\">\n                  {group}\n                </div>\n                <div className=\"grid grid-cols-8 gap-1\">\n                  {emojis.map((emoji) => (\n                    <button\n                      key={`${group}-${emoji}`}\n                      type=\"button\"\n                      className=\"rounded p-1 text-lg hover:bg-muted\"\n                      onClick={() => {\n                        onChange?.(emoji)\n                        setOpen(false)\n                      }}\n                    >\n                      {emoji}\n                    </button>\n                  ))}\n                </div>\n              </div>\n            ))}\n          </div>\n        </ScrollArea>\n      </PopoverContent>\n    </Popover>\n  )\n}\n",
+      "path": "ui/emoji-picker.tsx",
+      "target": "components/ui/emoji-picker.tsx"
+    }
+  ]
+}

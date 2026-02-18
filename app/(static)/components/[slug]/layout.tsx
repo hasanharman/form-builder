@@ -7,19 +7,19 @@ interface LayoutProps {
   children: ReactNode
 }
 
-export default async function TemplateLayout({ children }: LayoutProps) {
+export default async function ComponentsLayout({ children }: LayoutProps) {
   return (
     <SidebarProvider
       style={
         {
-          '--sidebar-width': '20rem',
-          '--sidebar-width-mobile': '20rem',
+          '--sidebar-width': '26rem',
+          '--sidebar-width-mobile': '22rem',
         } as React.CSSProperties
       }
     >
       <AppSidebar />
       <SidebarInset>
-        <main className="flex-1 p-4">{children}</main>
+        <main className="flex-1 min-w-0 p-3 md:p-6">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   )

@@ -1,0 +1,15 @@
+{
+  "name": "masked-input",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "input"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\n\nimport { Input } from '@/components/ui/input'\n\nconst MASK_TOKENS = {\n  '9': /\\d/,\n  a: /[A-Za-z]/,\n  '*': /[A-Za-z0-9]/,\n} as const\n\nexport function applyMask(raw: string, mask: string) {\n  const clean = raw.replace(/[^A-Za-z0-9]/g, '')\n  let cleanIndex = 0\n  let maskedValue = ''\n\n  for (let i = 0; i < mask.length; i += 1) {\n    const maskChar = mask[i] as keyof typeof MASK_TOKENS\n    const token = MASK_TOKENS[maskChar]\n\n    if (!token) {\n      maskedValue += mask[i]\n      continue\n    }\n\n    while (cleanIndex < clean.length && !token.test(clean[cleanIndex])) {\n      cleanIndex += 1\n    }\n\n    if (cleanIndex < clean.length) {\n      maskedValue += clean[cleanIndex]\n      cleanIndex += 1\n    } else {\n      break\n    }\n  }\n\n  return maskedValue\n}\n\ntype MaskedInputProps = Omit<\n  React.ComponentProps<typeof Input>,\n  'value' | 'onChange'\n> & {\n  mask: string\n  value?: string\n  defaultValue?: string\n  onValueChange?: (value: string) => void\n}\n\nexport function MaskedInput({\n  mask,\n  value,\n  defaultValue,\n  onValueChange,\n  ...props\n}: MaskedInputProps) {\n  const [internalValue, setInternalValue] = React.useState(\n    applyMask(defaultValue ?? '', mask),\n  )\n\n  const isControlled = value !== undefined\n  const displayValue = isControlled ? applyMask(value, mask) : internalValue\n\n  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {\n    const nextValue = applyMask(event.target.value, mask)\n\n    if (!isControlled) {\n      setInternalValue(nextValue)\n    }\n\n    onValueChange?.(nextValue)\n  }\n\n  return <Input {...props} value={displayValue} onChange={handleChange} />\n}\n",
+      "path": "ui/masked-input.tsx",
+      "target": "components/ui/masked-input.tsx"
+    }
+  ]
+}

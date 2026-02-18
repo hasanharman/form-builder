@@ -1,0 +1,16 @@
+{
+  "name": "token-input",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "badge",
+    "input"
+  ],
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\nimport { X } from 'lucide-react'\n\nimport { Badge } from '@/components/ui/badge'\nimport { Input } from '@/components/ui/input'\n\ntype TokenInputProps = {\n  value: string[]\n  onChange: (tokens: string[]) => void\n  placeholder?: string\n}\n\nexport function TokenInput({ value, onChange, placeholder }: TokenInputProps) {\n  const [draft, setDraft] = React.useState('')\n\n  const addToken = (raw: string) => {\n    const next = raw.trim()\n    if (!next || value.includes(next)) return\n    onChange([...value, next])\n  }\n\n  const removeToken = (token: string) => {\n    onChange(value.filter((item) => item !== token))\n  }\n\n  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === 'Enter' || event.key === ',') {\n      event.preventDefault()\n      addToken(draft)\n      setDraft('')\n    }\n\n    if (event.key === 'Backspace' && !draft && value.length > 0) {\n      removeToken(value[value.length - 1])\n    }\n  }\n\n  return (\n    <div className=\"space-y-2\">\n      <div className=\"flex flex-wrap gap-2 rounded-md border p-2\">\n        {value.map((token) => (\n          <Badge key={token} variant=\"secondary\" className=\"gap-1\">\n            {token}\n            <button\n              type=\"button\"\n              onClick={() => removeToken(token)}\n              aria-label={`Remove ${token}`}\n            >\n              <X className=\"h-3 w-3\" />\n            </button>\n          </Badge>\n        ))}\n        <Input\n          className=\"h-8 border-0 p-0 shadow-none focus-visible:ring-0\"\n          value={draft}\n          onChange={(event) => setDraft(event.target.value)}\n          onKeyDown={handleKeyDown}\n          onBlur={() => {\n            if (draft.trim()) {\n              addToken(draft)\n              setDraft('')\n            }\n          }}\n          placeholder={placeholder ?? 'Type and press Enter'}\n        />\n      </div>\n    </div>\n  )\n}\n",
+      "path": "ui/token-input.tsx",
+      "target": "components/ui/token-input.tsx"
+    }
+  ]
+}
