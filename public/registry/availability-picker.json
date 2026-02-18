@@ -1,0 +1,12 @@
+{
+  "name": "availability-picker",
+  "type": "registry:ui",
+  "files": [
+    {
+      "type": "registry:ui",
+      "content": "'use client'\n\nimport * as React from 'react'\n\nconst DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']\nconst HOURS = Array.from({ length: 12 }, (_, i) => i + 8)\n\ntype Slot = {\n  day: number\n  hour: number\n}\n\ntype AvailabilityPickerProps = {\n  value: Slot[]\n  onChange: (slots: Slot[]) => void\n}\n\nfunction slotKey(slot: Slot) {\n  return `${slot.day}-${slot.hour}`\n}\n\nexport function AvailabilityPicker({ value, onChange }: AvailabilityPickerProps) {\n  const active = new Set(value.map(slotKey))\n\n  const toggle = (slot: Slot) => {\n    const key = slotKey(slot)\n    if (active.has(key)) {\n      onChange(value.filter((entry) => slotKey(entry) !== key))\n      return\n    }\n\n    onChange([...value, slot])\n  }\n\n  return (\n    <div className=\"space-y-3\">\n      <div className=\"overflow-x-auto\">\n        <table className=\"w-full min-w-[760px] border-collapse text-xs\">\n          <thead>\n            <tr>\n              <th className=\"w-16 border p-2 text-left\">Time</th>\n              {DAYS.map((day) => (\n                <th key={day} className=\"border p-2 text-center\">\n                  {day}\n                </th>\n              ))}\n            </tr>\n          </thead>\n          <tbody>\n            {HOURS.map((hour) => (\n              <tr key={hour}>\n                <td className=\"border p-2 font-medium\">{`${hour}:00`}</td>\n                {DAYS.map((_, dayIndex) => {\n                  const slot = { day: dayIndex, hour }\n                  const selected = active.has(slotKey(slot))\n\n                  return (\n                    <td key={`${dayIndex}-${hour}`} className=\"border p-1\">\n                      <button\n                        type=\"button\"\n                        className={`h-7 w-full rounded ${selected ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}\n                        onClick={() => toggle(slot)}\n                      />\n                    </td>\n                  )\n                })}\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      </div>\n      <div className=\"text-sm text-muted-foreground\">\n        Selected slots: {value.length}\n      </div>\n    </div>\n  )\n}\n",
+      "path": "ui/availability-picker.tsx",
+      "target": "components/ui/availability-picker.tsx"
+    }
+  ]
+}
