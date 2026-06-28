@@ -1,0 +1,216 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcn-form",
+  "homepage": "https://www.shadcn-form.com",
+  "items": [
+    {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Input with an async, debounced suggestion list.",
+      "dependencies": ["use-debounce"],
+      "registryDependencies": ["input", "button"],
+      "files": [
+        {
+          "path": "registry/ui/autocomplete.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "location-input",
+      "type": "registry:ui",
+      "title": "Location Input",
+      "description": "Country and state picker backed by a searchable command list.",
+      "registryDependencies": ["button", "popover", "scroll-area", "command"],
+      "files": [
+        {
+          "path": "registry/ui/location-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "signature-input",
+      "type": "registry:ui",
+      "title": "Signature Input",
+      "description": "Canvas-based signature capture field.",
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "registry/ui/signature-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "signature-pad",
+      "type": "registry:ui",
+      "title": "Signature Pad",
+      "description": "Signature capture inside a dialog with progress feedback.",
+      "registryDependencies": ["button", "dialog", "progress"],
+      "files": [
+        {
+          "path": "registry/ui/signature-pad.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "credit-card",
+      "type": "registry:ui",
+      "title": "Credit Card",
+      "description": "Animated credit card input with live preview.",
+      "dependencies": ["framer-motion"],
+      "registryDependencies": ["card", "input", "select"],
+      "files": [
+        {
+          "path": "registry/ui/credit-card.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "masked-input",
+      "type": "registry:ui",
+      "title": "Masked Input",
+      "description": "Input that formats its value against a mask pattern.",
+      "registryDependencies": ["input"],
+      "files": [
+        {
+          "path": "registry/ui/masked-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Color picker with multiple color-format support.",
+      "registryDependencies": ["button", "input", "select"],
+      "files": [
+        {
+          "path": "registry/ui/color-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "token-input",
+      "type": "registry:ui",
+      "title": "Token Input",
+      "description": "Tag / token input that renders values as removable badges.",
+      "registryDependencies": ["badge", "input"],
+      "files": [
+        {
+          "path": "registry/ui/token-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "emoji-picker",
+      "type": "registry:ui",
+      "title": "Emoji Picker",
+      "description": "Searchable emoji picker in a popover.",
+      "registryDependencies": ["button", "input", "popover", "scroll-area"],
+      "files": [
+        {
+          "path": "registry/ui/emoji-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "transfer-list",
+      "type": "registry:ui",
+      "title": "Transfer List",
+      "description": "Two-pane list for moving items between source and target.",
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "registry/ui/transfer-list.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "tree-select",
+      "type": "registry:ui",
+      "title": "Tree Select",
+      "description": "Hierarchical select rendered as an expandable tree.",
+      "registryDependencies": ["button", "popover", "scroll-area"],
+      "files": [
+        {
+          "path": "registry/ui/tree-select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "image-upload-dropzone",
+      "type": "registry:ui",
+      "title": "Image Upload Dropzone",
+      "description": "Drag-and-drop image upload area with previews.",
+      "registryDependencies": ["button"],
+      "files": [
+        {
+          "path": "registry/ui/image-upload-dropzone.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "cron-expression-builder",
+      "type": "registry:ui",
+      "title": "Cron Expression Builder",
+      "description": "Visual builder that produces a cron expression.",
+      "registryDependencies": ["label", "select"],
+      "files": [
+        {
+          "path": "registry/ui/cron-expression-builder.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "inline-editable-field",
+      "type": "registry:ui",
+      "title": "Inline Editable Field",
+      "description": "Text that switches to an input for inline editing.",
+      "registryDependencies": ["button", "input"],
+      "files": [
+        {
+          "path": "registry/ui/inline-editable-field.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "sortable-list-input",
+      "type": "registry:ui",
+      "title": "Sortable List Input",
+      "description": "Reorderable list input for collecting ordered values.",
+      "registryDependencies": ["button", "input"],
+      "files": [
+        {
+          "path": "registry/ui/sortable-list-input.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "availability-picker",
+      "type": "registry:ui",
+      "title": "Availability Picker",
+      "description": "Weekly schedule / availability time-slot picker.",
+      "files": [
+        {
+          "path": "registry/ui/availability-picker.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    }
+  ]
+}
