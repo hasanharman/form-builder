@@ -18,6 +18,8 @@ A dynamic form-building tool that allows users to create, customize, and validat
   - [Usage](#usage)
     - [Creating a Form](#creating-a-form)
   - [Components](#components)
+  - [shadcn Registry](#shadcn-registry)
+  - [Project Structure](#project-structure)
   - [Validation](#validation)
   - [API](#api)
     - [Form Submission](#form-submission)
@@ -37,6 +39,8 @@ A dynamic form-building tool that allows users to create, customize, and validat
 - **Real-Time Validation**: Validate user inputs using the Zod library, ensuring data integrity and user-friendly feedback.
 - **Responsive Design**: Built with Tailwind CSS, ensuring forms look great on all devices.
 - **Customizable Components**: Leverage ShadCN components for a consistent and modern UI experience.
+- **Two Form Libraries**: Generate React Hook Form or TanStack Form code, each starting with the one `shadcn add` command it needs.
+- **shadcn Registry**: Every extra component and template installs with the shadcn CLI, in Radix and Base UI projects alike.
 - **Server-Side Rendering**: Utilize Next.js for optimized performance and SEO.
 
 ## Live Demo
@@ -63,7 +67,7 @@ To get started with Form Builder, follow these steps:
 
 3. Install the necessary dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 
 ## Usage
@@ -71,8 +75,10 @@ To get started with Form Builder, follow these steps:
 To start the development server, run:
 
 ```bash
-npm run dev
+pnpm dev
 ```
+
+`pnpm dev` and `pnpm build` first build the registry into `public/r`. Run the tests with `pnpm test`.
 
 Open your browser and navigate to `http://localhost:3000` to see the application in action.
 
@@ -85,13 +91,30 @@ Open your browser and navigate to `http://localhost:3000` to see the application
 
 ## Components
 
-Form Builder consists of various reusable components:
+The site's UI is shadcn/ui on [Base UI](https://base-ui.com) (`components.json` style `base-vega`). The extra form components (phone input, multi select, credit card, signature pad, …) are documented at [/components](https://www.shadcn-form.com/components).
 
-- **FormContainer**: The main container for the form elements.
-- **InputField**: A customizable input component.
-- **SelectField**: Dropdown selection component.
-- **CheckboxField**: A checkbox input component.
-- **Button**: A styled button component for form submission.
+## shadcn Registry
+
+Everything under [/components](https://www.shadcn-form.com/components) and [/templates](https://www.shadcn-form.com/templates) is published as a [shadcn registry](https://ui.shadcn.com/docs/registry). Install an item with the shadcn CLI:
+
+```bash
+npx shadcn@latest add https://www.shadcn-form.com/r/phone-input.json
+```
+
+Items only use props every shadcn style shares, so they install into Radix (`radix-*`, `new-york`) and Base UI (`base-*`) projects alike. The generated form code in the playground starts with the command that installs everything it imports.
+
+- `registry.json` is the source of truth: titles, descriptions, files, dependencies.
+- `pnpm registry:build` runs `shadcn build` into `public/r`; `pnpm registry:validate` checks the source.
+- `__tests__/registry-catalog.spec.ts` checks each item's declared dependencies against its imports.
+
+## Project Structure
+
+Domain terms are defined in [CONTEXT.md](CONTEXT.md).
+
+- `components/field-variants/`: one module per playground field type (preview control, validation, default value, generated code). Add a field type by adding a module and listing it in `index.ts`.
+- `lib/form-code/`: the form code generator, with one adapter per form library.
+- `lib/registry-catalog.ts`: reads `registry.json` for docs pages, sidebars and install commands.
+- `components/ui/`: shadcn wrappers; the only place allowed to import `@base-ui/react`.
 
 ## Validation
 
