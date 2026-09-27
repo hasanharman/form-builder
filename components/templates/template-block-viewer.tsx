@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Check,
   ChevronRight,
@@ -18,16 +19,21 @@ import { Highlight, themes } from 'prism-react-renderer'
 import { toast } from 'sonner'
 
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { TemplateFlow } from '@/constants/templates'
+import {
+  getRegistryItem,
+  installCommand,
+  registryItemUrl,
+} from '@/lib/registry-catalog'
 
 type ViewerTab = 'preview' | 'code'
 type Device = 'desktop' | 'tablet' | 'mobile'
 
 type TemplateCodeFile = {
-  filename: string
-  label: string
+  /** Where the file lands in the user's project. */
   path: string
 }
 
@@ -48,18 +54,22 @@ type FileLeafNode = {
 type FileNode = FolderNode | FileLeafNode
 
 interface TemplateBlockViewerProps {
-  slug: string
-  description?: string
-  codeFiles?: TemplateCodeFile[]
-  pnpmBlockName?: string
+  /** Registry block name. */
+  name: string
+  /** Pages of a multi-page template; links to their routes switch the preview. */
+  flows?: TemplateFlow[]
   children: React.ReactNode
 }
 
-const defaultCodeFile = (slug: string): TemplateCodeFile => ({
-  filename: slug,
-  label: `${slug}.tsx`,
-  path: `components/templates/${slug}.tsx`,
-})
+/** Install location of a registry file, with shadcn's alias placeholders spelled out. */
+function installPath(file: { path: string; target?: string }) {
+  return (file.target ?? file.path)
+    .replace(/^@components\//, 'components/')
+    .replace(/^@ui\//, 'components/ui/')
+    .replace(/^@lib\//, 'lib/')
+    .replace(/^@hooks\//, 'hooks/')
+    .replace(/^~\//, '')
+}
 
 function buildFileTree(files: TemplateCodeFile[]) {
   const root: FolderNode = {
@@ -136,7 +146,7 @@ function FileTreeItem({
           onClick={() => onSelect(node.file)}
           className={cn(
             'flex w-full items-center gap-2 rounded-none py-1.5 text-left text-sm transition-colors',
-            node.file.filename === activeFile
+            node.file.path === activeFile
               ? 'bg-muted/70 font-medium text-foreground'
               : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
           )}
@@ -179,33 +189,41 @@ function FileTreeItem({
 }
 
 export function TemplateBlockViewer({
-  slug,
-  description,
-  codeFiles,
-  pnpmBlockName,
+  name,
+  flows,
   children,
 }: TemplateBlockViewerProps) {
-  const files = useMemo(() => codeFiles ?? [defaultCodeFile(slug)], [codeFiles, slug])
+  const router = useRouter()
+  const item = getRegistryItem(name)
+  const description = item?.description
+  const files = useMemo<TemplateCodeFile[]>(
+    () => (item?.files ?? []).map((file) => ({ path: installPath(file) })),
+    [item],
+  )
   const fileTree = useMemo(() => buildFileTree(files), [files])
 
   const [view, setView] = useState<ViewerTab>('preview')
   const [device, setDevice] = useState<Device>('desktop')
   const [previewKey, setPreviewKey] = useState(0)
-  const [activeFile, setActiveFile] = useState<TemplateCodeFile>(files[0])
+  const [activeFile, setActiveFile] = useState<TemplateCodeFile | undefined>(files[0])
   const [codeByFile, setCodeByFile] = useState<Record<string, string>>({})
   const [isLoadingCode, setIsLoadingCode] = useState(false)
   const [codeError, setCodeError] = useState('')
   const [isCommandCopied, setIsCommandCopied] = useState(false)
 
-  const cliCommand = `pnpm dlx shadcn@latest add ${pnpmBlockName ?? slug}`
+  const cliCommand = installCommand(name)
   const previewWidth = device === 'desktop' ? 100 : device === 'tablet' ? 60 : 30
-  const v0Url = useMemo(
-    () =>
-      `https://v0.dev/chat?q=${encodeURIComponent(
-        `Create a ${slug} authentication template with shadcn/ui and clean TypeScript.`
-      )}`,
-    [slug]
-  )
+  const v0Url = `https://v0.dev/chat/api/open?url=${encodeURIComponent(registryItemUrl(name))}`
+
+  // Flow pages link to their real routes (/sign-up, ...); in the preview those
+  // links switch flows instead of leaving the site.
+  const handlePreviewClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const anchor = (event.target as HTMLElement).closest('a')
+    const flow = flows?.find((entry) => entry.route === anchor?.getAttribute('href'))
+    if (!flow) return
+    event.preventDefault()
+    router.push(`?flow=${flow.id}`, { scroll: false })
+  }
 
   useEffect(() => {
     setActiveFile(files[0])
@@ -214,25 +232,21 @@ export function TemplateBlockViewer({
   useEffect(() => {
     let ignore = false
 
-    async function fetchCode() {
-      if (codeByFile[activeFile.filename]) {
-        setCodeError('')
-        return
-      }
-
+    async function fetchItem() {
       setIsLoadingCode(true)
       setCodeError('')
 
       try {
-        const response = await fetch(`/api/file/${activeFile.filename}`)
-        const data = await response.json()
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to load code.')
-        }
+        // The built registry item carries every file's content.
+        const response = await fetch(`/r/${name}.json`)
+        if (!response.ok) throw new Error('Failed to load code.')
+        const built: { files: { path: string; target?: string; content?: string }[] } =
+          await response.json()
 
         if (!ignore) {
-          setCodeByFile((prev) => ({ ...prev, [activeFile.filename]: data.content }))
+          setCodeByFile(
+            Object.fromEntries(built.files.map((file) => [installPath(file), file.content ?? ''])),
+          )
         }
       } catch (error) {
         if (!ignore) {
@@ -245,14 +259,14 @@ export function TemplateBlockViewer({
       }
     }
 
-    void fetchCode()
+    void fetchItem()
 
     return () => {
       ignore = true
     }
-  }, [activeFile, codeByFile])
+  }, [name])
 
-  const activeCode = codeByFile[activeFile.filename]
+  const activeCode = activeFile ? codeByFile[activeFile.path] : undefined
 
   return (
     <div className="group/block-view-wrapper flex min-w-0 flex-col gap-4">
@@ -342,11 +356,14 @@ export function TemplateBlockViewer({
             <span>{cliCommand}</span>
           </Button>
 
-          <Button size="sm" className="h-8 px-3 text-xs" asChild>
-            <a href={v0Url} target="_blank" rel="noreferrer">
-              Open in v0
-            </a>
-          </Button>
+          <a
+            href={v0Url}
+            target="_blank"
+            rel="noreferrer"
+            className={cn(buttonVariants({ size: 'sm' }), 'h-8 px-3 text-xs')}
+          >
+            Open in v0
+          </a>
         </div>
       </div>
 
@@ -360,7 +377,10 @@ export function TemplateBlockViewer({
                 className="relative h-full overflow-y-auto border-r transition-[width] duration-200 ease-linear"
                 style={{ width: `${previewWidth}%` }}
               >
-                <div className="flex min-h-full items-center justify-center px-6 py-10 md:px-8 md:py-14">
+                <div
+                  className="flex min-h-full items-center justify-center px-6 py-10 md:px-8 md:py-14"
+                  onClickCapture={handlePreviewClick}
+                >
                   {children}
                 </div>
               </div>
@@ -378,7 +398,7 @@ export function TemplateBlockViewer({
                     key={node.path}
                     node={node}
                     depth={0}
-                    activeFile={activeFile.filename}
+                    activeFile={activeFile?.path ?? ''}
                     onSelect={setActiveFile}
                   />
                 ))}
@@ -389,7 +409,7 @@ export function TemplateBlockViewer({
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="flex h-12 items-center gap-2 border-b px-4 py-2 text-sm text-muted-foreground">
               <File className="size-4" />
-              <span className="truncate">{activeFile.path}</span>
+              <span className="truncate">{activeFile?.path}</span>
               {!!activeCode && (
                 <Button
                   size="icon"

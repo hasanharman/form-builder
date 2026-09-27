@@ -39,6 +39,7 @@ export type RegistryItem = {
   registryDependencies?: string[]
   envVars?: Record<string, string>
   docs?: string
+  meta?: { features?: string[] }
   files: RegistryItemFile[]
 }
 

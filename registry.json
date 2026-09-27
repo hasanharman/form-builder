@@ -547,6 +547,357 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "validation-schemas",
+      "type": "registry:lib",
+      "title": "Validation Schemas",
+      "description": "Reusable zod schemas for email, password, name, phone and message fields.",
+      "categories": [
+        "lib"
+      ],
+      "dependencies": [
+        "zod"
+      ],
+      "files": [
+        {
+          "path": "lib/validation-schemas.ts",
+          "type": "registry:lib",
+          "target": "@lib/validation-schemas.ts"
+        }
+      ]
+    },
+    {
+      "name": "auth-shell",
+      "type": "registry:component",
+      "title": "Auth Shell",
+      "description": "Centered card layout shared by the authentication templates.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "button",
+        "field"
+      ],
+      "files": [
+        {
+          "path": "components/templates/base-auth-shell.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/base-auth-shell.tsx"
+        }
+      ]
+    },
+    {
+      "name": "shadcn-auth",
+      "type": "registry:block",
+      "title": "Shadcn",
+      "description": "Authentication starter with login, signup, and recovery flows.",
+      "categories": [
+        "template",
+        "authentication"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "lucide-react",
+        "next"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/password-input.json",
+        "https://www.shadcn-form.com/r/auth-shell.json",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "docs": "Render each flow on its own route: /sign-in, /sign-up, /forgot-password and /reset-password. The flows link to each other through those paths.",
+      "meta": {
+        "features": [
+          "Authentication starter for shadcn/ui only.",
+          "Includes sign in, sign up, forgot password, and reset password flows.",
+          "No third-party auth provider dependencies."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/sign-in.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/sign-in.tsx"
+        },
+        {
+          "path": "components/templates/sign-up.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/sign-up.tsx"
+        },
+        {
+          "path": "components/templates/forgot-password.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/forgot-password.tsx"
+        },
+        {
+          "path": "components/templates/reset-password.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/reset-password.tsx"
+        }
+      ]
+    },
+    {
+      "name": "clerk-auth",
+      "type": "registry:block",
+      "title": "Clerk Elements Auth",
+      "description": "Clerk-style auth starter with sign-in, sign-up, and reset flows.",
+      "categories": [
+        "template",
+        "authentication"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "lucide-react",
+        "next"
+      ],
+      "registryDependencies": [
+        "button",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/password-input.json",
+        "https://www.shadcn-form.com/r/auth-shell.json",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "docs": "Render each flow on its own route: /sign-in, /sign-up, /forgot-password and /reset-password. The flows link to each other through those paths. Install Clerk (pnpm add @clerk/nextjs @clerk/elements) and wrap your app in <ClerkProvider> before wiring the submit handlers.",
+      "meta": {
+        "features": [
+          "Clerk-themed auth flows using shadcn/ui patterns.",
+          "Includes sign in, sign up, forgot password, and reset password flows.",
+          "Wire the handlers to Clerk once @clerk/nextjs is installed."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/clerk-sign-in.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/clerk-sign-in.tsx"
+        },
+        {
+          "path": "components/templates/clerk-sign-up.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/clerk-sign-up.tsx"
+        },
+        {
+          "path": "components/templates/clerk-forgot-password.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/clerk-forgot-password.tsx"
+        },
+        {
+          "path": "components/templates/clerk-reset-password.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/clerk-reset-password.tsx"
+        },
+        {
+          "path": "components/templates/clerk-install-hint.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/clerk-install-hint.tsx"
+        },
+        {
+          "path": "components/templates/oauth-icons.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/oauth-icons.tsx"
+        }
+      ]
+    },
+    {
+      "name": "supabase-auth",
+      "type": "registry:block",
+      "title": "Supabase Ready Auth",
+      "description": "Email/password auth UI prepared for Supabase actions.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "next"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/password-input.json",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "meta": {
+        "features": [
+          "Supabase-ready auth provider template.",
+          "Includes all core auth flows in one page.",
+          "Ready for Supabase auth action wiring."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/supabase-auth.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/supabase-auth.tsx"
+        }
+      ]
+    },
+    {
+      "name": "firebase-auth",
+      "type": "registry:block",
+      "title": "Firebase Ready Auth",
+      "description": "Firebase-focused sign-in design with provider actions.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "next"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/password-input.json",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "meta": {
+        "features": [
+          "Firebase auth provider template.",
+          "Includes all core auth flows in one page.",
+          "Clear primary and secondary auth actions."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/firebase-auth.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/firebase-auth.tsx"
+        }
+      ]
+    },
+    {
+      "name": "better-auth",
+      "type": "registry:block",
+      "title": "Better Auth Ready",
+      "description": "Composable auth screen structure for Better Auth stacks.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner",
+        "next"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/password-input.json",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "meta": {
+        "features": [
+          "Composable Better Auth provider template.",
+          "Includes all core auth flows in one page.",
+          "Prepared for server-action based auth."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/better-auth.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/better-auth.tsx"
+        }
+      ]
+    },
+    {
+      "name": "contact",
+      "type": "registry:block",
+      "title": "Contact Form",
+      "description": "General inquiry form for support and sales conversations.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "textarea",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "meta": {
+        "features": [
+          "Contact flow with name, email, and message.",
+          "Validation-ready for support or sales inboxes.",
+          "Accessible labels and feedback states."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/contact.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/contact.tsx"
+        }
+      ]
+    },
+    {
+      "name": "newsletter",
+      "type": "registry:block",
+      "title": "Newsletter Form",
+      "description": "Minimal email capture form for product updates.",
+      "categories": [
+        "template"
+      ],
+      "dependencies": [
+        "react-hook-form",
+        "@hookform/resolvers",
+        "zod",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "button",
+        "card",
+        "field",
+        "input",
+        "https://www.shadcn-form.com/r/validation-schemas.json"
+      ],
+      "meta": {
+        "features": [
+          "Single-field email capture experience.",
+          "High-conversion compact layout.",
+          "Ready for newsletter provider integration."
+        ]
+      },
+      "files": [
+        {
+          "path": "components/templates/newsletter.tsx",
+          "type": "registry:component",
+          "target": "@components/templates/newsletter.tsx"
+        }
+      ]
     }
   ]
 }

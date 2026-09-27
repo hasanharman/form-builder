@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -36,7 +36,7 @@ export default function ForgotPasswordPreview() {
       description="Enter your email and we will send you a reset link."
       footer={
         <>
-          Remembered your password? <Link href="/templates/authentication/sign-in">Back to sign in</Link>
+          Remembered your password? <Link href="/sign-in">Back to sign in</Link>
         </>
       }
     >
@@ -60,7 +60,7 @@ export default function ForgotPasswordPreview() {
             </Button>
           </Field>
           <FieldDescription className="text-center">
-            Need a new account? <Link href="/templates/authentication/sign-up">Create account</Link>
+            Need a new account? <Link href="/sign-up">Create account</Link>
           </FieldDescription>
         </FieldGroup>
       </form>

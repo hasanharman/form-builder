@@ -8,6 +8,7 @@ import {
   installCommand,
   listRegistryItems,
   registryItemUrl,
+  type RegistryItem,
 } from '@/lib/registry-catalog'
 
 const root = process.cwd()
@@ -24,7 +25,18 @@ function packageName(spec: string) {
   return spec.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0]
 }
 
-const PROVIDED_BY_PROJECT = new Set(['react', 'react-dom', 'next'])
+const PROVIDED_BY_PROJECT = new Set(['react', 'react-dom'])
+
+/** Files an item ships plus those of the items from this registry it depends on. */
+function filesWithOwnDependencies(item: RegistryItem, seen = new Set<string>()): string[] {
+  if (seen.has(item.name)) return []
+  seen.add(item.name)
+  const own = (item.registryDependencies ?? [])
+    .filter((dep) => dep.startsWith('http'))
+    .map((dep) => getRegistryItem(basename(dep, '.json')))
+    .filter((dep): dep is RegistryItem => Boolean(dep))
+  return [...item.files.map((file) => file.path), ...own.flatMap((dep) => filesWithOwnDependencies(dep, seen))]
+}
 
 describe('registry catalog', () => {
   const items = listRegistryItems()
@@ -40,6 +52,7 @@ describe('registry catalog', () => {
       .map((file) => ({ path: file.path, code: read(file.path) }))
     const specs = sources.flatMap((source) => importsOf(source.code))
     const shipped = new Set(item.files.map((file) => file.path))
+    const available = new Set(filesWithOwnDependencies(item))
 
     it('ships files that exist', () => {
       for (const file of item.files) expect(existsSync(resolve(root, file.path)), file.path).toBe(true)
@@ -61,9 +74,9 @@ describe('registry catalog', () => {
           .filter((dep) => !shipped.has(`components/ui/${dep}.tsx`)),
       )
       const declared = new Set(
-        (item.registryDependencies ?? []).map((dep) =>
-          dep.startsWith('http') ? basename(dep, '.json') : dep,
-        ),
+        (item.registryDependencies ?? [])
+          .map((dep) => (dep.startsWith('http') ? basename(dep, '.json') : dep))
+          .filter((dep) => (getRegistryItem(dep)?.type ?? 'registry:ui') === 'registry:ui'),
       )
       expect([...declared].sort()).toEqual([...uiImports].sort())
     })
@@ -75,7 +88,7 @@ describe('registry catalog', () => {
       for (const spec of local) {
         const path = spec.slice(2)
         const candidates = [path, `${path}.ts`, `${path}.tsx`]
-        expect(candidates.some((c) => shipped.has(c)), `${name} imports ${spec}`).toBe(true)
+        expect(candidates.some((c) => available.has(c)), `${name} imports ${spec}`).toBe(true)
       }
     })
 
@@ -85,7 +98,7 @@ describe('registry catalog', () => {
       const forbidden: [RegExp, string][] = [
         [/['"](@radix-ui\/[^'"]+|radix-ui|@base-ui\/[^'"]+)['"]/, 'imports a primitive library directly'],
         [/\basChild\b/, 'uses Radix asChild; style the trigger with buttonVariants instead'],
-        [/\srender=\{/, 'uses Base UI render; style the trigger with buttonVariants instead'],
+        [/\srender=\{\s*</, 'uses Base UI render; style the trigger with buttonVariants instead'],
         [/data-\[state|data-state|data-\[open|data-open/, 'styles a primitive state attribute'],
         [/\b(InputProps|CalendarProps)\b/, 'imports a type the stock wrappers do not export'],
         [/<style jsx/, 'uses styled-jsx, which only exists in Next.js'],
@@ -100,6 +113,7 @@ describe('registry catalog', () => {
     it('depends on its own registry items by URL', () => {
       for (const dep of item.registryDependencies ?? []) {
         if (getRegistryItem(dep)) throw new Error(`${name}: use ${registryItemUrl(dep)} instead of "${dep}"`)
+        if (dep.startsWith('http')) expect(getRegistryItem(basename(dep, '.json')), dep).toBeDefined()
       }
     })
   })

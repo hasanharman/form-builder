@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -53,7 +53,7 @@ export default function ClerkResetPasswordPreview() {
       footer={
         <>
           Need another code?{' '}
-          <Link href="/templates/authentication/clerk-auth?flow=forgot-password">
+          <Link href="/forgot-password">
             Restart reset
           </Link>
           .
@@ -112,7 +112,7 @@ export default function ClerkResetPasswordPreview() {
 
             <FieldDescription className="text-center">
               Back to{' '}
-              <Link href="/templates/authentication/clerk-auth?flow=sign-in">
+              <Link href="/sign-in">
                 sign in
               </Link>
             </FieldDescription>

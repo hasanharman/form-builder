@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -54,7 +54,7 @@ export default function SignUpPreview() {
       title="Create account"
       description={
         <>
-          Already have an account? <Link href="/templates/authentication/sign-in">Sign in</Link>
+          Already have an account? <Link href="/sign-in">Sign in</Link>
         </>
       }
       showOauth
@@ -118,7 +118,7 @@ export default function SignUpPreview() {
           </Field>
           <FieldSeparator>Or</FieldSeparator>
           <FieldDescription className="text-center">
-            Need account access help? <Link href="/templates/authentication/forgot-password">Reset here</Link>
+            Need account access help? <Link href="/forgot-password">Reset here</Link>
           </FieldDescription>
         </FieldGroup>
       </form>

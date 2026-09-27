@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { Link } from 'next-view-transitions'
 
-import { templates } from '@/constants/templates'
+import { templateCategories } from '@/constants/templates'
 
 const iconMap = {
   shield: Shield,
@@ -159,7 +159,7 @@ function LoginMock() {
 export default function TemplatesPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      {templates.map((section) => (
+      {templateCategories.map((section) => (
         <section
           key={section.title}
           className="rounded-xl border bg-background/60 backdrop-blur-sm overflow-hidden"
@@ -171,7 +171,7 @@ export default function TemplatesPage() {
             </p>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-border/60">
-            {section.sub.map((template) => {
+            {section.templates.map((template) => {
               const Icon = iconMap[template.icon]
 
               return (
