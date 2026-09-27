@@ -64,17 +64,18 @@ export function AppSidebar() {
           <SidebarMenu>
             {entries.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <Link href={item.path} className="font-semibold">
-                    {item.title}
-                  </Link>
+                <SidebarMenuButton className="font-semibold" render={<Link href={item.path} />}>
+                  {item.title}
                 </SidebarMenuButton>
                 <SidebarMenuBadge className="border">{item.sub.length}</SidebarMenuBadge>
                 <SidebarMenuSub>
                   {item.sub.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.key}>
-                      <SidebarMenuSubButton asChild isActive={subItem.isActive}>
-                        <Link href={subItem.path}>{subItem.title}</Link>
+                      <SidebarMenuSubButton
+                        isActive={subItem.isActive}
+                        render={<Link href={subItem.path} />}
+                      >
+                        {subItem.title}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

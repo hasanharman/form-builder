@@ -26,10 +26,11 @@ export function AppSidebar() {
         <SidebarGroup className="py-4">
           <SidebarMenu className="gap-2">
             <SidebarMenuItem className="mb-2">
-              <SidebarMenuButton asChild className="py-2">
-                <Link href="/components" className="font-semibold text-base">
-                  Components
-                </Link>
+              <SidebarMenuButton
+                className="py-2 font-semibold text-base"
+                render={<Link href="/components" />}
+              >
+                Components
               </SidebarMenuButton>
               <SidebarMenuBadge className="border">{items.length}</SidebarMenuBadge>
               <SidebarMenuSub className="gap-1 py-2">
@@ -38,13 +39,11 @@ export function AppSidebar() {
                   return (
                     <SidebarMenuSubItem key={item.name}>
                       <SidebarMenuSubButton
-                        asChild
                         isActive={pathname === path}
-                        className="py-2 h-auto"
+                        className="py-2 h-auto leading-snug"
+                        render={<Link href={path} />}
                       >
-                        <Link href={path} className="leading-snug">
-                          {item.title}
-                        </Link>
+                        {item.title}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   )
