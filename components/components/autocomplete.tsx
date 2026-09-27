@@ -12,9 +12,7 @@ const usageCode = `import Autocomplete from '@/components/ui/autocomplete'
 export default function AutocompletePreview() {
   return (
     <ComponentDocShell
-      title="Autocomplete"
-      slug="autocomplete"
-      description="Search input with debounced suggestions and keyboard navigation."
+      name="autocomplete"
       preview={<Autocomplete />}
       previewCode={previewCode}
       usageCode={usageCode}
@@ -23,7 +21,6 @@ export default function AutocompletePreview() {
         'Keyboard navigation (ArrowUp, ArrowDown, Enter, Escape).',
         'Accessible listbox semantics for suggestions.',
       ]}
-      dependencies={['use-debounce']}
     />
   )
 }

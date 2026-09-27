@@ -15,9 +15,7 @@ export default function InlineEditableFieldPreview() {
 
   return (
     <ComponentDocShell
-      title="Inline Editable Field"
-      slug="inline-editable-field"
-      description="Click-to-edit text that toggles between view and input modes."
+      name="inline-editable-field"
       preview={<InlineEditableField value={value} onChange={setValue} />}
       previewCode={previewCode}
       usageCode={usageCode}

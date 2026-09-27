@@ -17,9 +17,7 @@ export default function ColorPickerPreview() {
 
   return (
     <ComponentDocShell
-      title="Color Picker"
-      slug="color-picker"
-      description="Figma-like color picker with saturation/value canvas, hue + alpha sliders, format switching, eyedropper, and swatches."
+      name="color-picker"
       preview={<ColorPicker value={color} onChange={setColor} />}
       previewCode={previewCode}
       usageCode={usageCode}

@@ -15,9 +15,7 @@ export default function AvailabilityPickerPreview() {
 
   return (
     <ComponentDocShell
-      title="Schedule / Availability Picker"
-      slug="availability-picker"
-      description="Weekly time-slot grid for selecting recurring availability."
+      name="availability-picker"
       preview={<AvailabilityPicker value={slots} onChange={setSlots} />}
       previewCode={previewCode}
       usageCode={usageCode}

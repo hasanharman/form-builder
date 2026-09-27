@@ -19,9 +19,7 @@ export default function SignaturePadPreview() {
 
   return (
     <ComponentDocShell
-      title="Signature Pad"
-      slug="signature-pad"
-      description="Dialog-based signature capture with hold-to-confirm interaction."
+      name="signature-pad"
       preview={<SignaturePad value={signature} onChange={setSignature} />}
       previewCode={previewCode}
       usageCode={usageCode}

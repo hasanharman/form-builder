@@ -18,9 +18,7 @@ const usageCode = `import LocationSelector from '@/components/ui/location-input'
 export default function LocationInputPreview() {
   return (
     <ComponentDocShell
-      title="Location Input"
-      slug="location-input"
-      description="Country and state picker based on your local countries/states JSON data."
+      name="location-input"
       preview={<LocationSelector />}
       previewCode={previewCode}
       usageCode={usageCode}
@@ -29,12 +27,6 @@ export default function LocationInputPreview() {
         'State list automatically filtered by selected country.',
         'Controlled callbacks for form integrations.',
       ]}
-      notes={
-        <p>
-          Add <code>countries.json</code> and <code>states.json</code> in your{' '}
-          <code>/data</code> directory before using this component.
-        </p>
-      }
     />
   )
 }

@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 
-import { components } from '@/constants/components'
+import { documentedComponents } from '@/components/components'
 
 export default function ComponentsPage() {
-  const firstComponentPath = components[0]?.sub?.[0]?.path
-  redirect(firstComponentPath ?? '/')
+  const first = documentedComponents()[0]
+  redirect(first ? `/components/${first.name}` : '/')
 }

@@ -34,9 +34,7 @@ export default function TreeSelectPreview() {
 
   return (
     <ComponentDocShell
-      title="Tree Select"
-      slug="tree-select"
-      description="Hierarchical dropdown with expandable nodes and checkbox selection."
+      name="tree-select"
       preview={<TreeSelect options={options} value={value} onChange={setValue} />}
       previewCode={previewCode}
       usageCode={usageCode}

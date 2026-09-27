@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://www.shadcn-form.com/components</loc><lastmod>2026-02-18T18:44:53.989Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.shadcn-form.com/playground</loc><lastmod>2026-02-18T18:44:53.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.shadcn-form.com/readme</loc><lastmod>2026-02-18T18:44:53.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.shadcn-form.com/templates</loc><lastmod>2026-02-18T18:44:53.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.shadcn-form.com</loc><lastmod>2026-02-18T18:44:53.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://www.shadcn-form.com/sponsors</loc><lastmod>2026-02-18T18:44:53.990Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/autocomplete</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/availability-picker</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/color-picker</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/credit-card</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/cron-expression-builder</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/emoji-picker</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/image-upload-dropzone</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/inline-editable-field</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/location-input</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/masked-input</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/signature-input</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/signature-pad</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/sortable-list-input</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/token-input</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/transfer-list</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/components/tree-select</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/playground</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/readme</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/sponsors</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://www.shadcn-form.com/templates</loc><lastmod>2026-09-27T16:22:08.714Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

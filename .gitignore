@@ -43,3 +43,5 @@ next-env.d.ts
 
 # Ignore for WebStorm configuration
 .idea
+# shadcn registry output (built from registry.json by `shadcn build`)
+/public/r

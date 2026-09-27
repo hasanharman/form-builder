@@ -1,0 +1,173 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "shadcn-form",
+  "homepage": "https://www.shadcn-form.com",
+  "items": [
+    {
+      "name": "autocomplete",
+      "type": "registry:ui",
+      "title": "Autocomplete",
+      "description": "Search input with debounced suggestions and keyboard navigation.",
+      "categories": ["input"],
+      "dependencies": ["use-debounce", "lucide-react"],
+      "registryDependencies": ["input", "button"],
+      "files": [{ "path": "components/ui/autocomplete.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "location-input",
+      "type": "registry:ui",
+      "title": "Location Input",
+      "description": "Country and state picker with search, backed by bundled countries and states data.",
+      "categories": ["input", "picker"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "popover", "scroll-area", "command"],
+      "files": [
+        { "path": "components/ui/location-input.tsx", "type": "registry:ui" },
+        {
+          "path": "lib/location-data/countries.json",
+          "type": "registry:lib",
+          "target": "@lib/location-data/countries.json"
+        },
+        {
+          "path": "lib/location-data/states.json",
+          "type": "registry:lib",
+          "target": "@lib/location-data/states.json"
+        }
+      ]
+    },
+    {
+      "name": "signature-input",
+      "type": "registry:ui",
+      "title": "Signature Input",
+      "description": "Canvas-based signature input that returns a PNG data URL.",
+      "categories": ["input"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [{ "path": "components/ui/signature-input.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "signature-pad",
+      "type": "registry:ui",
+      "title": "Signature Pad",
+      "description": "Dialog-based signature capture with hold-to-confirm interaction.",
+      "categories": ["input"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "dialog"],
+      "files": [{ "path": "components/ui/signature-pad.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "credit-card",
+      "type": "registry:ui",
+      "title": "Credit Card",
+      "description": "Interactive credit-card form with visual card preview and validations.",
+      "categories": ["input", "payment"],
+      "dependencies": ["framer-motion", "lucide-react"],
+      "registryDependencies": ["card", "input", "select"],
+      "files": [{ "path": "components/ui/credit-card.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "masked-input",
+      "type": "registry:ui",
+      "title": "Masked Input",
+      "description": "Generic masked input for SSN, tax ID, IBAN, or custom patterns.",
+      "categories": ["input"],
+      "registryDependencies": ["input"],
+      "files": [{ "path": "components/ui/masked-input.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:ui",
+      "title": "Color Picker",
+      "description": "Figma-like color picker with saturation/value canvas, hue + alpha sliders, format switching, eyedropper, and swatches.",
+      "categories": ["input", "picker"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "input", "select"],
+      "files": [{ "path": "components/ui/color-picker.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "token-input",
+      "type": "registry:ui",
+      "title": "Tag / Token Input",
+      "description": "Input that turns text into removable tags/chips.",
+      "categories": ["input"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["badge", "input"],
+      "files": [{ "path": "components/ui/token-input.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "emoji-picker",
+      "type": "registry:ui",
+      "title": "Emoji Picker",
+      "description": "Categorized emoji selector input built with popover + scroll area.",
+      "categories": ["input", "picker"],
+      "registryDependencies": ["button", "input", "popover", "scroll-area"],
+      "files": [{ "path": "components/ui/emoji-picker.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "transfer-list",
+      "type": "registry:ui",
+      "title": "Transfer List",
+      "description": "Dual-list picker to move items between available and selected panels.",
+      "categories": ["input", "picker"],
+      "registryDependencies": ["button"],
+      "files": [{ "path": "components/ui/transfer-list.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "tree-select",
+      "type": "registry:ui",
+      "title": "Tree Select",
+      "description": "Hierarchical dropdown with expandable nodes and checkbox selection.",
+      "categories": ["input", "picker"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "popover", "scroll-area"],
+      "files": [{ "path": "components/ui/tree-select.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "image-upload-dropzone",
+      "type": "registry:ui",
+      "title": "Image Upload / Dropzone",
+      "description": "Drag-and-drop image upload with preview, center crop, and progress feedback.",
+      "categories": ["input", "upload"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button"],
+      "files": [{ "path": "components/ui/image-upload-dropzone.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "cron-expression-builder",
+      "type": "registry:ui",
+      "title": "Cron Expression Builder",
+      "description": "Visual cron schedule builder with human-readable summary.",
+      "categories": ["input", "date-time"],
+      "registryDependencies": ["label", "select"],
+      "files": [{ "path": "components/ui/cron-expression-builder.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "inline-editable-field",
+      "type": "registry:ui",
+      "title": "Inline Editable Field",
+      "description": "Click-to-edit text that toggles between view and input modes.",
+      "categories": ["input"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "input"],
+      "files": [{ "path": "components/ui/inline-editable-field.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "sortable-list-input",
+      "type": "registry:ui",
+      "title": "Sortable List Input",
+      "description": "Drag-and-drop reorderable list stored as a form value.",
+      "categories": ["input"],
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["button", "input"],
+      "files": [{ "path": "components/ui/sortable-list-input.tsx", "type": "registry:ui" }]
+    },
+    {
+      "name": "availability-picker",
+      "type": "registry:ui",
+      "title": "Schedule / Availability Picker",
+      "description": "Weekly time-slot grid for selecting recurring availability.",
+      "categories": ["input", "date-time"],
+      "files": [{ "path": "components/ui/availability-picker.tsx", "type": "registry:ui" }]
+    }
+  ]
+}

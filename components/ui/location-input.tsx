@@ -18,8 +18,8 @@ import {
 import { cn } from '@/lib/utils'
 
 // Import JSON data directly
-import countries from '@/data/countries.json'
-import states from '@/data/states.json'
+import countries from '@/lib/location-data/countries.json'
+import states from '@/lib/location-data/states.json'
 
 interface Timezone {
   zoneName: string

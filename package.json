@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack",
-    "build": "next build --webpack",
+    "dev": "pnpm registry:build && next dev --webpack",
+    "build": "pnpm registry:build && next build --webpack",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "registry:build": "shadcn build",
+    "registry:validate": "shadcn registry validate"
   },
   "dependencies": {
     "@blocknote/core": "^0.55.0",
@@ -92,6 +94,7 @@
     "postcss": "^8.5.28",
     "prettier": "^3.9.9",
     "raw-loader": "^4.0.2",
+    "shadcn": "^4.21.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
