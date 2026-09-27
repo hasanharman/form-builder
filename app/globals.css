@@ -102,6 +102,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar-background);
   --color-sidebar-background: var(--sidebar-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -171,6 +172,8 @@
 
 @layer base {
   body {
+    /* Base UI: keeps iOS 26+ Safari from mispositioning popups. */
+    position: relative;
     @apply bg-background text-foreground;
     font-family: Arial, Helvetica, sans-serif;
   }
