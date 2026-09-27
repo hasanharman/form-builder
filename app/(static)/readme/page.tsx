@@ -1,7 +1,7 @@
 import { Link } from 'next-view-transitions'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Separator } from '@radix-ui/react-separator'
+import { Separator } from '@/components/ui/separator'
 
 interface UserLinkProps {
   href: string
