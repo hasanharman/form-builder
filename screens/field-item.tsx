@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -152,17 +153,22 @@ export const FieldItem = ({
           condition={showColumnButton}
           render={() => (
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="min-w-9 w-9 h-9 rounded-full"
-                >
-                  +
-                </Button>
+              <DropdownMenuTrigger
+                render={
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="min-w-9 w-9 h-9 rounded-full"
+                  />
+                }
+              >
+                +
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>Select Component</DropdownMenuLabel>
+                {/* Base UI menu labels must sit inside a group. */}
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Select Component</DropdownMenuLabel>
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 {fieldVariants.map((variant) => (
                   <DropdownMenuItem
