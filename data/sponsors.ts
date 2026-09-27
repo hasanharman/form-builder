@@ -26,16 +26,6 @@ export const featuredSponsors: Sponsor[] = [
   //     description: 'Premium Sponsor',
   //   },
   {
-    id: 1,
-    name: 'shadcnstudio.com',
-    designation: 'Header Sponsor',
-    image: 'https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg',
-    tier: 'header',
-    url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor',
-    isActive: true,
-    description: 'shadcn blocks & templates',
-  },
-  {
     id: 2,
     name: 'shadcnspace.com',
     designation: 'Community Supporter',
@@ -134,6 +124,16 @@ export const pastSponsors: Sponsor[] = [
     tier: 'header',
     url: 'https://github.com/maxciebiera',
     isActive: false,
+  },
+  {
+    id: 6,
+    name: 'shadcnstudio.com',
+    designation: 'Former Header Sponsor',
+    image: 'https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg',
+    tier: 'header',
+    url: 'https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=banner&utm_campaign=sponsor',
+    isActive: false,
+    description: 'shadcn blocks & templates',
   },
 ]
 

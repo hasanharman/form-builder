@@ -165,13 +165,7 @@ A huge thank you to everyone who has supported this project! Your generosity kee
 
 Premium sponsors featured prominently throughout the project:
 
-<div align="center">
-  <a href="https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor">
-    <img src="https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg" alt="shadcnstudio.com" width="200" height="100" style="margin: 20px; border-radius: 8px;" />
-  </a>
-</div>
-
-**[shadcnstudio.com](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor)** - Explore beautiful shadcn blocks & templates to accelerate your development.
+- Come be the first! [Become a Header Sponsor](https://github.com/sponsors/hasanharman)
 
 ### Project Supporters ($50/month)
 
@@ -193,6 +187,8 @@ A heartfelt thanks to those who previously supported the project:
 |:---:|:---:|:---:|:---:|:---:|
 | [![tino-technology](https://avatars.githubusercontent.com/u/150597157?s=100&v=4)](https://github.com/tino-technology) | [![feliperails](https://avatars.githubusercontent.com/u/1680000?s=100&v=4)](https://github.com/feliperails) | [![Radu Ciocan](https://avatars.githubusercontent.com/u/4984377?s=100&v=4)](https://github.com/raduciocan) | [![rutsatz](https://avatars.githubusercontent.com/u/14064725?s=100&v=4)](https://github.com/rutsatz) | [![Maxim Ciebiera](https://avatars.githubusercontent.com/u/47557243?s=100&v=4)](https://github.com/maxciebiera) |
 | [tino-technology](https://github.com/tino-technology) | [feliperails](https://github.com/feliperails) | [Radu Ciocan](https://github.com/raduciocan) | [rutsatz](https://github.com/rutsatz) | [Maxim Ciebiera](https://github.com/maxciebiera) |
+| [![shadcnstudio.com](https://ts-assets.b-cdn.net/ss-assets/logo/logo.svg)](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor) | | | | |
+| [shadcnstudio.com](https://shadcnstudio.com/?utm_source=shadcn-form&utm_medium=github&utm_campaign=sponsor) | | | | |
 
 ---
 
