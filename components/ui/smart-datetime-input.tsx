@@ -4,7 +4,7 @@ import React from 'react'
 import * as chrono from 'chrono-node'
 import { enUS as localeEnUS, type Locale } from 'date-fns/locale'
 import { Calendar as CalendarIcon } from 'lucide-react'
-import { ActiveModifiers } from 'react-day-picker'
+import type { Modifiers } from 'react-day-picker'
 
 import {
   Popover,
@@ -135,8 +135,9 @@ const DEFAULT_SIZE = 96
  */
 type SmartDatetimeInputProps = Omit<
   CalendarProps,
-  'id' | 'mode' | 'selected' | 'onSelect' | 'initialFocus'
+  'id' | 'mode' | 'selected' | 'onSelect' | 'locale'
 > & {
+  locale?: Locale
   value?: Date | null
   onValueChange: (date: Date | null) => void
   hour12?: boolean
@@ -618,8 +619,8 @@ const DateTimeLocalInput = ({
     (
       date: Date | undefined,
       selectedDate: Date,
-      m: ActiveModifiers,
-      e: React.MouseEvent,
+      _m: Modifiers,
+      _e: React.MouseEvent | React.KeyboardEvent,
     ) => {
       const parsedDateTime = parseDateTime(selectedDate, locale)
 
@@ -659,7 +660,7 @@ const DateTimeLocalInput = ({
             mode="single"
             selected={value ?? undefined}
             onSelect={formateSelectedDate}
-            initialFocus
+            autoFocus
           />
           <TimePicker locale={locale} hour12={hour12} />
         </div>

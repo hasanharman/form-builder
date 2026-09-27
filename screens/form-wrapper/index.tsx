@@ -20,7 +20,7 @@ import {
 import { isNotEmpty } from '@/lib/utils'
 
 interface FormWrapperProps<TFieldValues extends FieldValues> {
-  schema: z.ZodType<TFieldValues>
+  schema: z.ZodType<TFieldValues, TFieldValues>
   defaultValues: DefaultValues<TFieldValues>
   onSubmit: (values: TFieldValues) => void
   children: (form: UseFormReturn<TFieldValues>) => React.ReactNode

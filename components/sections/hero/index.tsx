@@ -15,7 +15,7 @@ import HeartIcon from '@/components/hearth-icon'
 import { LuStar, LuHeart } from 'react-icons/lu'
 import { VscSourceControl } from 'react-icons/vsc'
 
-const ease = [0.16, 1, 0.3, 1]
+const ease = [0.16, 1, 0.3, 1] as const
 
 function HeroPill() {
   const [stats, setStats] = useState({

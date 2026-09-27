@@ -263,7 +263,7 @@ export const renderFormField = (field: FormFieldType, form: any) => {
                     shouldDirty: true,
                   })
                 }}
-                initialFocus
+                autoFocus
               />
             </PopoverContent>
           </Popover>

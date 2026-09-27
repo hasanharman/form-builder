@@ -17,17 +17,15 @@
     "jsx": "react-jsx",
     "incremental": true,
     "target": "es2015",
-    "downlevelIteration": true,
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "baseUrl": "./",
     "paths": {
       "@/*": [
         "./*",
-        "app/*"
+        "./app/*"
       ]
     }
   },

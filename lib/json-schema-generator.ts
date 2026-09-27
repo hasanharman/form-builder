@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import zodToJsonSchema from 'zod-to-json-schema'
 
 export interface JsonSchemaOptions {
   title?: string
@@ -8,18 +7,34 @@ export interface JsonSchemaOptions {
 }
 
 export const generateJsonSchema = (
-  zodSchema: z.ZodTypeAny,
+  zodSchema: z.ZodType,
   options: JsonSchemaOptions = {}
 ) => {
-  const jsonSchema = zodToJsonSchema(zodSchema as any, {
-    name: options.title,
-    definitions: options.definitions
-  })
-  
-  if (options.description && typeof jsonSchema === 'object' && jsonSchema !== null) {
-    (jsonSchema as any).description = options.description
+  const schema = z.toJSONSchema(zodSchema, {
+    target: 'draft-7',
+    unrepresentable: 'any',
+    io: 'input',
+    override: (ctx) => {
+      if (ctx.zodSchema._zod.def.type === 'date') {
+        ctx.jsonSchema.type = 'string'
+        ctx.jsonSchema.format = 'date-time'
+      }
+    },
+  }) as Record<string, any>
+  const { $schema, ...body } = schema
+
+  const jsonSchema: Record<string, any> = options.title
+    ? {
+        $ref: `#/definitions/${options.title}`,
+        definitions: { ...options.definitions, [options.title]: body },
+        $schema,
+      }
+    : { ...body, ...(options.definitions && { definitions: options.definitions }), $schema }
+
+  if (options.description) {
+    jsonSchema.description = options.description
   }
-  
+
   return jsonSchema
 }
 
@@ -27,12 +42,12 @@ export const generateFormJsonSchema = (
   formFields: any[],
   options: JsonSchemaOptions = {}
 ) => {
-  const schemaObject: Record<string, z.ZodTypeAny> = {}
+  const schemaObject: Record<string, z.ZodType> = {}
   
   formFields.forEach((field) => {
     if (field.variant === 'Label') return
     
-    let fieldSchema: z.ZodTypeAny = z.string()
+    let fieldSchema: z.ZodType = z.string()
     
     switch (field.variant) {
       case 'Checkbox':
