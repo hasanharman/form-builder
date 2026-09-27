@@ -3,7 +3,8 @@ import { motion, Reorder } from 'framer-motion'
 
 import { cn } from '@/lib/utils'
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig, fieldTypes } from '@/constants'
+import { fieldVariants } from '@/components/field-variants'
+import { createField } from '@/components/field-variants/form'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -48,52 +49,12 @@ export const FieldItem = ({
   )
 
   const addNewColumn = (variant: string, index: number) => {
-    const newFieldName = `name_${Math.random().toString().slice(-10)}`
-
-    // Check for duplicates
-    const existingFields = Array.isArray(formFields[index])
-      ? (formFields[index] as FormFieldType[]).map((field) => field.name)
-      : [formFields[index]?.name]
-
-    // Check if the new field name already exists in the existing fields
-    if (existingFields.includes(newFieldName)) {
-      // If a field with the same name exists, do not add a new field
-      return
-    }
-
-    const { label, description, placeholder } = defaultFieldConfig[variant] || {
-      label: '',
-      description: '',
-      placeholder: '',
-    }
-
-    const newField: FormFieldType = {
-      checked: true,
-      description: description || '',
-      disabled: false,
-      label: label || newFieldName,
-      name: newFieldName,
-      onChange: () => {},
-      onSelect: () => {},
-      placeholder: placeholder || 'Placeholder',
-      required: true,
-      rowIndex: index,
-      setValue: () => {},
-      type: '',
-      value: '',
-      variant,
-    }
+    const newField = createField(variant)
 
     setFormFields((prevFields) => {
       const newFields = [...prevFields]
       if (Array.isArray(newFields[index])) {
-        // If it's already an array, check for duplicates before adding
-        const currentFieldNames = (newFields[index] as FormFieldType[]).map(
-          (field) => field.name,
-        )
-        if (!currentFieldNames.includes(newFieldName)) {
-          ;(newFields[index] as FormFieldType[]).push(newField)
-        }
+        newFields[index] = [...(newFields[index] as FormFieldType[]), newField]
       } else if (newFields[index]) {
         // If it's a single field, convert it to an array with the existing field and the new one
         newFields[index] = [newFields[index] as FormFieldType, newField]
@@ -203,15 +164,15 @@ export const FieldItem = ({
               <DropdownMenuContent>
                 <DropdownMenuLabel>Select Component</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {fieldTypes.map((fieldType) => (
+                {fieldVariants.map((variant) => (
                   <DropdownMenuItem
-                    key={fieldType.name}
+                    key={variant.name}
                     onClick={() => {
-                      addNewColumn(fieldType.name, index)
+                      addNewColumn(variant.name, index)
                       setColumnCount((prev) => prev + 1)
                     }}
                   >
-                    {fieldType.name}
+                    {variant.name}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>

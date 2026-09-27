@@ -1,6 +1,6 @@
 import { FormFieldType } from '@/types'
 import { generateCodeSnippetWithField } from './field-snippets'
-import { generateZodSchema, generateConstants, generateDefaultValuesString, getZodSchemaString } from './index'
+import { generateDefaultValuesString, getZodSchemaString } from './index'
 
 type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -67,7 +67,6 @@ import { Field, FieldLabel, FieldDescription, FieldError } from "@/components/ui
 import { Button } from "@/components/ui/button"
 ${componentImports.join('\n')}`
 
-  const constants = Array.from(generateConstants(formFields)).join('\n')
   const schema = getZodSchemaString(formFields)
 
   const renderFields = (fields: FormFieldOrGroup[]) => {
@@ -98,7 +97,6 @@ ${componentImports.join('\n')}`
 
   const component = `
 export default function MyForm() {
-  ${constants}
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
      ${defaultValuesString}
