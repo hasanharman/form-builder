@@ -16,7 +16,6 @@ import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
 import { EditFieldDialog } from '@/screens/edit-field-dialog'
 import EmptyListSvg from '@/assets/oc-thinking.svg'
-import Editor from '@/components/editor/editor'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
