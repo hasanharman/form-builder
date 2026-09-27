@@ -23,6 +23,8 @@ import {
   SelectItem,
 } from '@/components/ui/select' // Import Select components
 
+const INPUT_TYPES = { text: 'Text', email: 'Email', number: 'Number' }
+
 type EditFieldDialogProps = {
   isOpen: boolean
   onClose: () => void
@@ -124,7 +126,10 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    {/* Base UI shows the raw value unless given a label. */}
+                    <SelectValue placeholder="Select type">
+                      {INPUT_TYPES[editedField.type as keyof typeof INPUT_TYPES]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="text">Text</SelectItem>
