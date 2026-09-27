@@ -456,7 +456,7 @@ export function ColorPicker({
         ))}
       </div>
 
-      <style jsx global>{`
+      <style>{`
         .figma-range::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;

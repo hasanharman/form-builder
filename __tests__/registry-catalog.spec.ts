@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
+import { SPECIAL_COMPONENTS } from '@/constants/special-components'
 import {
   getRegistryItem,
   installCommand,
@@ -87,6 +88,7 @@ describe('registry catalog', () => {
         [/\srender=\{/, 'uses Base UI render; style the trigger with buttonVariants instead'],
         [/data-\[state|data-state|data-\[open|data-open/, 'styles a primitive state attribute'],
         [/\b(InputProps|CalendarProps)\b/, 'imports a type the stock wrappers do not export'],
+        [/<style jsx/, 'uses styled-jsx, which only exists in Next.js'],
       ]
       for (const source of sources) {
         for (const [pattern, reason] of forbidden) {
@@ -108,6 +110,10 @@ describe('registry catalog', () => {
       .map((file) => basename(file, '.tsx'))
       .filter((page) => !['component-doc-shell', 'components-sidebar'].includes(page))
     for (const page of pages) expect(getRegistryItem(page), page).toBeDefined()
+  })
+
+  it('can install every component the playground renders', () => {
+    for (const { item } of SPECIAL_COMPONENTS) expect(getRegistryItem(item), item).toBeDefined()
   })
 
   it('builds install commands from item URLs', () => {

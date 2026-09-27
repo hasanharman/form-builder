@@ -11,9 +11,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Calendar, CalendarProps } from '@/components/ui/calendar'
+import { Calendar } from '@/components/ui/calendar'
 import { Input } from '@/components/ui/input'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'
 
@@ -134,7 +134,7 @@ const DEFAULT_SIZE = 96
  * Smart time input Docs: {@link: https://shadcn-extension.vercel.app/docs/smart-time-input}
  */
 type SmartDatetimeInputProps = Omit<
-  CalendarProps,
+  React.ComponentProps<typeof Calendar>,
   'id' | 'mode' | 'selected' | 'onSelect' | 'locale'
 > & {
   locale?: Locale
@@ -605,7 +605,7 @@ NaturalLanguageInput.displayName = 'NaturalLanguageInput'
 type DateTimeLocalInputProps = {
   locale: Locale
   hour12: boolean
-} & Omit<CalendarProps, 'locale'>
+} & Omit<React.ComponentProps<typeof Calendar>, 'locale'>
 
 const DateTimeLocalInput = ({
   locale,
@@ -637,18 +637,16 @@ const DateTimeLocalInput = ({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant={'outline'}
-          size={'icon'}
-          className={cn(
-            'size-9 flex items-center justify-center font-normal',
-            !value && 'text-muted-foreground',
-          )}
-        >
-          <CalendarIcon className="size-4" />
-          <span className="sr-only">calender</span>
-        </Button>
+      <PopoverTrigger
+        type="button"
+        className={cn(
+          buttonVariants({ variant: 'outline', size: 'icon' }),
+          'size-9 flex items-center justify-center font-normal',
+          !value && 'text-muted-foreground',
+        )}
+      >
+        <CalendarIcon className="size-4" />
+        <span className="sr-only">Open calendar</span>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" sideOffset={8}>
         <div className="flex gap-1">

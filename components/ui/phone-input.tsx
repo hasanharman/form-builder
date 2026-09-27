@@ -6,7 +6,7 @@ import * as RPNInput from 'react-phone-number-input'
 
 import flags from 'react-phone-number-input/flags'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -15,7 +15,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { Input, InputProps } from '@/components/ui/input'
+import { Input } from '@/components/ui/input'
 import {
   Popover,
   PopoverContent,
@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/popover'
 
 import { cn } from '@/lib/utils'
-import { ScrollArea } from './scroll-area'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 type PhoneInputProps = Omit<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -63,7 +63,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   )
 PhoneInput.displayName = 'PhoneInput'
 
-const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
+const InputComponent = React.forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   ({ className, ...props }, ref) => (
     <Input
       className={cn('rounded-e-lg rounded-s-none', className)}
@@ -98,21 +98,21 @@ const CountrySelect = ({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant={'outline'}
-          className="flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10"
-          disabled={disabled}
-        >
-          <FlagComponent country={value} countryName={value} />
-          <ChevronsUpDown
-            className={cn(
-              '-mr-2 h-4 w-4 opacity-50',
-              disabled ? 'hidden' : 'opacity-100',
-            )}
-          />
-        </Button>
+      <PopoverTrigger
+        type="button"
+        className={cn(
+          buttonVariants({ variant: 'outline' }),
+          'flex gap-1 rounded-e-none rounded-s-lg border-r-0 px-3 focus:z-10',
+        )}
+        disabled={disabled}
+      >
+        <FlagComponent country={value} countryName={value} />
+        <ChevronsUpDown
+          className={cn(
+            '-mr-2 h-4 w-4 opacity-50',
+            disabled ? 'hidden' : 'opacity-100',
+          )}
+        />
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
