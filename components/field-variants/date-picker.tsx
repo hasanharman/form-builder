@@ -67,7 +67,7 @@ export const datePickerVariant: FieldVariant = {
     <Calendar
       mode="single"
       selected={${b.value}}
-      onSelect={(date) => ${b.onChange('date')}}
+      onSelect={(date) => date && ${b.onChange('date')}}
     />
   </PopoverContent>
 </Popover>`,

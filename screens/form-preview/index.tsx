@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/select"
 import If from '@/components/ui/if'
 import { FormFieldType } from '@/types'
-import { FormLibrary } from '@/constants'
 import { getFieldVariant } from '@/components/field-variants'
 import { FieldShell } from '@/components/field-variants/field-shell'
 import {
@@ -28,11 +27,10 @@ import {
 } from '@/components/field-variants/form'
 
 import { Code, Eye, Files } from 'lucide-react'
-import { generateFormCodeForLibrary } from '@/screens/generate-code-parts'
-import { formatJSXCode } from '@/lib/utils'
+import { generateFormCode, type FormLibrary } from '@/lib/form-code'
+import { formatCode } from '@/lib/format-code'
 import { VscJson } from 'react-icons/vsc'
 import { SiReacthookform, SiReactquery } from 'react-icons/si'
-import { FaReact } from 'react-icons/fa'
 
 export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
@@ -103,8 +101,20 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
     }
   }
 
-  const generatedCode = generateFormCodeForLibrary(formFields, selectedLibrary)
-  const formattedCode = formatJSXCode(generatedCode)
+  const generatedCode = React.useMemo(
+    () => generateFormCode(formFields, selectedLibrary),
+    [formFields, selectedLibrary],
+  )
+  const [formattedCode, setFormattedCode] = React.useState(generatedCode)
+  React.useEffect(() => {
+    let current = true
+    formatCode(generatedCode)
+      .then((code) => current && setFormattedCode(code))
+      .catch(() => current && setFormattedCode(generatedCode))
+    return () => {
+      current = false
+    }
+  }, [generatedCode])
 
   return (
     <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
@@ -132,7 +142,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 
           <Select
             value={selectedLibrary}
-            onValueChange={(value) => onLibraryChange(value as FormLibrary)}
+            onValueChange={(value) => value && onLibraryChange(value as FormLibrary)}
           >
             <SelectTrigger className="w-auto px-2 gap-2">
               <SelectValue placeholder="Select library">
@@ -141,9 +151,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
                 )}
                 {selectedLibrary === 'tanstack-form' && (
                   <SiReactquery className="size-5" />
-                )}
-                {selectedLibrary === 'server-actions' && (
-                  <FaReact className="size-5 text-blue-500" />
                 )}
               </SelectValue>
             </SelectTrigger>
@@ -160,12 +167,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
                   <div className="flex items-center gap-2">
                     <SiReactquery className="size-4" />
                     <span>TanStack Form</span>
-                  </div>
-                </SelectItem>
-                <SelectItem value="server-actions" disabled>
-                  <div className="flex items-center gap-2">
-                    <FaReact className="size-4 text-blue-500" />
-                    <span>Server Actions (Coming Soon)</span>
                   </div>
                 </SelectItem>
               </SelectGroup>

@@ -30,7 +30,9 @@ export const locationInputVariant: FieldVariant = {
     />
   ),
   control: (field, b) => `<LocationSelector${field.disabled ? '\n  disabled' : ''}
-  onCountryChange={(country) => ${b.onChange('[country?.name ?? "", ""]')}}
-  onStateChange={(state) => ${b.onChange(`[${b.value}[0], state?.name ?? ""]`)}}
+  onCountryChange={(country) => ${b.onChange('[country?.name ?? "", ""] as [string, string]')}}
+  onStateChange={(state) =>
+    ${b.onChange(`[${b.value}[0], state?.name ?? ""] as [string, string]`)}
+  }
 />`,
 }

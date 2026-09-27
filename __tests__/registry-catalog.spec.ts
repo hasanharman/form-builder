@@ -2,7 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { basename, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
-import { SPECIAL_COMPONENTS } from '@/constants/special-components'
+import { fieldVariants } from '@/components/field-variants'
 import {
   getRegistryItem,
   installCommand,
@@ -126,8 +126,15 @@ describe('registry catalog', () => {
     for (const page of pages) expect(getRegistryItem(page), page).toBeDefined()
   })
 
-  it('can install every component the playground renders', () => {
-    for (const { item } of SPECIAL_COMPONENTS) expect(getRegistryItem(item), item).toBeDefined()
+  // Official shadcn items the generated forms use; anything else must be ours.
+  const OFFICIAL = ['button', 'calendar', 'checkbox', 'command', 'field', 'input', 'input-otp', 'popover', 'radio-group', 'select', 'slider', 'sonner', 'switch', 'textarea']
+
+  it('can install every component the playground generates code for', () => {
+    for (const variant of fieldVariants) {
+      for (const item of variant.registryItems) {
+        expect(OFFICIAL.includes(item) || getRegistryItem(item) !== undefined, `${variant.name}: ${item}`).toBe(true)
+      }
+    }
   })
 
   it('builds install commands from item URLs', () => {

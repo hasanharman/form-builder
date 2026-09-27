@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { FORM_LIBRARIES, FormLibrary } from '@/constants'
+import { FORM_LIBRARIES, isFormLibrary, type FormLibrary } from '@/lib/form-code'
 import { createField } from '@/components/field-variants/form'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
@@ -28,7 +28,8 @@ export default function FormBuilder() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedLibrary, setSelectedLibrary] = useState<FormLibrary>(() => {
     if (typeof window !== 'undefined') {
-      return (localStorage.getItem('formLibrary') as FormLibrary) || FORM_LIBRARIES.REACT_HOOK_FORM
+      const saved = localStorage.getItem('formLibrary')
+      return isFormLibrary(saved) ? saved : FORM_LIBRARIES.REACT_HOOK_FORM
     }
     return FORM_LIBRARIES.REACT_HOOK_FORM
   })

@@ -1,40 +1,36 @@
 import { Link } from 'next-view-transitions'
 
 import Code from '@/components/code'
-import { SPECIAL_COMPONENTS } from '@/constants/special-components'
-import { getRegistryItem, installCommand } from '@/lib/registry-catalog'
-import { FormFieldType } from '@/types'
+import type { FormFieldOrGroup } from '@/components/field-variants/form'
+import { formInstallCommand, formRegistryItems } from '@/lib/form-code'
+import { getRegistryItem } from '@/lib/registry-catalog'
 
-export type FormFieldOrGroup = FormFieldType | FormFieldType[]
-
-const SpecialComponentsNotice = ({
-  formFields,
-}: {
-  formFields: FormFieldOrGroup[]
-}) => {
-  const variants = new Set(formFields.flat().map((field) => field.variant))
-  const used = SPECIAL_COMPONENTS.filter((component) =>
-    variants.has(component.variant),
-  )
-
-  if (used.length === 0) return null
+/** The install command for everything the generated form imports. */
+const SpecialComponentsNotice = ({ formFields }: { formFields: FormFieldOrGroup[] }) => {
+  if (formFields.length === 0) return null
+  const ownItems = formRegistryItems(formFields)
+    .map((name) => getRegistryItem(name))
+    .filter((item) => item !== undefined)
 
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        This form uses components from the shadcn-form registry. Install them
-        with:
+        Install every component this form uses:
       </p>
-      <Code code={installCommand(used.map((component) => component.item))} />
-      <ul className="list-disc text-sm text-muted-foreground pl-3">
-        {used.map((component) => (
-          <li key={component.item}>
-            <Link href={`/components/${component.item}`} className="hover:underline">
-              {getRegistryItem(component.item)?.title ?? component.variant}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <Code code={formInstallCommand(formFields)} />
+      {ownItems.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          From the shadcn-form registry:{' '}
+          {ownItems.map((item, index) => (
+            <span key={item.name}>
+              {index > 0 && ', '}
+              <Link href={`/components/${item.name}`} className="underline">
+                {item.title}
+              </Link>
+            </span>
+          ))}
+        </p>
+      )}
     </div>
   )
 }

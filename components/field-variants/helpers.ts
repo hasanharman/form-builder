@@ -1,8 +1,11 @@
 import type { FormFieldType } from '@/types'
 import { zx, type SchemaExpr } from './schema-expr'
 
-/** A JSX attribute value holding a string literal, safe for any characters. */
-export const lit = (value: string | undefined) => `{${JSON.stringify(value ?? '')}}`
+/** A JSX attribute value for a string: `"text"`, or `{"..."}` when it needs escaping. */
+export const lit = (value: string | undefined) => {
+  const text = value ?? ''
+  return /["\\{}\n]/.test(text) ? `{${JSON.stringify(text)}}` : `"${text}"`
+}
 
 /** `required` string: at least `min` (default 1) characters; optional strings may be empty. */
 export function stringSchema(field: FormFieldType, message = 'Required'): SchemaExpr {

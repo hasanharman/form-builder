@@ -27,7 +27,7 @@ export const datetimePickerVariant: FieldVariant = {
   ),
   control: (_field, b) => `<DatetimePicker
   value={${b.value}}
-  onChange={(date) => ${b.onChange('date')}}
+  onChange={(date) => date && ${b.onChange('date')}}
   format={[
     ["months", "days", "years"],
     ["hours", "minutes", "am/pm"],

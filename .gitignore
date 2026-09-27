@@ -45,3 +45,6 @@ next-env.d.ts
 .idea
 # shadcn registry output (built from registry.json by `shadcn build`)
 /public/r
+
+# generated-code typecheck fixtures (__tests__/form-code.spec.ts)
+/__tests__/.generated

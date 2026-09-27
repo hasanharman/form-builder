@@ -1,7 +1,6 @@
 'use client'
 
 import { Rating } from '@/components/ui/rating'
-import { optionalUnlessRequired } from './helpers'
 import { zx } from './schema-expr'
 import type { FieldVariant } from './types'
 
@@ -11,9 +10,7 @@ export const ratingVariant: FieldVariant = {
   registryItems: ['rating'],
   imports: () => ['import { Rating } from "@/components/ui/rating"'],
   schema: (field) =>
-    field.required
-      ? zx.number().min(1, { message: 'Please provide a rating' })
-      : optionalUnlessRequired(field, zx.number()),
+    field.required ? zx.number().min(1, { message: 'Please provide a rating' }) : zx.number(),
   defaultValue: () => 0,
   Control: ({ field, value, onChange }) => (
     <Rating value={value ?? 0} onChange={onChange} readOnly={field.disabled} />

@@ -33,7 +33,7 @@ export const smartDatetimeInputVariant: FieldVariant = {
   ),
   control: (field, b) => `<SmartDatetimeInput
   value={${b.value}}
-  onValueChange={(date) => ${b.onChange('date')}}
+  onValueChange={(date) => date && ${b.onChange('date')}}
   placeholder=${lit(field.placeholder)}${field.locale ? `\n  locale={${field.locale}}` : ''}${field.hour12 ? '\n  hour12' : ''}
 />`,
 }
