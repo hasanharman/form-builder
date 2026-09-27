@@ -8,6 +8,7 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest",
     "registry:build": "shadcn build",
     "registry:validate": "shadcn registry validate"
