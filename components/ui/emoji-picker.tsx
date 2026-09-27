@@ -2,7 +2,8 @@
 
 import * as React from 'react'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
 import {
   Popover,
@@ -37,10 +38,11 @@ export function EmojiPicker({ value = '', onChange }: EmojiPickerProps) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button type="button" variant="outline" className="w-full justify-start">
-          {value || 'Pick an emoji'}
-        </Button>
+      <PopoverTrigger
+        type="button"
+        className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-start')}
+      >
+        {value || 'Pick an emoji'}
       </PopoverTrigger>
       <PopoverContent className="w-[320px] space-y-2 p-3">
         <Input

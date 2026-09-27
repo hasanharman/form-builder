@@ -571,7 +571,7 @@ function CreditCard({
             <label className="block text-sm font-medium mb-2">Month</label>
             <Select
               value={currentValue.expiryMonth}
-              onValueChange={(value) => handleInputChange('expiryMonth', value)}
+              onValueChange={(value) => handleInputChange('expiryMonth', value ?? '')}
             >
               <SelectTrigger
                 className={cn(
@@ -601,7 +601,7 @@ function CreditCard({
             <label className="block text-sm font-medium mb-2">Year</label>
             <Select
               value={currentValue.expiryYear}
-              onValueChange={(value) => handleInputChange('expiryYear', value)}
+              onValueChange={(value) => handleInputChange('expiryYear', value ?? '')}
             >
               <SelectTrigger
                 className={cn(

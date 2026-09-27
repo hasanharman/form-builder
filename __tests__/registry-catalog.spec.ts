@@ -78,6 +78,23 @@ describe('registry catalog', () => {
       }
     })
 
+    // Items must install cleanly into radix-*, base-* and legacy styles alike,
+    // so they may only use props every shadcn wrapper shares.
+    it('uses no primitive-library-specific API', () => {
+      const forbidden: [RegExp, string][] = [
+        [/['"](@radix-ui\/[^'"]+|radix-ui|@base-ui\/[^'"]+)['"]/, 'imports a primitive library directly'],
+        [/\basChild\b/, 'uses Radix asChild; style the trigger with buttonVariants instead'],
+        [/\srender=\{/, 'uses Base UI render; style the trigger with buttonVariants instead'],
+        [/data-\[state|data-state|data-\[open|data-open/, 'styles a primitive state attribute'],
+        [/\b(InputProps|CalendarProps)\b/, 'imports a type the stock wrappers do not export'],
+      ]
+      for (const source of sources) {
+        for (const [pattern, reason] of forbidden) {
+          expect(pattern.test(source.code), `${source.path} ${reason}`).toBe(false)
+        }
+      }
+    })
+
     it('depends on its own registry items by URL', () => {
       for (const dep of item.registryDependencies ?? []) {
         if (getRegistryItem(dep)) throw new Error(`${name}: use ${registryItemUrl(dep)} instead of "${dep}"`)

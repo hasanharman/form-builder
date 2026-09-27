@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
   Command,
@@ -110,24 +110,22 @@ const LocationSelector = ({
     <div className="flex gap-4">
       {/* Country Selector */}
       <Popover open={openCountryDropdown} onOpenChange={setOpenCountryDropdown}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={openCountryDropdown}
-            disabled={disabled}
-            className="w-full justify-between"
-          >
-            {selectedCountry ? (
-              <div className="flex items-center gap-2">
-                <span>{selectedCountry.emoji}</span>
-                <span>{selectedCountry.name}</span>
-              </div>
-            ) : (
-              <span>Select Country...</span>
-            )}
-            <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-          </Button>
+        <PopoverTrigger
+          type="button"
+          role="combobox"
+          aria-expanded={openCountryDropdown}
+          disabled={disabled}
+          className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between')}
+        >
+          {selectedCountry ? (
+            <div className="flex items-center gap-2">
+              <span>{selectedCountry.emoji}</span>
+              <span>{selectedCountry.name}</span>
+            </div>
+          ) : (
+            <span>Select Country...</span>
+          )}
+          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </PopoverTrigger>
         <PopoverContent className="p-0">
           <Command>
@@ -171,21 +169,19 @@ const LocationSelector = ({
       {/* State Selector - Only shown if selected country has states */}
       {availableStates.length > 0 && (
         <Popover open={openStateDropdown} onOpenChange={setOpenStateDropdown}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              role="combobox"
-              aria-expanded={openStateDropdown}
-              disabled={!selectedCountry}
-              className="w-full justify-between"
-            >
-              {selectedState ? (
-                <span>{selectedState.name}</span>
-              ) : (
-                <span>Select State...</span>
-              )}
-              <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
-            </Button>
+          <PopoverTrigger
+            type="button"
+            role="combobox"
+            aria-expanded={openStateDropdown}
+            disabled={!selectedCountry}
+            className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between')}
+          >
+            {selectedState ? (
+              <span>{selectedState.name}</span>
+            ) : (
+              <span>Select State...</span>
+            )}
+            <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </PopoverTrigger>
           <PopoverContent className="p-0">
             <Command>

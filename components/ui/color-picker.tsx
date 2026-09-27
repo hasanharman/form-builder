@@ -15,6 +15,8 @@ import {
 
 type PickerFormat = 'hex' | 'rgb' | 'hsl'
 
+const FORMAT_LABELS: Record<PickerFormat, string> = { hex: 'Hex', rgb: 'RGB', hsl: 'HSL' }
+
 type Rgb = { r: number; g: number; b: number }
 type Hsv = { h: number; s: number; v: number }
 
@@ -421,9 +423,10 @@ export function ColorPicker({
           }}
         />
 
-        <Select value={format} onValueChange={(value) => setFormat(value as PickerFormat)}>
+        <Select value={format} onValueChange={(value) => setFormat((value ?? 'hex') as PickerFormat)}>
           <SelectTrigger className="w-[78px]">
-            <SelectValue />
+            {/* Explicit label: Base UI selects show the raw value otherwise. */}
+            <SelectValue>{FORMAT_LABELS[format]}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="hex">Hex</SelectItem>
