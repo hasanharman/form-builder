@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
-@plugin "tailwindcss-animate";
 
 /* Form layouts build `col-span-${n}` at runtime; keep the whole range. */
 @source inline("col-span-{1,2,3,4,5,6,7,8,9,10,11,12}");
@@ -125,16 +126,6 @@
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
   --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
-  
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--accordion-panel-height); }
-  }
-  
-  @keyframes accordion-up {
-    from { height: var(--accordion-panel-height); }
-    to { height: 0; }
-  }
   
   @keyframes marquee {
     from { transform: translateX(0); }
