@@ -47,14 +47,13 @@ function SponsorCard({
       {showButton && (
         <div className="flex justify-end mt-3">
           <Button
-            asChild
+            render={<Link href={sponsorUrl} target="_blank" />}
+            nativeButton={false}
             variant="outline"
             className="gap-1 rounded-full group"
           >
-            <Link href={sponsorUrl} target="_blank">
-              Visit Website
-              <IoIosArrowRoundForward className="text-xl transition-transform duration-300 group-hover:-rotate-45" />
-            </Link>
+            Visit Website
+            <IoIosArrowRoundForward className="text-xl transition-transform duration-300 group-hover:-rotate-45" />
           </Button>
         </div>
       )}
