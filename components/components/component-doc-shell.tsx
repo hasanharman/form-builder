@@ -6,31 +6,33 @@ import { Link } from 'next-view-transitions'
 import Code from '@/components/code'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  getRegistryItem,
+  installCommand,
+  registryItemUrl,
+} from '@/lib/registry-catalog'
 
 type ComponentDocShellProps = {
-  title: string
-  slug: string
-  description: string
+  /** Registry item name; title, description and install command come from the catalog. */
+  name: string
   preview: React.ReactNode
   previewCode: string
   usageCode: string
   features?: string[]
-  dependencies?: string[]
   notes?: React.ReactNode
 }
 
 export function ComponentDocShell({
-  title,
-  slug,
-  description,
+  name,
   preview,
   previewCode,
   usageCode,
   features = [],
-  dependencies = [],
   notes,
 }: ComponentDocShellProps) {
-  const installationCode = `npx shadcn@latest add https://www.shadcn-form.com/registry/${slug}.json`
+  const item = getRegistryItem(name)
+  if (!item) throw new Error(`Unknown registry item: ${name}`)
+  const { title, description } = item
 
   return (
     <div className="space-y-6">
@@ -70,23 +72,14 @@ export function ComponentDocShell({
 
       <section className="space-y-2">
         <h3 className="text-lg font-semibold">Installation</h3>
-        <Code code={installationCode} />
+        <Code code={installCommand(name)} />
         <p className="text-sm text-muted-foreground">
-          Registry JSON:{' '}
-          <Link
-            href={`https://www.shadcn-form.com/registry/${slug}.json`}
-            target="_blank"
-            className="underline"
-          >
-            /registry/{slug}.json
+          The CLI installs every dependency listed in the{' '}
+          <Link href={registryItemUrl(name)} target="_blank" className="underline">
+            registry item
           </Link>
+          .
         </p>
-        {dependencies.length > 0 ? (
-          <>
-            <p className="text-sm text-muted-foreground">Install dependencies:</p>
-            <Code code={`npm install ${dependencies.join(' ')}`} />
-          </>
-        ) : null}
       </section>
 
       <section className="space-y-2">

@@ -6,14 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -61,60 +54,50 @@ export default function SupabaseAuthPreview() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <div className="grid gap-4">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="email"
-                          placeholder="hello@company.com"
-                          type="email"
-                          autoComplete="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid gap-4">
+              <Field
+                className="grid gap-2"
+                data-invalid={!!form.formState.errors.email}
+              >
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  id="email"
+                  placeholder="hello@company.com"
+                  type="email"
+                  autoComplete="email"
+                  aria-invalid={!!form.formState.errors.email}
+                  {...form.register('email')}
                 />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <div className="flex justify-between items-center">
-                        <FormLabel htmlFor="password">Password</FormLabel>
-                        <Link href="#" className="text-sm underline">
-                          Forgot password?
-                        </Link>
-                      </div>
-                      <FormControl>
-                        <PasswordInput
-                          id="password"
-                          placeholder="******"
-                          autoComplete="current-password"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                <FieldError errors={[form.formState.errors.email]} />
+              </Field>
+              <Field
+                className="grid gap-2"
+                data-invalid={!!form.formState.errors.password}
+              >
+                <div className="flex justify-between items-center">
+                  <FieldLabel htmlFor="password">Password</FieldLabel>
+                  <Link href="#" className="text-sm underline">
+                    Forgot password?
+                  </Link>
+                </div>
+                <PasswordInput
+                  id="password"
+                  placeholder="******"
+                  autoComplete="current-password"
+                  aria-invalid={!!form.formState.errors.password}
+                  {...form.register('password')}
                 />
-                <Button type="submit" className="w-full">
-                  Sign in
-                </Button>
-                <Button type="button" variant="secondary" className="w-full">
-                  Send magic link
-                </Button>
-              </div>
-            </form>
-          </Form>
+                <FieldError errors={[form.formState.errors.password]} />
+              </Field>
+              <Button type="submit" className="w-full">
+                Sign in
+              </Button>
+              <Button type="button" variant="secondary" className="w-full">
+                Send magic link
+              </Button>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { FormFieldType } from '@/types'
+import { getFieldVariant } from '@/components/field-variants'
 import If from '@/components/ui/if'
 import {
   Select,
@@ -21,6 +22,8 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select' // Import Select components
+
+const INPUT_TYPES = { text: 'Text', email: 'Email', number: 'Number' }
 
 type EditFieldDialogProps = {
   isOpen: boolean
@@ -36,7 +39,6 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   onSave,
 }) => {
   const [editedField, setEditedField] = useState<FormFieldType | null>(null)
-  const [fieldType, setFieldType] = useState<string>()
 
   useEffect(() => {
     setEditedField(field)
@@ -50,6 +52,8 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
   }
 
   if (!editedField) return null
+
+  const settings = getFieldVariant(editedField.variant).settings ?? []
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -110,25 +114,26 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
             />
           </div>
           <If
-            condition={field?.variant === 'Input'}
+            condition={settings.includes('inputType')}
             render={() => (
               <div>
                 <Label htmlFor="type">Type</Label>
                 <Select
                   // id="type"
                   value={editedField.type}
-                  onValueChange={(value) => {
-                    setFieldType(value)
-                    setEditedField({ ...editedField, type: value })
-                  }}
+                  onValueChange={(value) =>
+                    setEditedField({ ...editedField, type: value ?? 'text' })
+                  }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select type" />
+                    {/* Base UI shows the raw value unless given a label. */}
+                    <SelectValue placeholder="Select type">
+                      {INPUT_TYPES[editedField.type as keyof typeof INPUT_TYPES]}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="text">Text</SelectItem>
                     <SelectItem value="email">Email</SelectItem>
-                    <SelectItem value="file">File</SelectItem>
                     <SelectItem value="number">Number</SelectItem>
                   </SelectContent>
                 </Select>
@@ -136,91 +141,69 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
             )}
           />
           <If
-            condition={fieldType === 'number' || fieldType === 'text'}
-            render={() => (
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-1 flex flex-col gap-1 ">
-                  <Label>Min Value</Label>
-                  <Input
-                    id="min"
-                    type="number"
-                    value={editedField.min}
-                    onChange={(e) =>
-                      setEditedField({
-                        ...editedField,
-                        min: Number(e.target.value),
-                      })
-                    }
-                  />
-                </div>
-                <div className="col-span-1 flex flex-col gap-1 ">
-                  <Label>Max Value</Label>
-                  <Input
-                    id="max"
-                    type="number"
-                    value={editedField.max}
-                    onChange={(e) =>
-                      setEditedField({
-                        ...editedField,
-                        max: Number(e.target.value),
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            )}
-          />
-          <If
-            condition={field?.variant === 'Slider'}
+            condition={settings.includes('range')}
             render={() => (
               <div className="grid grid-cols-3 gap-3">
                 <div className="col-span-1 flex flex-col gap-1 ">
-                  <Label>Min Value</Label>
+                  <Label htmlFor="min">
+                    {editedField.variant === 'Slider' || editedField.type === 'number'
+                      ? 'Min value'
+                      : 'Min length'}
+                  </Label>
                   <Input
                     id="min"
                     type="number"
-                    value={editedField.min}
+                    value={editedField.min ?? ''}
                     onChange={(e) =>
                       setEditedField({
                         ...editedField,
-                        min: Number(e.target.value),
+                        min: e.target.value === '' ? undefined : Number(e.target.value),
                       })
                     }
                   />
                 </div>
                 <div className="col-span-1 flex flex-col gap-1 ">
-                  <Label>Max Value</Label>
+                  <Label htmlFor="max">
+                    {editedField.variant === 'Slider' || editedField.type === 'number'
+                      ? 'Max value'
+                      : 'Max length'}
+                  </Label>
                   <Input
                     id="max"
                     type="number"
-                    value={editedField.max}
+                    value={editedField.max ?? ''}
                     onChange={(e) =>
                       setEditedField({
                         ...editedField,
-                        max: Number(e.target.value),
+                        max: e.target.value === '' ? undefined : Number(e.target.value),
                       })
                     }
                   />
                 </div>
-                <div className="col-span-1 flex flex-col gap-1 ">
-                  <Label>Step</Label>
-                  <Input
-                    id="step"
-                    type="number"
-                    value={editedField.step}
-                    onChange={(e) =>
-                      setEditedField({
-                        ...editedField,
-                        step: Number(e.target.value),
-                      })
-                    }
-                  />
-                </div>
+                <If
+                  condition={settings.includes('step')}
+                  render={() => (
+                    <div className="col-span-1 flex flex-col gap-1 ">
+                      <Label htmlFor="step">Step</Label>
+                      <Input
+                        id="step"
+                        type="number"
+                        value={editedField.step ?? ''}
+                        onChange={(e) =>
+                          setEditedField({
+                            ...editedField,
+                            step: e.target.value === '' ? undefined : Number(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
+                  )}
+                />
               </div>
             )}
           />
           <If
-            condition={field?.variant === 'Smart Datetime Input'}
+            condition={settings.includes('locale')}
             render={() => (
               <div className="grid grid-cols-2 gap-3">
                 <div className="col-span-1 flex flex-col gap-1 ">
@@ -231,7 +214,7 @@ export const EditFieldDialog: React.FC<EditFieldDialogProps> = ({
                     onValueChange={(value) => {
                       setEditedField({
                         ...editedField,
-                        locale: value as keyof typeof Locales,
+                        locale: (value || undefined) as keyof typeof Locales | undefined,
                       })
                     }}
                   >

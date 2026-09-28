@@ -25,9 +25,7 @@ export default function SignatureInputPreview() {
 
   return (
     <ComponentDocShell
-      title="Signature Input"
-      slug="signature-input"
-      description="Canvas-based signature input that returns a PNG data URL."
+      name="signature-input"
       preview={
         <SignatureInput
           canvasRef={canvasRef}

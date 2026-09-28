@@ -1,13 +1,13 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { Icons } from '@/components/ui/icons'
+import { Icons } from '@/components/templates/oauth-icons'
 import { Button } from '@/components/ui/button'
 import {
   Field,
@@ -60,7 +60,7 @@ export default function ClerkSignUpPreview() {
       description={
         <>
           Already have an account?{' '}
-          <Link href="/templates/authentication/clerk-auth?flow=sign-in">
+          <Link href="/sign-in">
             Sign in
           </Link>
           .
@@ -171,7 +171,7 @@ export default function ClerkSignUpPreview() {
 
             <FieldDescription className="text-center">
               Need to recover access?{' '}
-              <Link href="/templates/authentication/clerk-auth?flow=forgot-password">
+              <Link href="/forgot-password">
                 Reset password
               </Link>
             </FieldDescription>

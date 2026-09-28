@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { templates } from '@/constants/templates'
+import { templateCategories } from '@/constants/templates'
 
 interface CategoryPageProps {
   params: Promise<{
@@ -10,11 +10,6 @@ interface CategoryPageProps {
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const { category } = await params
-
-  const matchingTemplate = templates.find((template) =>
-    template.path.endsWith(`/${category}`),
-  )
-
-  const defaultTemplatePath = matchingTemplate?.sub?.[0]?.path
-  redirect(defaultTemplatePath ?? '/templates')
+  const first = templateCategories.find((entry) => entry.id === category)?.templates[0]
+  redirect(first?.path ?? '/templates')
 }

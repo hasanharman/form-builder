@@ -15,9 +15,7 @@ export default function TokenInputPreview() {
 
   return (
     <ComponentDocShell
-      title="Tag / Token Input"
-      slug="token-input"
-      description="Input that turns text into removable tags/chips."
+      name="token-input"
       preview={<TokenInput value={tokens} onChange={setTokens} />}
       previewCode={previewCode}
       usageCode={usageCode}

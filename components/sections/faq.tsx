@@ -12,8 +12,6 @@ export default function FAQ() {
     <Section title="FAQ" subtitle="Frequently asked questions">
       <div className="mx-auto my-12 md:max-w-[800px]">
         <Accordion
-          type="single"
-          collapsible
           className="flex w-full flex-col items-center justify-center space-y-2"
         >
           {siteConfig.faqs.map((faq, idx) => (

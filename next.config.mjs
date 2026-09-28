@@ -2,6 +2,12 @@ import path from 'node:path'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      // Registry items moved from /registry/<name>.json to shadcn's default /r/<name>.json.
+      { source: '/registry/:path*', destination: '/r/:path*', permanent: true },
+    ]
+  },
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),

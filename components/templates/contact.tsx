@@ -5,14 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Field, FieldError, FieldLabel } from '@/components/ui/field'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -59,77 +52,63 @@ export default function ContactFormPreview() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <div className="grid gap-4">
-                {/* Name Field */}
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="name">Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="name"
-                          placeholder="John Doe"
-                          type="text"
-                          autoComplete="name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <div className="grid gap-4">
+              {/* Name Field */}
+              <Field
+                className="grid gap-2"
+                data-invalid={!!form.formState.errors.name}
+              >
+                <FieldLabel htmlFor="name">Name</FieldLabel>
+                <Input
+                  id="name"
+                  placeholder="John Doe"
+                  type="text"
+                  autoComplete="name"
+                  aria-invalid={!!form.formState.errors.name}
+                  {...form.register('name')}
                 />
+                <FieldError errors={[form.formState.errors.name]} />
+              </Field>
 
-                {/* Email Field */}
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="email">Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="email"
-                          placeholder="johndoe@mail.com"
-                          type="email"
-                          autoComplete="email"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              {/* Email Field */}
+              <Field
+                className="grid gap-2"
+                data-invalid={!!form.formState.errors.email}
+              >
+                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <Input
+                  id="email"
+                  placeholder="johndoe@mail.com"
+                  type="email"
+                  autoComplete="email"
+                  aria-invalid={!!form.formState.errors.email}
+                  {...form.register('email')}
                 />
+                <FieldError errors={[form.formState.errors.email]} />
+              </Field>
 
-                {/* Message Field */}
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="message">Message</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          id="message"
-                          placeholder="Your message..."
-                          autoComplete="off"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+              {/* Message Field */}
+              <Field
+                className="grid gap-2"
+                data-invalid={!!form.formState.errors.message}
+              >
+                <FieldLabel htmlFor="message">Message</FieldLabel>
+                <Textarea
+                  id="message"
+                  placeholder="Your message..."
+                  autoComplete="off"
+                  aria-invalid={!!form.formState.errors.message}
+                  {...form.register('message')}
                 />
+                <FieldError errors={[form.formState.errors.message]} />
+              </Field>
 
-                <Button type="submit" className="w-full">
-                  Send Message
-                </Button>
-              </div>
-            </form>
-          </Form>
+              <Button type="submit" className="w-full">
+                Send Message
+              </Button>
+            </div>
+          </form>
         </CardContent>
       </Card>
     </div>

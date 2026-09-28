@@ -25,9 +25,7 @@ export default function TransferListPreview() {
 
   return (
     <ComponentDocShell
-      title="Transfer List"
-      slug="transfer-list"
-      description="Dual-list picker to move items between available and selected panels."
+      name="transfer-list"
       preview={<TransferList available={state.available} selected={state.selected} onChange={setState} />}
       previewCode={previewCode}
       usageCode={usageCode}

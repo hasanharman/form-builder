@@ -31,9 +31,7 @@ export default function CreditCardPreview() {
 
   return (
     <ComponentDocShell
-      title="Credit Card"
-      slug="credit-card"
-      description="Interactive credit-card form with visual card preview and validations."
+      name="credit-card"
       preview={<CreditCard value={creditCard} onChange={setCreditCard} />}
       previewCode={previewCode}
       usageCode={usageCode}
@@ -42,7 +40,6 @@ export default function CreditCardPreview() {
         'Animated card preview with front/back transitions.',
         'Validation hooks for expiry and CVV.',
       ]}
-      dependencies={['framer-motion']}
     />
   )
 }

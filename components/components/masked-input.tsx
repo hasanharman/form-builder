@@ -15,9 +15,7 @@ export default function MaskedInputPreview() {
 
   return (
     <ComponentDocShell
-      title="Masked Input"
-      slug="masked-input"
-      description="Generic masked input for SSN, tax ID, IBAN, or custom patterns."
+      name="masked-input"
       preview={<MaskedInput mask="999-99-9999" value={value} onValueChange={setValue} />}
       previewCode={previewCode}
       usageCode={usageCode}

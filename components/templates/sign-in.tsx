@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from 'next-view-transitions'
+import Link from 'next/link'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -42,7 +42,7 @@ export default function SignInPreview() {
       title="Welcome to Acme Inc."
       description={
         <>
-          Don&apos;t have an account? <Link href="/templates/authentication/sign-up">Sign up</Link>
+          Don&apos;t have an account? <Link href="/sign-up">Sign up</Link>
         </>
       }
       showOauth
@@ -75,7 +75,7 @@ export default function SignInPreview() {
           <FieldSeparator>Or</FieldSeparator>
           <FieldDescription className="text-center">
             Need help signing in?{' '}
-            <Link href="/templates/authentication/forgot-password">Reset password</Link>
+            <Link href="/forgot-password">Reset password</Link>
           </FieldDescription>
         </FieldGroup>
       </form>

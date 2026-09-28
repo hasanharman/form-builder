@@ -78,7 +78,8 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ''} />
-          <div>
+          {/* Base UI portals render outside this root; isolate keeps app z-indexes below them. */}
+          <div className="root isolate">
             <NextTopLoader color="#FF9432" showSpinner={false} />
             <Toaster />
             <AllProviders>

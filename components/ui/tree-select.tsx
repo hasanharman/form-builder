@@ -3,7 +3,8 @@
 import * as React from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import {
   Popover,
   PopoverContent,
@@ -100,12 +101,13 @@ export function TreeSelect({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button type="button" variant="outline" className="w-full justify-between">
-          <span className="truncate">
-            {selectedLabels.length ? selectedLabels.join(', ') : placeholder}
-          </span>
-        </Button>
+      <PopoverTrigger
+        type="button"
+        className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-between')}
+      >
+        <span className="truncate">
+          {selectedLabels.length ? selectedLabels.join(', ') : placeholder}
+        </span>
       </PopoverTrigger>
       <PopoverContent className="w-[340px] p-2">
         <ScrollArea className="h-64">

@@ -1,7 +1,11 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
-@plugin "tailwindcss-animate";
+
+/* Form layouts build `col-span-${n}` at runtime; keep the whole range. */
+@source inline("col-span-{1,2,3,4,5,6,7,8,9,10,11,12}");
 
 :root {
   --background: hsl(0 0% 100%);
@@ -99,6 +103,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar-background);
   --color-sidebar-background: var(--sidebar-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -121,16 +126,6 @@
   --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
   --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
   --animate-ripple: ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite;
-  
-  @keyframes accordion-down {
-    from { height: 0; }
-    to { height: var(--radix-accordion-content-height); }
-  }
-  
-  @keyframes accordion-up {
-    from { height: var(--radix-accordion-content-height); }
-    to { height: 0; }
-  }
   
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -168,6 +163,8 @@
 
 @layer base {
   body {
+    /* Base UI: keeps iOS 26+ Safari from mispositioning popups. */
+    position: relative;
     @apply bg-background text-foreground;
     font-family: Arial, Helvetica, sans-serif;
   }

@@ -1,43 +1,37 @@
 import { Link } from 'next-view-transitions'
 
-import { SPECIAL_COMPONENTS } from '@/constants/special-components'
-import { FormFieldType } from '@/types'
+import Code from '@/components/code'
+import type { FormFieldOrGroup } from '@/components/field-variants/form'
+import { formInstallCommand, formRegistryItems } from '@/lib/form-code'
+import { getRegistryItem } from '@/lib/registry-catalog'
 
-export type FormFieldOrGroup = FormFieldType | FormFieldType[]
-
-const SpecialComponentsNotice = ({
-  formFields,
-}: {
-  formFields: FormFieldOrGroup[]
-}) => {
-  const usedSpecialComponents = SPECIAL_COMPONENTS.filter((component) =>
-    formFields.some(
-      (field) => !Array.isArray(field) && field.variant === component.variant,
-    ),
-  )
-
-  if (usedSpecialComponents.length === 0) return null
+/** The install command for everything the generated form imports. */
+const SpecialComponentsNotice = ({ formFields }: { formFields: FormFieldOrGroup[] }) => {
+  if (formFields.length === 0) return null
+  const ownItems = formRegistryItems(formFields)
+    .map((name) => getRegistryItem(name))
+    .filter((item) => item !== undefined)
 
   return (
-    <>
+    <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        This form includes special components, add the component in your
-        directory.
+        Install every component this form uses:
       </p>
-      <ul className="list-disc text-sm text-muted-foreground pl-3">
-        {usedSpecialComponents.map((component) => (
-          <li key={component.variant}>
-            <Link
-              href={component.url}
-              target="_blank"
-              className="hover:underline"
-            >
-              {component.variant}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </>
+      <Code code={formInstallCommand(formFields)} />
+      {ownItems.length > 0 && (
+        <p className="text-sm text-muted-foreground">
+          From the shadcn-form registry:{' '}
+          {ownItems.map((item, index) => (
+            <span key={item.name}>
+              {index > 0 && ', '}
+              <Link href={`/components/${item.name}`} className="underline">
+                {item.title}
+              </Link>
+            </span>
+          ))}
+        </p>
+      )}
+    </div>
   )
 }
 

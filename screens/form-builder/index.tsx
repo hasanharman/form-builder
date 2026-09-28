@@ -5,7 +5,8 @@ import Image from 'next/image'
 import { Link } from 'next-view-transitions'
 
 import { FormFieldType } from '@/types'
-import { defaultFieldConfig, FORM_LIBRARIES, FormLibrary } from '@/constants'
+import { FORM_LIBRARIES, isFormLibrary, type FormLibrary } from '@/lib/form-code'
+import { createField } from '@/components/field-variants/form'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { Separator } from '@/components/ui/separator'
 
@@ -16,7 +17,6 @@ import { FormFieldList } from '@/screens/form-field-list'
 import { FormPreview } from '@/screens/form-preview'
 import { EditFieldDialog } from '@/screens/edit-field-dialog'
 import EmptyListSvg from '@/assets/oc-thinking.svg'
-import Editor from '@/components/editor/editor'
 
 export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
@@ -28,7 +28,8 @@ export default function FormBuilder() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [selectedLibrary, setSelectedLibrary] = useState<FormLibrary>(() => {
     if (typeof window !== 'undefined') {
-      return (localStorage.getItem('formLibrary') as FormLibrary) || FORM_LIBRARIES.REACT_HOOK_FORM
+      const saved = localStorage.getItem('formLibrary')
+      return isFormLibrary(saved) ? saved : FORM_LIBRARIES.REACT_HOOK_FORM
     }
     return FORM_LIBRARIES.REACT_HOOK_FORM
   })
@@ -39,32 +40,8 @@ export default function FormBuilder() {
     }
   }, [selectedLibrary])
 
-  const addFormField = (variant: string, index: number) => {
-    const newFieldName = `name_${Math.random().toString().slice(-10)}`
-
-    const { label, description, placeholder } = defaultFieldConfig[variant] || {
-      label: '',
-      description: '',
-      placeholder: '',
-    }
-
-    const newField: FormFieldType = {
-      checked: true,
-      description: description || '',
-      disabled: false,
-      label: label || newFieldName,
-      name: newFieldName,
-      onChange: () => { },
-      onSelect: () => { },
-      placeholder: placeholder || 'Placeholder',
-      required: true,
-      rowIndex: index,
-      setValue: () => { },
-      type: '',
-      value: '',
-      variant,
-    }
-    setFormFields([...formFields, newField])
+  const addFormField = (variant: string) => {
+    setFormFields([...formFields, createField(variant)])
   }
 
   const findFieldPath = (
@@ -120,7 +97,7 @@ export default function FormBuilder() {
   const FieldSelectorWithSeparator = ({
     addFormField,
   }: {
-    addFormField: (variant: string, index?: number) => void
+    addFormField: (variant: string) => void
   }) => (
     <div className="flex flex-col md:flex-row gap-3">
       <FieldSelector addFormField={addFormField} />
@@ -150,9 +127,7 @@ export default function FormBuilder() {
           <div className="grid grid-cols-1 md:grid-cols-2 items-start gap-8 md:px-5 h-full">
             <div className="w-full h-full col-span-1 md:space-x-3 md:max-h-[75vh] flex flex-col md:flex-row ">
               <FieldSelectorWithSeparator
-                addFormField={(variant: string, index: number = 0) =>
-                  addFormField(variant, index)
-                }
+                addFormField={addFormField}
               />
               <div className="overflow-y-auto flex-1 ">
                 <FormFieldList
@@ -177,9 +152,7 @@ export default function FormBuilder() {
         otherwise={() => (
           <div className="flex flex-col md:flex-row items-center gap-3 md:px-5">
             <FieldSelectorWithSeparator
-              addFormField={(variant: string, index: number = 0) =>
-                addFormField(variant, index)
-              }
+              addFormField={addFormField}
             />
             <EmptyListSvg className="mx-auto" />
           </div>

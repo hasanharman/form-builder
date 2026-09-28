@@ -1,13 +1,11 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Highlight, themes } from 'prism-react-renderer'
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm, type Control } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 
-import { renderFormField } from '@/screens/render-form-field'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Form, FormField, FormItem, FormControl } from '@/components/ui/form'
+import { FieldGroup } from '@/components/ui/field'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -20,21 +18,19 @@ import {
 } from "@/components/ui/select"
 import If from '@/components/ui/if'
 import { FormFieldType } from '@/types'
-import { FormLibrary } from '@/constants'
+import { getFieldVariant } from '@/components/field-variants'
+import { FieldShell } from '@/components/field-variants/field-shell'
+import {
+  buildFormSchema,
+  formDefaultValues,
+  type FormFieldOrGroup,
+} from '@/components/field-variants/form'
 
 import { Code, Eye, Files } from 'lucide-react'
-import {
-  generateZodSchema,
-  generateFormCode,
-  generateDefaultValues,
-  generateFormCodeForLibrary,
-} from '@/screens/generate-code-parts'
-import { formatJSXCode } from '@/lib/utils'
+import { generateFormCode, type FormLibrary } from '@/lib/form-code'
+import { formatCode } from '@/lib/format-code'
 import { VscJson } from 'react-icons/vsc'
 import { SiReacthookform, SiReactquery } from 'react-icons/si'
-import { FaReact } from 'react-icons/fa'
-
-export type FormFieldOrGroup = FormFieldType | FormFieldType[]
 
 export type FormPreviewProps = {
   formFields: FormFieldOrGroup[]
@@ -42,82 +38,54 @@ export type FormPreviewProps = {
   onLibraryChange: (library: FormLibrary) => void
 }
 
-const renderFormFields = (fields: FormFieldOrGroup[], form: any) => {
-  return fields.map((fieldOrGroup, index) => {
-    if (Array.isArray(fieldOrGroup)) {
-      // Calculate column span based on number of fields in the group
-      const getColSpan = (totalFields: number) => {
-        switch (totalFields) {
-          case 2:
-            return 6 // Two columns
-          case 3:
-            return 4 // Three columns
-          default:
-            return 12 // Single column or fallback
-        }
-      }
+const COL_SPAN: Record<number, string> = { 2: 'col-span-6', 3: 'col-span-4' }
 
-      return (
-        <div key={index} className="grid grid-cols-12 gap-4">
-          {fieldOrGroup.map((field, subIndex) => (
-            <FormField
-              key={field.name}
-              control={form.control}
-              name={field.name}
-              render={({ field: formField }) => (
-                <FormItem
-                  className={`col-span-${getColSpan(fieldOrGroup.length)}`}
-                >
-                  <FormControl>
-                    {React.cloneElement(
-                      renderFormField(field, form) as React.ReactElement,
-                      {
-                        ...formField,
-                      },
-                    )}
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-          ))}
-        </div>
-      )
-    } else {
-      return (
-        <FormField
-          key={index}
-          control={form.control}
-          name={fieldOrGroup.name}
-          render={({ field: formField }) => (
-            <FormItem className="col-span-12">
-              <FormControl>
-                {React.cloneElement(
-                  renderFormField(fieldOrGroup, form) as React.ReactElement,
-                  {
-                    ...formField,
-                  },
-                )}
-              </FormControl>
-            </FormItem>
-          )}
-        />
-      )
-    }
-  })
+function FieldPreview({ field, control }: { field: FormFieldType; control: Control }) {
+  const { Control: VariantControl } = getFieldVariant(field.variant)
+  const id = `preview-${field.name}`
+  return (
+    <Controller
+      name={field.name}
+      control={control}
+      render={({ field: bound, fieldState }) => (
+        <FieldShell field={field} id={id} invalid={fieldState.invalid} error={fieldState.error}>
+          <VariantControl
+            field={field}
+            id={id}
+            value={bound.value}
+            onChange={bound.onChange}
+            onBlur={bound.onBlur}
+            invalid={fieldState.invalid}
+          />
+        </FieldShell>
+      )}
+    />
+  )
 }
+
+const renderFormFields = (fields: FormFieldOrGroup[], control: Control) =>
+  fields.map((fieldOrGroup, index) =>
+    Array.isArray(fieldOrGroup) ? (
+      <div key={index} className="grid grid-cols-12 gap-4">
+        {fieldOrGroup.map((field) => (
+          <div key={field.name} className={COL_SPAN[fieldOrGroup.length] ?? 'col-span-12'}>
+            <FieldPreview field={field} control={control} />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <FieldPreview key={fieldOrGroup.name} field={fieldOrGroup} control={control} />
+    ),
+  )
 
 export const FormPreview: React.FC<FormPreviewProps> = ({
   formFields,
   selectedLibrary,
   onLibraryChange,
 }) => {
-  const formSchema = generateZodSchema(formFields)
-
-  const defaultVals = generateDefaultValues(formFields)
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: defaultVals,
+  const form = useForm({
+    resolver: zodResolver(buildFormSchema(formFields)),
+    defaultValues: formDefaultValues(formFields),
   })
 
   function onSubmit(data: any) {
@@ -133,8 +101,20 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
     }
   }
 
-  const generatedCode = generateFormCodeForLibrary(formFields, selectedLibrary)
-  const formattedCode = formatJSXCode(generatedCode)
+  const generatedCode = React.useMemo(
+    () => generateFormCode(formFields, selectedLibrary),
+    [formFields, selectedLibrary],
+  )
+  const [formattedCode, setFormattedCode] = React.useState(generatedCode)
+  React.useEffect(() => {
+    let current = true
+    formatCode(generatedCode)
+      .then((code) => current && setFormattedCode(code))
+      .catch(() => current && setFormattedCode(generatedCode))
+    return () => {
+      current = false
+    }
+  }, [generatedCode])
 
   return (
     <div className="w-full h-full col-span-1 rounded-xl flex justify-center">
@@ -162,7 +142,7 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
 
           <Select
             value={selectedLibrary}
-            onValueChange={(value) => onLibraryChange(value as FormLibrary)}
+            onValueChange={(value) => value && onLibraryChange(value as FormLibrary)}
           >
             <SelectTrigger className="w-auto px-2 gap-2">
               <SelectValue placeholder="Select library">
@@ -171,9 +151,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
                 )}
                 {selectedLibrary === 'tanstack-form' && (
                   <SiReactquery className="size-5" />
-                )}
-                {selectedLibrary === 'server-actions' && (
-                  <FaReact className="size-5 text-blue-500" />
                 )}
               </SelectValue>
             </SelectTrigger>
@@ -192,12 +169,6 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
                     <span>TanStack Form</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="server-actions" disabled>
-                  <div className="flex items-center gap-2">
-                    <FaReact className="size-4 text-blue-500" />
-                    <span>Server Actions (Coming Soon)</span>
-                  </div>
-                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -209,15 +180,14 @@ export const FormPreview: React.FC<FormPreviewProps> = ({
           <If
             condition={formFields.length > 0}
             render={() => (
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="space-y-4 py-5 max-w-lg"
-                >
-                  {renderFormFields(formFields, form)}
-                  <Button type="submit">Submit</Button>
-                </form>
-              </Form>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="py-5 max-w-lg">
+                <FieldGroup>
+                  {renderFormFields(formFields, form.control)}
+                  <Button type="submit" className="w-fit">
+                    Submit
+                  </Button>
+                </FieldGroup>
+              </form>
             )}
             otherwise={() => (
               <div className="h-[50vh] flex justify-center items-center">

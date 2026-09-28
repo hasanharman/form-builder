@@ -15,123 +15,71 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from '@/components/ui/sidebar'
+import { findTemplate, resolveFlow, templateCategories } from '@/constants/templates'
 
-import { templates } from '@/constants/templates'
+type SidebarEntry = {
+  title: string
+  path: string
+  sub: { key: string; title: string; path: string; isActive: boolean }[]
+}
 
 export function AppSidebar() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const parts = pathname.split('/').filter(Boolean)
-  const selectedCategory = parts[1]
-  const selectedSlug = parts[2]
-  const selectedFlow = searchParams.get('flow') ?? 'sign-in'
+  const [, categoryId, name] = pathname.split('/').filter(Boolean)
+  const template = categoryId && name ? findTemplate(categoryId, name) : undefined
+  const activeFlow = template && resolveFlow(template, searchParams.get('flow') ?? undefined)
 
-  const visibleTemplates = selectedSlug
-    ? templates.filter((item) => item.path.endsWith(`/${selectedCategory}`))
-    : templates
-
-  const isShadcnAuthPage =
-    selectedCategory === 'authentication' && selectedSlug === 'shadcn-auth'
-  const isClerkAuthPage =
-    selectedCategory === 'authentication' && selectedSlug === 'clerk-auth'
-
-  const shadcnAuthFlows = [
-    {
-      title: 'Login',
-      path: '/templates/authentication/shadcn-auth?flow=sign-in',
-      flow: 'sign-in',
-    },
-    {
-      title: 'Sign Up',
-      path: '/templates/authentication/shadcn-auth?flow=sign-up',
-      flow: 'sign-up',
-    },
-    {
-      title: 'Forgot Password',
-      path: '/templates/authentication/shadcn-auth?flow=forgot-password',
-      flow: 'forgot-password',
-    },
-    {
-      title: 'Reset Password',
-      path: '/templates/authentication/shadcn-auth?flow=reset-password',
-      flow: 'reset-password',
-    },
-  ]
-
-  const clerkAuthFlows = [
-    {
-      title: 'Login',
-      path: '/templates/authentication/clerk-auth?flow=sign-in',
-      flow: 'sign-in',
-    },
-    {
-      title: 'Sign Up',
-      path: '/templates/authentication/clerk-auth?flow=sign-up',
-      flow: 'sign-up',
-    },
-    {
-      title: 'Forgot Password',
-      path: '/templates/authentication/clerk-auth?flow=forgot-password',
-      flow: 'forgot-password',
-    },
-    {
-      title: 'Reset Password',
-      path: '/templates/authentication/clerk-auth?flow=reset-password',
-      flow: 'reset-password',
-    },
-  ]
-
-  const selectedFlowTemplate = isShadcnAuthPage
-    ? {
-        title: 'Shadcn Auth Pages',
-        path: '/templates/authentication/shadcn-auth?flow=sign-in',
-        sub: shadcnAuthFlows,
-      }
-    : isClerkAuthPage
-      ? {
-          title: 'Clerk Auth Pages',
-          path: '/templates/authentication/clerk-auth?flow=sign-in',
-          sub: clerkAuthFlows,
-        }
-      : null
+  // A multi-page template lists its flows; otherwise list templates by category.
+  const entries: SidebarEntry[] = template?.flows
+    ? [
+        {
+          title: `${template.title} Pages`,
+          path: template.path,
+          sub: template.flows.map((flow) => ({
+            key: flow.id,
+            title: flow.title,
+            path: `${template.path}?flow=${flow.id}`,
+            isActive: flow.id === activeFlow?.id,
+          })),
+        },
+      ]
+    : templateCategories
+        .filter((category) => !template || category.id === categoryId)
+        .map((category) => ({
+          title: category.title,
+          path: category.path,
+          sub: category.templates.map((entry) => ({
+            key: entry.name,
+            title: entry.title,
+            path: entry.path,
+            isActive: pathname === entry.path,
+          })),
+        }))
 
   return (
     <Sidebar className="sticky top-4 h-[calc(100svh-6.5rem)]">
       <SidebarContent className="h-full">
         <SidebarGroup className="h-full">
           <SidebarMenu>
-            {(selectedFlowTemplate
-              ? [selectedFlowTemplate]
-              : visibleTemplates
-            ).map((item) => (
+            {entries.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <Link href={item.path} className="font-semibold">
-                    {item.title}
-                  </Link>
+                <SidebarMenuButton className="font-semibold" render={<Link href={item.path} />}>
+                  {item.title}
                 </SidebarMenuButton>
-                <SidebarMenuBadge className="border">
-                  {item.sub.length}
-                </SidebarMenuBadge>
-                {item.sub?.length ? (
-                  <SidebarMenuSub>
-                    {item.sub.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton
-                          asChild
-                          isActive={
-                            selectedFlowTemplate
-                              ? 'flow' in subItem &&
-                                subItem.flow === selectedFlow
-                              : pathname === subItem.path
-                          }
-                        >
-                          <Link href={subItem.path}>{subItem.title}</Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
+                <SidebarMenuBadge className="border">{item.sub.length}</SidebarMenuBadge>
+                <SidebarMenuSub>
+                  {item.sub.map((subItem) => (
+                    <SidebarMenuSubItem key={subItem.key}>
+                      <SidebarMenuSubButton
+                        isActive={subItem.isActive}
+                        render={<Link href={subItem.path} />}
+                      >
+                        {subItem.title}
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  ))}
+                </SidebarMenuSub>
               </SidebarMenuItem>
             ))}
           </SidebarMenu>

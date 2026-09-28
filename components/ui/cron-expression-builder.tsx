@@ -49,8 +49,11 @@ const range = (max: number, pad = false) =>
     label: pad ? String(i).padStart(2, '0') : String(i),
   }))
 
+const dayLabel = (dayOfWeek: string) =>
+  DOW.find((item) => item.value === dayOfWeek)?.label ?? 'Custom day'
+
 function toHuman(value: CronValue) {
-  const day = DOW.find((item) => item.value === value.dayOfWeek)?.label ?? 'Custom day'
+  const day = dayLabel(value.dayOfWeek)
   return `Runs at ${value.hour.padStart(2, '0')}:${value.minute.padStart(2, '0')} on ${day}`
 }
 
@@ -76,9 +79,9 @@ export function CronExpressionBuilder({
       <div className="grid gap-3 md:grid-cols-3">
         <div className="space-y-1">
           <Label>Minute</Label>
-          <Select value={state.minute} onValueChange={(v) => setField('minute', v)}>
+          <Select value={state.minute} onValueChange={(v) => setField('minute', v ?? '0')}>
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue>{state.minute.padStart(2, '0')}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {range(60, true).map((option) => (
@@ -91,9 +94,9 @@ export function CronExpressionBuilder({
         </div>
         <div className="space-y-1">
           <Label>Hour</Label>
-          <Select value={state.hour} onValueChange={(v) => setField('hour', v)}>
+          <Select value={state.hour} onValueChange={(v) => setField('hour', v ?? '0')}>
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue>{state.hour.padStart(2, '0')}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {range(24, true).map((option) => (
@@ -106,9 +109,9 @@ export function CronExpressionBuilder({
         </div>
         <div className="space-y-1">
           <Label>Day of Week</Label>
-          <Select value={state.dayOfWeek} onValueChange={(v) => setField('dayOfWeek', v)}>
+          <Select value={state.dayOfWeek} onValueChange={(v) => setField('dayOfWeek', v ?? '*')}>
             <SelectTrigger>
-              <SelectValue />
+              <SelectValue>{dayLabel(state.dayOfWeek)}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               {DOW.map((option) => (

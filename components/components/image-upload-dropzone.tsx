@@ -15,9 +15,7 @@ export default function ImageUploadDropzonePreview() {
 
   return (
     <ComponentDocShell
-      title="Image Upload / Dropzone"
-      slug="image-upload-dropzone"
-      description="Drag-and-drop image upload with preview, center crop, and progress feedback."
+      name="image-upload-dropzone"
       preview={<ImageUploadDropzone value={image} onChange={setImage} />}
       previewCode={previewCode}
       usageCode={usageCode}

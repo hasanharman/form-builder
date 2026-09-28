@@ -15,9 +15,7 @@ export default function CronExpressionBuilderPreview() {
 
   return (
     <ComponentDocShell
-      title="Cron Expression Builder"
-      slug="cron-expression-builder"
-      description="Visual cron schedule builder with human-readable summary."
+      name="cron-expression-builder"
       preview={<CronExpressionBuilder onChange={(v) => setSummary(v.human)} />}
       previewCode={previewCode}
       usageCode={usageCode}

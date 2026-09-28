@@ -15,9 +15,7 @@ export default function EmojiPickerPreview() {
 
   return (
     <ComponentDocShell
-      title="Emoji Picker"
-      slug="emoji-picker"
-      description="Categorized emoji selector input built with popover + scroll area."
+      name="emoji-picker"
       preview={<EmojiPicker value={emoji} onChange={setEmoji} />}
       previewCode={previewCode}
       usageCode={usageCode}

@@ -221,20 +221,23 @@ function SponsorAvatarPopover({
 
   return (
     <Popover open={open}>
-      <PopoverTrigger asChild>
-        <div
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
-          className="inline-flex"
-        >
-          {sponsor.url ? (
-            <Link href={getSponsorUrl(sponsor, 'landing')} target="_blank" rel="noopener noreferrer">
-              {avatarContent}
-            </Link>
-          ) : (
-            avatarContent
-          )}
-        </div>
+      <PopoverTrigger
+        nativeButton={false}
+        render={
+          <div
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+            className="inline-flex"
+          />
+        }
+      >
+        {sponsor.url ? (
+          <Link href={getSponsorUrl(sponsor, 'landing')} target="_blank" rel="noopener noreferrer">
+            {avatarContent}
+          </Link>
+        ) : (
+          avatarContent
+        )}
       </PopoverTrigger>
       <PopoverContent side="top" className="px-2 py-1 text-xs">
         {sponsor.name}

@@ -15,9 +15,7 @@ export default function SortableListInputPreview() {
 
   return (
     <ComponentDocShell
-      title="Sortable List Input"
-      slug="sortable-list-input"
-      description="Drag-and-drop reorderable list stored as a form value."
+      name="sortable-list-input"
       preview={<SortableListInput value={items} onChange={setItems} />}
       previewCode={previewCode}
       usageCode={usageCode}
