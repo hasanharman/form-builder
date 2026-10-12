@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { getRegistryItem } from '@/lib/registry-catalog'
+import { getRegistryItem, registryItemMetadata } from '@/lib/registry-catalog'
 
 type Props = { params: Promise<{ slug: string }> }
 
@@ -19,12 +19,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const item = getRegistryItem((await params).slug)
-  if (!item) return {}
-  return {
-    title: `${item.title} - Shadcn Form Builder`,
-    description: item.description,
-  }
+  return registryItemMetadata((await params).slug)
 }
 
 export default async function Page({ params }: Props) {

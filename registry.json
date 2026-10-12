@@ -549,6 +549,44 @@
       ]
     },
     {
+      "name": "basketball-upload",
+      "type": "registry:ui",
+      "title": "Basketball Upload",
+      "description": "File upload where you shoot the file through a hoop. Miss and you get the rebound; make it and the net fills up as the progress bar.",
+      "categories": [
+        "funny",
+        "upload"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "components/ui/basketball-upload.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "penalty-upload",
+      "type": "registry:ui",
+      "title": "Penalty Upload",
+      "description": "File upload as a penalty kick. Pick your spot, beat the keeper, and the goal fills up as the progress bar.",
+      "categories": [
+        "funny",
+        "upload"
+      ],
+      "dependencies": [
+        "lucide-react"
+      ],
+      "files": [
+        {
+          "path": "components/ui/penalty-upload.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
       "name": "validation-schemas",
       "type": "registry:lib",
       "title": "Validation Schemas",

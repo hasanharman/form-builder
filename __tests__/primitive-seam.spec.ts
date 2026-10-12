@@ -19,13 +19,14 @@ describe('primitive seam', () => {
           '--',
           '*.ts',
           '*.tsx',
-          ':!components/ui/**',
-          ':!__tests__/**',
+          ':(exclude)components/ui/**',
+          ':(exclude)__tests__/**',
         ],
         { encoding: 'utf8' },
       )
-    } catch {
-      // git grep exits 1 when nothing matches
+    } catch (error) {
+      // git grep exits 1 when nothing matches; anything else is a real failure
+      if ((error as { status?: number }).status !== 1) throw error
     }
     expect(output).toBe('')
   })
