@@ -56,6 +56,7 @@ const tabs: Tabs[] = [
   // },
   { name: 'Components', href: '/components', variant: 'linkHover2' },
   { name: 'Templates', href: '/templates', variant: 'linkHover2' },
+  { name: 'Funny', href: '/funny', variant: 'linkHover2' },
   { name: 'Sponsors', href: '/sponsors', variant: 'linkHover2' },
 ]
 

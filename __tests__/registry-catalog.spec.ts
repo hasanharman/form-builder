@@ -3,6 +3,7 @@ import { basename, resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
 
 import { fieldVariants } from '@/components/field-variants'
+import { funnyComponents } from '@/components/funny'
 import {
   getRegistryItem,
   installCommand,
@@ -124,6 +125,12 @@ describe('registry catalog', () => {
       .map((file) => basename(file, '.tsx'))
       .filter((page) => !['component-doc-shell', 'components-sidebar'].includes(page))
     for (const page of pages) expect(getRegistryItem(page), page).toBeDefined()
+  })
+
+  it('has a funny registry item for every funny component', () => {
+    for (const name of Object.keys(funnyComponents)) {
+      expect(getRegistryItem(name)?.categories, name).toContain('funny')
+    }
   })
 
   // Official shadcn items the generated forms use; anything else must be ours.

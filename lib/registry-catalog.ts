@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+
 import registry from '@/registry.json'
 
 /**
@@ -56,6 +58,16 @@ export function getRegistryItem(name: string): RegistryItem | undefined {
 
 export function isRegistryItem(name: string): boolean {
   return byName.has(name)
+}
+
+/** Page metadata for an item's docs page; empty for unknown names. */
+export function registryItemMetadata(name: string): Metadata {
+  const item = byName.get(name)
+  if (!item) return {}
+  return {
+    title: `${item.title} - Shadcn Form Builder`,
+    description: item.description,
+  }
 }
 
 export function registryItemUrl(name: string): string {

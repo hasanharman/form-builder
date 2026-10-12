@@ -26,6 +26,12 @@ registry. `registry.json` is the **Registry catalog**, the single source for
 items' files, titles, descriptions and dependencies;
 `lib/registry-catalog.ts` is its only reader.
 
+**Funny component**: a registry item in the `funny` category: a form control
+turned into a small game (Basketball Upload, Penalty Upload). It installs
+like any other item but is listed in the gallery at `/funny`, not in the
+Components sidebar. `components/funny/index.ts` maps each one to its docs
+page and its gallery teaser.
+
 **Template**: a ready-made form (auth flows, contact, newsletter) shipped as
 a `registry:block`. A template can have **flows**, pages at their own routes
 (`/sign-in`, `/sign-up`, …) that link to each other.
